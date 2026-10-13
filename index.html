@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="All by Jiddamarh — premium apparel, kitchen essentials, toiletries and makeup kits." />
+  <title>Jiddahs Heaven</title>
+
+  <!-- Premium, freely available Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+  <!-- ==================== ANNOUNCEMENT BAR ==================== -->
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <span>NEW SEASON EDIT</span>
+      <span class="announcement-dot">✦</span>
+      <span>CURATED FOR EVERYDAY LUXURY</span>
+      <span class="announcement-dot">✦</span>
+      <span>JIIDAHS HEAVEN</span>
+    </div>
+  </div>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <button class="icon-button menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <a href="#top" class="brand" aria-label="JIDDAHS HEAVEN home">
+        <span class="brand-all">JIDDAHS</span>
+        <span class="brand-name">HEAVEN</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#shop">Shop</a>
+        <a href="#collections">Collections</a>
+        <a href="#new-in">New In</a>
+        <a href="#story">Our Story</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-button" id="searchToggle" aria-label="Open search" aria-expanded="false">⌕</button>
+        <button class="icon-button bag-button" id="bagToggle" aria-label="Open shopping bag" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="bag-count" id="bagCount">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile navigation -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#collections">Collections</a>
+      <a href="#new-in">New In</a>
+      <a href="#story">Our Story</a>
+      <a href="#shop">Shop</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Search panel -->
+    <div class="search-panel" id="searchPanel">
+      <div class="container search-inner">
+        <label for="searchInput">Search the collection</label>
+        <div class="search-row">
+          <input id="searchInput" type="search" placeholder="Try “body mist”, “dress”, or “kitchen”..." autocomplete="off" />
+          <button class="search-close" id="searchClose" aria-label="Close search">×</button>
+        </div>
+        <p id="searchHint">Start typing to filter products.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+      <div class="image-slot hero-media">
+        <img
+          class="slot-image"
+          src="assets/images/herobanner.jpg"
+          alt="Skincare and everyday beauty essentials"
+          fetchpriority="high"
+        >
+      </div>
+
+      <div class="hero-shade"></div>
+
+      <div class="container hero-content">
+        <p class="eyebrow eyebrow-light">Jiddahs edit</p>
+        <h1>Everyday essentials,<br /><em>beautifully chosen.</em></h1>
+        <p class="hero-text">
+          Apparel, beauty, self-care and kitchen pieces curated to bring a little more
+          intention to the everyday.
+        </p>
+        <a class="button button-light" href="#shop">Explore the collection <span>→</span></a>
+      </div>
+
+      <div class="hero-scroll">SCROLL TO DISCOVER <span>↓</span></div>
+    </section>
+
+    <!-- ==================== MARQUEE ==================== -->
+    <section class="marquee" aria-label="Brand statement">
+      <div class="marquee-track">
+        <span>CURATED WITH INTENTION</span><b>✦</b>
+        <span>EVERYDAY LUXURY</span><b>✦</b>
+        <span>JIDDAHS HEAVEN</span><b>✦</b>
+        <span>CURATED WITH INTENTION</span><b>✦</b>
+        <span>EVERYDAY LUXURY</span><b>✦</b>
+        <span>JIDDAHS HEAVEN</span><b>✦</b>
+      </div>
+    </section>
+
+    <!-- ==================== CATEGORY COLLECTIONS ==================== -->
+    <section class="section section-cream" id="collections">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <p class="eyebrow">SHOP BY CATEGORY</p>
+            <h2>Find your everyday<br /><em>favourites.</em></h2>
+          </div>
+          <p class="heading-note">
+            Four thoughtfully selected worlds, one distinctly Jiddamarh point of view.
+          </p>
+        </div>
+
+        <div class="category-grid">
+          <a href="#productCollection" class="category-card category-large" data-category-link="apparel">
+            <div class="image-slot category-media">
+              <img class="slot-image" src="/assets/images/apparel.jpg" alt="Apparel collection" loading="lazy">
+            </div>
+            <div class="category-overlay"></div>
+            <div class="category-content">
+              <small>01</small>
+              <h3>Apparel</h3>
+              <span>Shop apparel →</span>
+            </div>
+          </a>
+
+          <a href="#productCollection" class="category-card" data-category-link="beauty">
+            <div class="image-slot category-media">
+              <img class="slot-image" src="/assets/images/beautyandmakeup.jpg" alt="Makeup and beauty products" loading="lazy">
+            </div>
+            <div class="category-overlay"></div>
+            <div class="category-content">
+              <small>02</small>
+              <h3>Makeup &amp; Beauty</h3>
+              <span>Shop beauty →</span>
+            </div>
+          </a>
+
+          <a href="#productCollection" class="category-card" data-category-link="kitchen">
+            <div class="image-slot category-media">
+              <img class="slot-image" src="/assets/images/kitchenutensils.jpg" alt="Kitchen utensils and essentials" loading="lazy">
+            </div>
+            <div class="category-overlay"></div>
+            <div class="category-content">
+              <small>03</small>
+              <h3>Kitchen</h3>
+              <span>Shop kitchen →</span>
+            </div>
+          </a>
+
+          <a href="#productCollection" class="category-card" data-category-link="toiletries">
+            <div class="image-slot category-media">
+              <img class="slot-image" src="/assets/images/toiletries.jpg" alt="Face mask and toiletries" loading="lazy">
+            </div>
+            <div class="category-overlay"></div>
+            <div class="category-content">
+              <small>04</small>
+              <h3>Toiletries</h3>
+              <span>Shop toiletries →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== NEW IN ==================== -->
+    <section class="section section-dark" id="new-in">
+      <div class="container">
+        <div class="section-heading light-heading">
+          <div>
+            <p class="eyebrow eyebrow-light">THE LATEST EDIT</p>
+            <h2>New in, <em>now.</em></h2>
+          </div>
+          <a href="#productCollection" class="text-link text-link-light">View all products →</a>
+        </div>
+
+        <div class="product-grid product-grid-dark" id="featuredProducts"></div>
+      </div>
+    </section>
+
+    <!-- ==================== EDITORIAL BEAUTY ==================== -->
+    <section class="section section-cream" id="story">
+      <div class="container editorial-grid">
+        <div class="editorial-copy">
+          <p class="eyebrow">THE BEAUTY EDIT</p>
+          <h2>Your ritual,<br /><em>elevated.</em></h2>
+          <p>
+            Build a beauty shelf that feels personal. From makeup kits to everyday
+            self-care, discover pieces designed to make routines feel a little more special.
+          </p>
+          <button class="button button-dark jump-filter" data-jump-filter="beauty">Shop beauty →</button>
+        </div>
+
+        <div class="image-slot editorial-media">
+          <img class="slot-image" src="images/editorial-beauty.jpg" alt="Beauty and skincare essentials" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EDITORIAL KITCHEN ==================== -->
+    <section class="section section-white">
+      <div class="container editorial-grid editorial-grid-reverse">
+        <div class="image-slot editorial-media">
+          <img class="slot-image" src="images/face%20mask.webp" alt="Kitchen utensils and serving essentials" loading="lazy">
+        </div>
+
+        <div class="editorial-copy">
+          <p class="eyebrow">HOME / KITCHEN</p>
+          <h2>Beautifully<br /><em>practical.</em></h2>
+          <p>
+            From prep to serving, discover kitchen utensils and essentials that look good,
+            work hard and fit effortlessly into everyday life.
+          </p>
+          <button class="button button-dark jump-filter" data-jump-filter="kitchen">Shop kitchen →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ALL PRODUCTS ==================== -->
+    <section class="section section-white" id="shop">
+      <div class="container" id="productCollection">
+        <div class="section-heading products-heading">
+          <div>
+            <p class="eyebrow">SHOP THE COLLECTION</p>
+            <h2>Made to be <em>yours.</em></h2>
+          </div>
+
+          <div class="filter-wrap" id="filters">
+            <button class="filter-button active" data-filter="all">All</button>
+            <button class="filter-button" data-filter="apparel">Apparel</button>
+            <button class="filter-button" data-filter="beauty">Beauty</button>
+            <button class="filter-button" data-filter="kitchen">Kitchen</button>
+            <button class="filter-button" data-filter="toiletries">Toiletries</button>
+          </div>
+        </div>
+
+        <div class="product-grid product-grid-light" id="allProducts"></div>
+      </div>
+    </section>
+
+    <!-- ==================== BRAND STATEMENT ==================== -->
+    <section class="statement">
+      <div class="container statement-inner">
+        <p class="eyebrow eyebrow-light">WHY JIDDAHS HEAVEN?</p>
+        <h2>Less noise.<br />More <em>good things.</em></h2>
+        <p>
+          We believe a great collection does not need to be crowded. Just useful pieces,
+          beautiful details and products you will genuinely want to reach for again.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== TRUST / SERVICE ==================== -->
+    <section class="section section-cream">
+      <div class="container service-grid">
+        <div class="service-card">
+          <span>01</span>
+          <h3>Curated selection</h3>
+          <p>Thoughtfully selected pieces across your everyday categories.</p>
+        </div>
+        <div class="service-card">
+          <span>02</span>
+          <h3>Easy shopping</h3>
+          <p>A clean experience built around discovery, choice and simplicity.</p>
+        </div>
+        <div class="service-card">
+          <span>03</span>
+          <h3>Customer care</h3>
+          <p>Need help choosing? Make every product conversation a little easier.</p>
+        </div>
+        <div class="service-card">
+          <span>04</span>
+          <h3>Always evolving</h3>
+          <p>A growing edit that keeps making room for what is genuinely useful.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== NEWSLETTER ==================== -->
+    <section class="newsletter" id="contact">
+      <div class="container newsletter-inner">
+        <div>
+          <p class="eyebrow">JOIN THE LIST</p>
+          <h2>First access to<br /><em>new arrivals.</em></h2>
+        </div>
+
+        <form class="newsletter-form" id="newsletterForm">
+          <div class="newsletter-input-row">
+            <input id="emailInput" type="email" placeholder="Your email address" aria-label="Your email address" required />
+            <button type="submit" class="button button-dark">Subscribe →</button>
+          </div>
+          <p id="newsletterMessage">No spam. Just beautiful things worth knowing about.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="brand footer-brand-logo">
+          <span class="brand-all">JIDDAHS</span>
+          <span class="brand-name">HEAVEN</span>
+        </a>
+        <p>Everyday essentials, beautifully chosen.</p>
+      </div>
+
+      <div class="footer-column">
+        <h4>Shop</h4>
+        <a href="#productCollection">All products</a>
+        <a href="#productCollection" data-footer-filter="apparel">Apparel</a>
+        <a href="#productCollection" data-footer-filter="beauty">Beauty</a>
+        <a href="#productCollection" data-footer-filter="kitchen">Kitchen</a>
+        <a href="#productCollection" data-footer-filter="toiletries">Toiletries</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>Explore</h4>
+        <a href="#collections">Collections</a>
+        <a href="#new-in">New in</a>
+        <a href="#story">Our story</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>Connect</h4>
+        <!-- Replace these URLs with the real brand accounts -->
+        <a href="https://www.instagram.com/jiddahs_heaven?obrf=MTF4aGk0cGVwYTE3NA==" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.snapchat.com/add/jidderh_bamalli?share_id=fnV2LYPINxI&locale=en-US" target="_blank" rel=noopener noreferrer">Snapchat</a>
+        <a href="mailto:Hauwaubamalliyahya@gmail.com">
+  Email Us
+        </a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>© <span id="year"></span> Jiddahs Heaven.</span>
+      <span>inspired by u .</span>
+    </div>
+  </footer>
+
+  <!-- ==================== SEARCH RESULTS TOAST ==================== -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ==================== CART DRAWER ==================== -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag">
+    <div class="cart-header">
+      <div>
+        <p class="eyebrow">YOUR BAG</p>
+        <h2>Shopping bag</h2>
+      </div>
+      <button class="icon-button cart-close" id="cartClose" aria-label="Close shopping bag">×</button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">₦0</strong>
+      </div>
+      <p class="cart-note">Checkout is a front-end demo. Connect this button to your preferred payment/cart backend.</p>
+      <button class="button button-dark button-full" id="checkoutButton">Proceed to checkout</button>
+    </div>
+  </aside>
+
+  <script src="/assets/javascript/index.js" defer></script>
+</body>
+</html>
