@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* ==========================================================
    ALL BY JIDDAMARH
    Front-end interactions
@@ -6,82 +7,122 @@
 const products = [
   {
     id: 1,
-    name: "Satin Ease Set",
+    name: "Abaya/kimono",
     category: "apparel",
-    price: 42000,
+    price: 17500,
     tag: "New",
-    description: "An effortless two-piece silhouette for polished everyday dressing.",
-    image: "images/product-satin-set.jpg"
+    description: "Elevate your style with our elegant Abayas and Kimonos, perfect for modest fashion and effortless sophistication.",
+    image: "/assets/images/abayas.jpg"
   },
 
   {
     id: 2,
-    name: "Soft Form Dress",
+    name: "Palazzo pants",
     category: "apparel",
-    price: 48500,
-    tag: "Edit",
-    description: "A clean, fluid dress made for easy styling from day to night.",
-    image: "images/product-soft-dress.jpg"
+    price: 10000,
+    tag: "Hot pick",
+    description: "Enjoy effortless style and comfort with our Palazzo Pants, perfect for chic everyday looks and elegant outings.",
+    image: "/assets/images/palazzo.jpg"
   },
 
   {
     id: 3,
-    name: "Glow Makeup Kit",
+    name: "Facial beauty mask",
     category: "beauty",
-    price: 28500,
-    tag: "New",
-    description: "A curated kit of everyday beauty essentials for a refined finish.",
-    image: "images/product-makeup-kit.jpg"
+    price: 300,
+    tag: "Bestseller",
+    description: "Refresh and nourish your skin with our Facial Beauty Mask for a radiant, healthy-looking glow.",
+    image: "/assets/images/facialmask.jpg"
   },
 
   {
     id: 4,
-    name: "Velvet Body Mist",
+    name: "Deep sea mud mask",
     category: "beauty",
-    price: 16500,
+    price: 1000,
     tag: "Bestseller",
-    description: "A soft, expressive scent designed to layer beautifully.",
-    image: "images/product-body-mist.jpg"
+    description: "Purify and refresh your skin with our Mud Beauty Mask for a good-looking glow.",
+    image: "/assets/images/mudmask.jpg"
   },
 
   {
     id: 5,
-    name: "Everyday Kitchen Set",
-    category: "kitchen",
-    price: 32000,
+    name: "Facial make-up set",
+    category: "beauty",
+    price: 25000,
     tag: "New",
-    description: "A practical collection for prep, serving and everyday cooking.",
-    image: "images/product-kitchen-set.jpg"
+    description: "Create stunning looks with our Facial Makeup Set, perfect for everyday beauty and special occasions.",
+    image: "/assets/images/makeupset.jpg"
   },
 
   {
     id: 6,
-    name: "Minimal Utensil Pair",
-    category: "kitchen",
-    price: 14500,
-    tag: "Edit",
-    description: "Useful, clean-lined utensils designed to sit beautifully on display.",
-    image: "images/product-utensil-pair.jpg"
+    name: "Handcream",
+    category: "beauty",
+    price: 700,
+    tag: "new",
+    description: "Keep your hands soft and moisturized with our Hand Cream for smooth, nourished skin every day.",
+    image: "/assets/images/handcream.jpg"
   },
 
   {
     id: 7,
-    name: "Daily Care Duo",
-    category: "toiletries",
-    price: 19800,
+    name: "Vacuum flask",
+    category: "kitchen",
+    price: 2000,
     tag: "New",
-    description: "Simple daily essentials for a fresh, well-kept routine.",
-    image: "images/product-care-duo.jpg"
+    description: "Keep your drinks at the perfect temperature with our Flask, ideal for everyday use, travel, and busy days.",
+    image: "/assets/images/flask.jpg"
   },
 
-  {
+    {
     id: 8,
-    name: "Travel Toiletry Set",
-    category: "toiletries",
+    name: "Cutlery set",
+    category: "kitchen",
     price: 17500,
     tag: "Edit",
     description: "A compact, considered kit made for weekends and getaways.",
-    image: "images/product-toiletry-set.jpg"
+    image: "/assets/images/cutleryset.jpg"
+    },
+  
+  {
+    id: 9,
+    name: "Glassware set",
+    category: "kitchen",
+    price: 17500,
+    tag: "hot",
+    description: "A compact, considered kit made for weekends and getaways.",
+    image: "/assets/images/glasswares.jpg"
+    },
+  
+  {
+    id: 10,
+    name: "Sanitary Set",
+    category: "toiletries",
+    price: 17500,
+    tag: "bestseller",
+    description: "Stay prepared and organized with our Sanitary Sets, designed for comfort and convenience during your period.",
+    image: "/assets/images/sanitary.jpg"
+  },
+
+  {
+  id: 11,
+    name: "Hair dryer",
+    category: "toiletries",
+    price: 5000,
+    tag: "hot pick",
+    description: "Style your hair with ease using our Hair Dryer, perfect for quick drying and effortless everyday styling.",
+    image: "/assets/images/dryer.jpg"
+    },
+  
+  {
+    id: 12,
+    name: "Toiletries travel storage bag",
+    category: "toiletries",
+    price: 7000,
+    tag: "new",
+    description: "Keep your essentials organized with our Toiletries Storage Bag, perfect for travel and everyday convenience.",
+    image: "/assets/images/storagebag.jpg"
   }
 ];
 
@@ -224,7 +265,7 @@ function createProductCard(product, dark = false) {
         </span>
 
         <span>
-          JIDDAMARH EDIT
+           JIDDAHS HEAVEN
         </span>
 
       </div>

@@ -1,4 +1,5 @@
 /* ==========================================================
+/* ==========================================================
    ALL BY JIDDAMARH
    Premium responsive storefront — HTML/CSS/JS
    ========================================================== */
@@ -62,7 +63,7 @@ button { cursor: pointer; }
   background: var(--black);
   color: var(--white);
   font-size: 10px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
 }
 
@@ -71,7 +72,7 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 56.5px;
 }
 
 .announcement-dot { opacity: 0.6; }
@@ -220,7 +221,6 @@ button { cursor: pointer; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-
 /* ---------- Search panel ---------- */
 .search-panel {
   display: none;
@@ -272,58 +272,120 @@ button { cursor: pointer; }
 }
 
 /* ---------- Hero ---------- */
+/* ===================================
+   JIDDAH'S HEAVEN HERO FIX
+   =================================== */
+
 .hero {
-  min-height: 78vh;
   position: relative;
   isolation: isolate;
-  color: var(--white);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  width: 100%;
+  min-height: 580px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-.hero-media,
-.hero-shade {
+/* Background image */
+.hero .hero-media {
   position: absolute;
   inset: 0;
-}
-
-.hero-media {
+  width: 100%;
+  height: 100%;
   z-index: -2;
-  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.14)), var(--paper);
-}
-
-.hero-shade {
-  z-index: -1;
-  background: linear-gradient(90deg, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0.28) 44%, rgba(0,0,0,0.05) 100%);
-}
-
-.hero-content {
-  padding-top: 150px;
-  padding-bottom: 110px;
-}
-/* Image styling */
-.slot-image {
-  display: fill;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  object-position: fill;
-}
-
-/* Hero image container */
-.hero-media {
-  width: 100%;
-  height: 100%;
   overflow: hidden;
 }
 
+.hero .hero-media .slot-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Image overlay */
+.hero .hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.70),
+    rgba(0, 0, 0, 0.30),
+    rgba(0, 0, 0, 0.05)
+  );
+}
+
+/* Text and buttons */
+.hero .hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 110px 6% 50px;
+  box-sizing: border-box;
+  color: #ffffff;
+}
+
+.hero .hero-content h1 {
+  max-width: 750px;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  line-height: 1.12;
+  overflow-wrap: break-word;
+}
+
+.hero .hero-content p,
+.hero .hero-content .hero-text {
+  max-width: 580px;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  line-height: 1.7;
+}
+
+/* Tablet */
 @media (max-width: 768px) {
-  .hero-media {
-    height: 350px;
+  .hero {
+    min-height: 520px;
+  }
+
+  .hero .hero-content {
+    padding: 55px 5%;
+  }
+
+  .hero .hero-media .slot-image {
+    object-position: center;
   }
 }
 
+/* Mobile */
+@media (max-width: 480px) {
+  .hero {
+    min-height: 480px;
+  }
+
+  .hero .hero-content {
+    padding: 40px 22px;
+  }
+
+  .hero .hero-content h1 {
+    font-size: clamp(1.9rem, 8vw, 2.8rem);
+  }
+
+  .hero .hero-content p,
+  .hero .hero-content .hero-text {
+    font-size: 0.95rem;
+  }
+
+  .hero .hero-shade {
+    background: rgba(0, 0, 0, 0.48);
+  }
+
+  .hero .hero-media .slot-image {
+    object-position: center;
+  }
+}
 .eyebrow {
   margin: 0 0 17px;
   font-size: 10px;
@@ -692,6 +754,23 @@ h2 em {
   font-size: 30px;
 }
 
+.whatsapp-order-btn {
+    display: block;
+    padding: 12px;
+    margin-top: 10px;
+    background: #25D366;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+.whatsapp-order-btn:hover {
+    background: #1ebe5d;
+    transform: translateY(-3px);
+}
 /* ---------- Editorial ---------- */
 .editorial-grid {
   display: grid;
