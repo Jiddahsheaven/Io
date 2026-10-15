@@ -12,7 +12,7 @@ const products = [
     price: 17500,
     tag: "New",
     description: "Elevate your style with our elegant Abayas and Kimonos, perfect for modest fashion and effortless sophistication.",
-    image: "/assets/images/abayas.jpg"
+    image: "assets/images/abayas.jpg"
   },
 
   {
@@ -22,7 +22,7 @@ const products = [
     price: 10000,
     tag: "Hot pick",
     description: "Enjoy effortless style and comfort with our Palazzo Pants, perfect for chic everyday looks and elegant outings.",
-    image: "/assets/images/palazzo.jpg"
+    image: "assets/images/palazzo.jpg"
   },
 
   {
@@ -32,7 +32,7 @@ const products = [
     price: 300,
     tag: "Bestseller",
     description: "Refresh and nourish your skin with our Facial Beauty Mask for a radiant, healthy-looking glow.",
-    image: "/assets/images/facialmask.jpg"
+    image: "assets/images/facialmask.jpg"
   },
 
   {
@@ -42,7 +42,7 @@ const products = [
     price: 1000,
     tag: "Bestseller",
     description: "Purify and refresh your skin with our Mud Beauty Mask for a good-looking glow.",
-    image: "/assets/images/mudmask.jpg"
+    image: "assets/images/mudmask.jpg"
   },
 
   {
@@ -52,7 +52,7 @@ const products = [
     price: 25000,
     tag: "New",
     description: "Create stunning looks with our Facial Makeup Set, perfect for everyday beauty and special occasions.",
-    image: "/assets/images/makeupset.jpg"
+    image: "assets/images/makeupset.jpg"
   },
 
   {
@@ -62,7 +62,7 @@ const products = [
     price: 700,
     tag: "new",
     description: "Keep your hands soft and moisturized with our Hand Cream for smooth, nourished skin every day.",
-    image: "/assets/images/handcream.jpg"
+    image: "assets/images/handcream.jpg"
   },
 
   {
@@ -72,7 +72,7 @@ const products = [
     price: 2000,
     tag: "New",
     description: "Keep your drinks at the perfect temperature with our Flask, ideal for everyday use, travel, and busy days.",
-    image: "/assets/images/flask.jpg"
+    image: "assets/images/flask.jpg"
   },
 
     {
@@ -82,7 +82,7 @@ const products = [
     price: 17500,
     tag: "Edit",
     description: "A compact, considered kit made for weekends and getaways.",
-    image: "/assets/images/cutleryset.jpg"
+    image: "assets/images/cutleryset.jpg"
     },
   
   {
@@ -92,7 +92,7 @@ const products = [
     price: 17500,
     tag: "hot",
     description: "A compact, considered kit made for weekends and getaways.",
-    image: "/assets/images/glasswares.jpg"
+    image: "assets/images/glasswares.jpg"
     },
   
   {
@@ -102,7 +102,7 @@ const products = [
     price: 17500,
     tag: "bestseller",
     description: "Stay prepared and organized with our Sanitary Sets, designed for comfort and convenience during your period.",
-    image: "/assets/images/sanitary.jpg"
+    image: "assets/images/sanitary.jpg"
   },
 
   {
@@ -112,7 +112,7 @@ const products = [
     price: 5000,
     tag: "hot pick",
     description: "Style your hair with ease using our Hair Dryer, perfect for quick drying and effortless everyday styling.",
-    image: "/assets/images/dryer.jpg"
+    image: "assets/images/dryer.jpg"
     },
   
   {
@@ -122,7 +122,7 @@ const products = [
     price: 7000,
     tag: "new",
     description: "Keep your essentials organized with our Toiletries Storage Bag, perfect for travel and everyday convenience.",
-    image: "/assets/images/storagebag.jpg"
+    image: "assets/images/storagebag.jpg"
   }
 ];
 
