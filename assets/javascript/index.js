@@ -1,4 +1,4 @@
-import { supabase, testDatabaseConnection } from '../javascript/supabase.js';
+
 // @ts-nocheck
 /* ==========================================================
    ALL BY JIDDAMARH
