@@ -1101,3 +1101,5 @@ renderProducts("all");
 
 updateCartUI();
 setupScrollReveal();
+
+testDatabaseConnection();
