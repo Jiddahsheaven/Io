@@ -8,7 +8,7 @@ testDatabaseConnection();
    Front-end interactions
    ========================================================== */
 
-const products = [
+let products = [
   {
     id: 1,
     name: "Abaya/kimono",
