@@ -1102,119 +1102,85 @@ updateCartUI();
 setupScrollReveal();
 
 // ========================================
-// LOAD PRODUCTS FROM SUPABASE ON THE WEBSITE
+// // ========================================
+// LOAD PRODUCTS FROM SUPABASE
 // ========================================
 
-async function displaySupabaseProducts() {
-    // Find the existing product grid
-    const productGrid = document.querySelector('.product-grid');
+function normalizeCategory(category) {
+  const value = String(category || "")
+    .trim()
+    .toLowerCase();
 
-    if (!productGrid) {
-        console.error('Product grid not found on the website.');
-        return;
-    }
+  const categories = {
+    apparel: "apparel",
+    fashion: "apparel",
+    clothing: "apparel",
+    clothes: "apparel",
 
-    // Get active products from Supabase
-    const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('is_active', true);
+    beauty: "beauty",
+    makeup: "beauty",
+    cosmetics: "beauty",
 
-    if (error) {
-        console.error('Could not load Supabase products:', error.message);
-        return;
-    }
+    kitchen: "kitchen",
+    utensils: "kitchen",
+    cookware: "kitchen",
 
-    if (!data || data.length === 0) {
-        console.log('No active products found in Supabase.');
-        return;
-    }
+    toiletries: "toiletries",
+    skincare: "toiletries",
+    hygiene: "toiletries"
+  };
 
-    // Display each database product as a card
-    data.forEach(product => {
-        // Prevent duplicate cards
-        if (
-            productGrid.querySelector(
-                `[data-supabase-product-id="${product.id}"]`
-            )
-        ) {
-            return;
-        }
-
-        // Create the card
-        const card = document.createElement('article');
-        card.className = 'product-card';
-        card.dataset.supabaseProductId = product.id;
-
-        // Product image area
-        const media = document.createElement('div');
-        media.className = 'product-media';
-
-        const image = document.createElement('img');
-        image.src = product.image_url || 'https://placehold.co/600x730?text=Product';
-        image.alt = product.name || 'Product image';
-        image.loading = 'lazy';
-        image.style.width = '100%';
-        image.style.height = '100%';
-        image.style.objectFit = 'cover';
-
-        image.onerror = function () {
-            this.onerror = null;
-            this.src = 'https://placehold.co/600x730?text=Image+Unavailable';
-        };
-
-        media.appendChild(image);
-
-        // Product information
-        const info = document.createElement('div');
-        info.className = 'product-info';
-
-        const meta = document.createElement('div');
-        meta.className = 'product-meta';
-
-        const category = document.createElement('span');
-        category.textContent = product.category || 'Collection';
-
-        const stock = document.createElement('span');
-        stock.textContent = Number(product.stock) > 0
-            ? 'In stock'
-            : 'Out of stock';
-
-        meta.append(category, stock);
-
-        const name = document.createElement('h3');
-        name.className = 'product-name';
-        name.textContent = product.name || 'Unnamed product';
-
-        const description = document.createElement('p');
-        description.className = 'product-desc';
-        description.textContent = product.description || '';
-
-        const bottom = document.createElement('div');
-        bottom.className = 'product-bottom';
-
-        const price = document.createElement('span');
-        price.className = 'product-price';
-        price.textContent = Number(product.price).toLocaleString(
-            'en-NG',
-            {
-                style: 'currency',
-                currency: 'NGN',
-                maximumFractionDigits: 2
-            }
-        );
-
-        bottom.appendChild(price);
-
-        info.append(meta, name, description, bottom);
-        card.append(media, info);
-
-        // Add the card to the existing website grid
-        productGrid.appendChild(card);
-    });
-
-    console.log('Supabase product cards displayed:', data.length);
+  return categories[value] || "toiletries";
 }
+
+async function loadSupabaseProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("is_active", true);
+
+  if (error) {
+    console.error("Supabase product loading failed:", error.message);
+    showToast("Could not load online products.");
+    return;
+  }
+
+  if (!data) return;
+
+  // Convert database records into your website's product format.
+  const databaseProducts = data.map(item => ({
+    id: `supabase-${item.id}`,
+    name: item.name || "Unnamed product",
+    category: normalizeCategory(item.category),
+    price: Number(item.price) || 0,
+    tag: "New",
+    description: item.description || "",
+    image: item.image_url || "https://placehold.co/600x730?text=Product",
+    stock: Number(item.stock) || 0
+  }));
+
+  // Keep local products and replace previously loaded database products.
+  products = [
+    ...products.filter(
+      item => !String(item.id).startsWith("supabase-")
+    ),
+    ...databaseProducts
+  ];
+
+  // Refresh the existing website product displays.
+  renderFeatured();
+  renderProducts(activeFilter, searchInput?.value.trim() || "");
+  syncFilterUI();
+  updateCartUI();
+
+  console.log(
+    "Supabase products integrated successfully:",
+    databaseProducts
+  );
+}
+
+// Load database products when the page opens.
+loadSupabaseProducts();
 
 // Run the function
 displaySupabaseProducts();
