@@ -1,4 +1,7 @@
 import { supabase, testDatabaseConnection } from './supabase.js';
+
+testDatabaseConnection();
+
 // @ts-nocheck
 /* ==========================================================
    ALL BY JIDDAMARH
@@ -1102,4 +1105,3 @@ renderProducts("all");
 updateCartUI();
 setupScrollReveal();
 
-testDatabaseConnection();
