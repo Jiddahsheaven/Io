@@ -1120,3 +1120,121 @@ renderProducts("all");
 updateCartUI();
 setupScrollReveal();
 
+// ========================================
+// LOAD PRODUCTS FROM SUPABASE ON THE WEBSITE
+// ========================================
+
+async function displaySupabaseProducts() {
+    // Find the existing product grid
+    const productGrid = document.querySelector('.product-grid');
+
+    if (!productGrid) {
+        console.error('Product grid not found on the website.');
+        return;
+    }
+
+    // Get active products from Supabase
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true);
+
+    if (error) {
+        console.error('Could not load Supabase products:', error.message);
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        console.log('No active products found in Supabase.');
+        return;
+    }
+
+    // Display each database product as a card
+    data.forEach(product => {
+        // Prevent duplicate cards
+        if (
+            productGrid.querySelector(
+                `[data-supabase-product-id="${product.id}"]`
+            )
+        ) {
+            return;
+        }
+
+        // Create the card
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        card.dataset.supabaseProductId = product.id;
+
+        // Product image area
+        const media = document.createElement('div');
+        media.className = 'product-media';
+
+        const image = document.createElement('img');
+        image.src = product.image_url || 'https://placehold.co/600x730?text=Product';
+        image.alt = product.name || 'Product image';
+        image.loading = 'lazy';
+        image.style.width = '100%';
+        image.style.height = '100%';
+        image.style.objectFit = 'cover';
+
+        image.onerror = function () {
+            this.onerror = null;
+            this.src = 'https://placehold.co/600x730?text=Image+Unavailable';
+        };
+
+        media.appendChild(image);
+
+        // Product information
+        const info = document.createElement('div');
+        info.className = 'product-info';
+
+        const meta = document.createElement('div');
+        meta.className = 'product-meta';
+
+        const category = document.createElement('span');
+        category.textContent = product.category || 'Collection';
+
+        const stock = document.createElement('span');
+        stock.textContent = Number(product.stock) > 0
+            ? 'In stock'
+            : 'Out of stock';
+
+        meta.append(category, stock);
+
+        const name = document.createElement('h3');
+        name.className = 'product-name';
+        name.textContent = product.name || 'Unnamed product';
+
+        const description = document.createElement('p');
+        description.className = 'product-desc';
+        description.textContent = product.description || '';
+
+        const bottom = document.createElement('div');
+        bottom.className = 'product-bottom';
+
+        const price = document.createElement('span');
+        price.className = 'product-price';
+        price.textContent = Number(product.price).toLocaleString(
+            'en-NG',
+            {
+                style: 'currency',
+                currency: 'NGN',
+                maximumFractionDigits: 2
+            }
+        );
+
+        bottom.appendChild(price);
+
+        info.append(meta, name, description, bottom);
+        card.append(media, info);
+
+        // Add the card to the existing website grid
+        productGrid.appendChild(card);
+    });
+
+    console.log('Supabase product cards displayed:', data.length);
+}
+
+// Run the function
+displaySupabaseProducts();
+
