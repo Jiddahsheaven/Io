@@ -463,43 +463,32 @@ function setFilter(
    ========================================================== */
 
 function addToCart(productId) {
-
-  const product =
-    products.find(
-      (item) => item.id === productId
-    );
-
-
-  if (!product) return;
-
-
-  const existing =
-    cart.find(
-      (item) => item.id === productId
-    );
-
-
-  if (existing) {
-
-    existing.qty += 1;
-
-  } else {
-
-    cart.push({
-      ...product,
-      qty: 1
-    });
-
-  }
-
-
-  updateCartUI();
-
-
-  showToast(
-    `${product.name} added to your bag.`
+  const product = products.find(
+    item => String(item.id) === String(productId)
   );
 
+  if (!product) {
+    showToast("Product not found.");
+    return;
+  }
+
+  if (Number(product.stock) <= 0) {
+    showToast("Sorry, this product is out of stock.");
+    return;
+  }
+
+  const existingItem = cart.find(
+    item => String(item.id) === String(productId)
+  );
+
+  if (existingItem) {
+    existingItem.qty += 1;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+
+  updateCartUI();
+  showToast(`${product.name} added to your bag.`);
 }
 
 
