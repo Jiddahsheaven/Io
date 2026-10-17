@@ -497,15 +497,11 @@ function addToCart(productId) {
    ========================================================== */
 
 function removeFromCart(productId) {
-
-  cart =
-    cart.filter(
-      (item) => item.id !== productId
-    );
-
+  cart = cart.filter(
+    item => String(item.id) !== String(productId)
+  );
 
   updateCartUI();
-
 }
 
 
