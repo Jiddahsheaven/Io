@@ -130,6 +130,21 @@ const products = [
   }
 ];
 
+async function testSupabaseProducts() {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true);
+
+    if (error) {
+        console.error('Could not load products:', error.message);
+        return;
+    }
+
+    console.log('Products from Supabase:', data);
+}
+
+testSupabaseProducts();
 
 /* ==========================================================
    CATEGORY NAMES
