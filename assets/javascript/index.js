@@ -692,9 +692,7 @@ document.addEventListener(
     if (addButton) {
 
       addToCart(
-        Number(
-          addButton.dataset.addId
-        )
+        addButton.dataset.addId
       );
 
       return;
@@ -710,9 +708,7 @@ document.addEventListener(
     if (removeButton) {
 
       removeFromCart(
-        Number(
-          removeButton.dataset.removeId
-        )
+        removeButton.dataset.removeId
       );
 
       return;
