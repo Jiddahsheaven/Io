@@ -520,7 +520,8 @@ function removeFromCart(productId) {
    ========================================================== */
 
 function updateCartUI() {
-    try {
+  // Save cart so it survives a page refresh.
+  try {
     localStorage.setItem(
       "jiddamarh-cart",
       JSON.stringify(cart)
@@ -529,54 +530,42 @@ function updateCartUI() {
     console.warn("Could not save cart:", error);
   }
 
-  const count =
-    cart.reduce(
-      (total, item) =>
-        total + item.qty,
-      0
-    );
+  // Update total item count.
+  const count = cart.reduce(
+    (total, item) => total + item.qty,
+    0
+  );
 
-
-  const subtotal =
-    cart.reduce(
-      (total, item) =>
-        total +
-        item.price *
-        item.qty,
-      0
-    );
-
+  // Calculate subtotal.
+  const subtotal = cart.reduce(
+    (total, item) => total + item.price * item.qty,
+    0
+  );
 
   bagCount.textContent = count;
+  cartSubtotal.textContent = formatNaira(subtotal);
 
-  cartSubtotal.textContent =
-    formatNaira(subtotal);
-
-
+  // Empty cart message.
   if (!cart.length) {
-
     cartItems.innerHTML = `
-
       <div class="cart-empty">
-
         Your bag is currently empty.
-
         <br><br>
-
         Explore the collection
         and add something you love.
-
       </div>
-
     `;
-
     return;
   }
 
+  // Render cart items and quantity controls.
+  cartItems.innerHTML = cart.map((item) => {
+    const stock = Number(item.stock);
+    const hasStockLimit = Number.isFinite(stock) && stock >= 0;
+    const canIncrease =
+      !hasStockLimit || item.qty < stock;
 
-  cartItems.innerHTML =
-    cart.map((item) => `
-
+    return `
       <div class="cart-item">
 
         <img
@@ -586,31 +575,47 @@ function updateCartUI() {
           loading="lazy"
         >
 
+        <div class="cart-item-details">
 
-        <div>
-
-          <h4>
-            ${item.name}
-          </h4>
+          <h4>${item.name}</h4>
 
           <p>
-            ${categoryLabels[item.category]}
-            · Qty ${item.qty}
+            ${categoryLabels[item.category] || item.category || "Collection"}
           </p>
 
-        </div>
+          <div class="quantity-controls">
 
+            <button
+              type="button"
+              class="quantity-btn"
+              data-qty-id="${item.id}"
+              data-qty-change="-1"
+              aria-label="Decrease ${item.name} quantity"
+              ${item.qty <= 1 ? "disabled" : ""}
+            >−</button>
+
+            <span class="quantity-value">
+              ${item.qty}
+            </span>
+
+            <button
+              type="button"
+              class="quantity-btn"
+              data-qty-id="${item.id}"
+              data-qty-change="1"
+              aria-label="Increase ${item.name} quantity"
+              ${!canIncrease ? "disabled" : ""}
+            >+</button>
+
+          </div>
+
+        </div>
 
         <div>
 
           <div class="cart-item-price">
-
-            ${formatNaira(
-              item.price * item.qty
-            )}
-
+            ${formatNaira(item.price * item.qty)}
           </div>
-
 
           <button
             class="add-to-bag"
@@ -618,19 +623,47 @@ function updateCartUI() {
             data-remove-id="${item.id}"
             style="margin-top:7px;"
           >
-
             Remove
-
           </button>
 
         </div>
 
       </div>
-
-    `).join("");
-
+    `;
+  }).join("");
 }
 
+const quantityButton = event.target.closest("[data-qty-id]");
+
+if (quantityButton) {
+  const productId = quantityButton.dataset.qtyId;
+  const change = Number(quantityButton.dataset.qtyChange);
+
+  const item = cart.find(
+    product => String(product.id) === String(productId)
+  );
+
+  if (!item) return;
+
+  const stock = Number(item.stock);
+  const hasStockLimit = Number.isFinite(stock) && stock >= 0;
+
+  const newQuantity = item.qty + change;
+
+  if (newQuantity < 1) {
+    return;
+  }
+
+  if (hasStockLimit && newQuantity > stock) {
+    showToast("You cannot add more than the available stock.");
+    return;
+  }
+
+  item.qty = newQuantity;
+
+  updateCartUI();
+  return;
+}
 
 /* ==========================================================
    OPEN CART
