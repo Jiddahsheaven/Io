@@ -1155,35 +1155,133 @@ updateCartUI();
 setupScrollReveal();
 
 // ========================================
-// // ========================================
-// LOAD PRODUCTS FROM SUPABASE
+// NORMALIZE PRODUCT CATEGORIES
 // ========================================
-
 function normalizeCategory(category) {
-  const value = String(category || "")
-    .trim()
-    .toLowerCase();
+  const value = String(category || "").trim().toLowerCase();
 
-  const categories = {
-    apparel: "apparel",
-    fashion: "apparel",
-    clothing: "apparel",
-    clothes: "apparel",
+  const categoryMap = {
+    // 👗 APPAREL
+    "apparel": "apparel",
+    "fashion": "apparel",
+    "clothing": "apparel",
+    "women's clothing": "apparel",
+    "men's clothing": "apparel",
+    "menswear": "apparel",
+    "dresses": "apparel",
+    "gowns": "apparel",
+    "abayas": "apparel",
+    "abaya": "apparel",
+    "kimono": "apparel",
+    "hijabs": "apparel",
+    "tops": "apparel",
+    "shirts": "apparel",
+    "trousers": "apparel",
+    "skirts": "apparel",
+    "jeans": "apparel",
+    "shorts": "apparel",
+    "jackets": "apparel",
+    "coats": "apparel",
+    "underwear": "apparel",
+    "lingerie": "apparel",
+    "sleepwear": "apparel",
+    "activewear": "apparel",
+    "sportswear": "apparel",
 
-    beauty: "beauty",
-    makeup: "beauty",
-    cosmetics: "beauty",
+    // 💄 BEAUTY
+    "beauty": "beauty",
+    "beauty products": "beauty",
+    "skincare": "beauty",
+    "skin care": "beauty",
+    "makeup": "beauty",
+    "cosmetics": "beauty",
+    "perfume": "beauty",
+    "perfumes": "beauty",
+    "fragrance": "beauty",
+    "fragrances": "beauty",
+    "body care": "beauty",
+    "body lotion": "beauty",
+    "moisturizer": "beauty",
+    "moisturizers": "beauty",
+    "face cream": "beauty",
+    "cleansers": "beauty",
+    "serums": "beauty",
+    "sunscreen": "beauty",
+    "lipstick": "beauty",
+    "lip gloss": "beauty",
+    "foundation": "beauty",
+    "powder": "beauty",
+    "mascara": "beauty",
+    "eyeliner": "beauty",
+    "hair care": "beauty",
+    "shampoo": "beauty",
+    "conditioner": "beauty",
+    "wigs": "beauty",
+    "hair extensions": "beauty",
+    "nail polish": "beauty",
+    "nails": "beauty",
 
-    kitchen: "kitchen",
-    utensils: "kitchen",
-    cookware: "kitchen",
+    // 🍳 KITCHEN
+    "kitchen": "kitchen",
+    "kitchenware": "kitchen",
+    "cookware": "kitchen",
+    "utensils": "kitchen",
+    "kitchen utensils": "kitchen",
+    "pots": "kitchen",
+    "pans": "kitchen",
+    "frying pans": "kitchen",
+    "cooking pots": "kitchen",
+    "plates": "kitchen",
+    "dishes": "kitchen",
+    "bowls": "kitchen",
+    "cups": "kitchen",
+    "mugs": "kitchen",
+    "cutlery": "kitchen",
+    "cutlery sets": "kitchen",
+    "knives": "kitchen",
+    "chopping boards": "kitchen",
+    "storage containers": "kitchen",
+    "food containers": "kitchen",
+    "water bottles": "kitchen",
+    "flasks": "kitchen",
+    "kettles": "kitchen",
+    "blenders": "kitchen",
+    "kitchen appliances": "kitchen",
+    "bakeware": "kitchen",
+    "baking tools": "kitchen",
+    "dish racks": "kitchen",
+    "dish drainers": "kitchen",
 
-    toiletries: "toiletries",
-    skincare: "toiletries",
-    hygiene: "toiletries"
+    // 🧴 TOILETRIES
+    "toiletries": "toiletries",
+    "personal care": "toiletries",
+    "bathroom essentials": "toiletries",
+    "bath products": "toiletries",
+    "soap": "toiletries",
+    "body wash": "toiletries",
+    "shower gel": "toiletries",
+    "toothpaste": "toiletries",
+    "toothbrushes": "toiletries",
+    "mouthwash": "toiletries",
+    "deodorant": "toiletries",
+    "deodorants": "toiletries",
+    "tissues": "toiletries",
+    "toilet paper": "toiletries",
+    "sanitary pads": "toiletries",
+    "tampons": "toiletries",
+    "cotton buds": "toiletries",
+    "cotton wool": "toiletries",
+    "hand wash": "toiletries",
+    "hand sanitizer": "toiletries",
+    "shaving products": "toiletries",
+    "razors": "toiletries",
+    "loofahs": "toiletries",
+    "bath towels": "toiletries",
+    "face towels": "toiletries",
+    "bath sponges": "toiletries"
   };
 
-  return categories[value] || "toiletries";
+  return categoryMap[value] || value;
 }
 
 async function loadSupabaseProducts() {
