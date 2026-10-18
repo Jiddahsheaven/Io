@@ -520,6 +520,14 @@ function removeFromCart(productId) {
    ========================================================== */
 
 function updateCartUI() {
+    try {
+    localStorage.setItem(
+      "jiddamarh-cart",
+      JSON.stringify(cart)
+    );
+  } catch (error) {
+    console.warn("Could not save cart:", error);
+  }
 
   const count =
     cart.reduce(
