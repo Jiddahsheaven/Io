@@ -1235,9 +1235,6 @@ async function loadSupabaseProducts() {
 // Load database products when the page opens.
 loadSupabaseProducts();
 
-Run the function
-displaySupabaseProducts();
-
 
 // ========================================
 // RESTORE PAGE POSITION AFTER REFRESH
