@@ -163,7 +163,17 @@ const categoryLabels = {
    ========================================================== */
 
 let activeFilter = "all";
-let cart = [];
+let cart = (() => {
+  try {
+    const savedCart = JSON.parse(
+      localStorage.getItem("jiddamarh-cart") || "[]"
+    );
+
+    return Array.isArray(savedCart) ? savedCart : [];
+  } catch (error) {
+    return [];
+  }
+})();
 
 
 /* ==========================================================
