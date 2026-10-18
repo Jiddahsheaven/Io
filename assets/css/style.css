@@ -1394,3 +1394,51 @@ h2 em {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Shopping cart quantity controls */
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.quantity-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d8d0c5;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.quantity-btn:hover:not(:disabled) {
+  background: #eee8df;
+  color: #222;
+}
+
+.quantity-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.quantity-value {
+  min-width: 18px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.cart-item-details {
+  min-width: 0;
+}
+
+.cart-item-details h4 {
+  overflow-wrap: anywhere;
+}
