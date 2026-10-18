@@ -720,38 +720,7 @@ document.addEventListener(
 
 
     const removeButton =
-      event.target.closest(
-       const quantityButton = event.target.closest("[data-qty-id]");
-
-if (quantityButton) {
-  const productId = quantityButton.dataset.qtyId;
-  const change = Number(quantityButton.dataset.qtyChange);
-
-  const item = cart.find(
-    product => String(product.id) === String(productId)
-  );
-
-  if (!item) return;
-
-  const stock = Number(item.stock);
-  const hasStockLimit = Number.isFinite(stock) && stock >= 0;
-
-  const newQuantity = item.qty + change;
-
-  if (newQuantity < 1) {
-    return;
-  }
-
-  if (hasStockLimit && newQuantity > stock) {
-    showToast("You cannot add more than the available stock.");
-    return;
-  }
-
-  item.qty = newQuantity;
-
-  updateCartUI();
-  return;
-}
+      event.target.closest (
         "[data-remove-id]"
       );
 
