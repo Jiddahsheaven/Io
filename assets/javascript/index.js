@@ -1202,15 +1202,15 @@ async function loadSupabaseProducts() {
 
   // Convert database records into your website's product format.
   const databaseProducts = data.map(item => ({
-    id: `supabase-${item.id}`,
-    name: item.name || "Unnamed product",
-    category: normalizeCategory(item.category),
-    price: Number(item.price) || 0,
-    tag: "New",
-    description: item.description || "",
-    image: item.image_url || "https://placehold.co/600x730?text=Product",
-    stock: Number(item.stock) || 0
-  }));
+  id: `supabase-${item.id}`,
+  name: item.name || "Unnamed product",
+  category: normalizeCategory(item.category),
+  price: Number(item.price) || 0,
+  tag: "New",
+  description: item.description || "",
+  image: item.image_url || "https://placehold.co/600x730?text=Product",
+  stock: item.stock == null ? null : Number(item.stock)
+}));
 
   // Keep local products and replace previously loaded database products.
   products = [
