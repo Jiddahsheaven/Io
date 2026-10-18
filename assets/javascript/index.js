@@ -718,6 +718,39 @@ document.addEventListener(
       return;
     }
 
+    // Handle quantity buttons
+const quantityButton = event.target.closest("[data-qty-id]");
+
+if (quantityButton) {
+  const productId = quantityButton.dataset.qtyId;
+  const change = Number(quantityButton.dataset.qtyChange);
+
+  const item = cart.find(
+    product => String(product.id) === String(productId)
+  );
+
+  if (!item) return;
+
+  const newQuantity = item.qty + change;
+
+  if (newQuantity < 1) return;
+
+  const stock = Number(item.stock);
+
+  if (
+    Number.isFinite(stock) &&
+    stock >= 0 &&
+    newQuantity > stock
+  ) {
+    showToast("You cannot exceed the available stock.");
+    return;
+  }
+
+  item.qty = newQuantity;
+
+  updateCartUI();
+  return;
+}
 
     const removeButton =
       event.target.closest (
