@@ -1200,6 +1200,45 @@ async function loadSupabaseProducts() {
 // Load database products when the page opens.
 loadSupabaseProducts();
 
-// Run the function
-displaySupabaseProducts();
+// ========================================
+// RESTORE PAGE POSITION AFTER REFRESH
+// ========================================
+
+const SCROLL_POSITION_KEY = "jiddamarh-scroll-position";
+
+// Remember the current scroll position.
+window.addEventListener("pagehide", () => {
+  try {
+    sessionStorage.setItem(
+      SCROLL_POSITION_KEY,
+      String(window.scrollY)
+    );
+  } catch (error) {
+    console.warn("Could not save page position:", error);
+  }
+});
+
+// Restore the previous position after the page loads.
+window.addEventListener("load", () => {
+  try {
+    const savedPosition = sessionStorage.getItem(
+      SCROLL_POSITION_KEY
+    );
+
+    if (savedPosition === null) return;
+
+    const position = Number(savedPosition);
+
+    if (!Number.isFinite(position)) return;
+
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: position,
+        behavior: "instant"
+      });
+    });
+  } catch (error) {
+    console.warn("Could not restore page position:", error);
+  }
+});
 
