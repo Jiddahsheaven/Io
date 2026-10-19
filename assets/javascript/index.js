@@ -1084,12 +1084,14 @@ $("#newsletterForm").addEventListener(
 ======================================== */
 
 $("#checkoutButton").addEventListener("click", () => {
+
   if (!cart.length) {
     showToast("Your bag is empty.");
     return;
   }
 
   window.location.href = "checkout.html";
+
 });
 
 */ ==========================================================
