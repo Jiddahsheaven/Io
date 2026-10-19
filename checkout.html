@@ -4,163 +4,609 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Checkout | Jiddamarh</title>
+  <title>Secure Checkout | Jidderhs Heaven</title>
+  <meta name="theme-color" content="#f8f5ef">
 
-  <!-- Reuse your existing website stylesheet -->
   <link rel="stylesheet" href="assets/css/style.css">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    .checkout-page {
-      max-width: 850px;
-      margin: 50px auto;
-      padding: 24px;
+    :root {
+      --checkout-paper: #f8f5ef;
+      --checkout-white: #fffefa;
+      --checkout-ink: #191815;
+      --checkout-muted: #777168;
+      --checkout-gold: #b18a48;
+      --checkout-line: #e8e1d6;
     }
 
-    .checkout-page h1 {
-      margin-bottom: 10px;
+    body {
+      background: var(--checkout-paper);
+      color: var(--checkout-ink);
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    .checkout-shell,
+    .checkout-shell * {
+      box-sizing: border-box;
+    }
+
+    .checkout-topbar {
+      border-bottom: 1px solid var(--checkout-line);
+      background: rgba(255, 254, 250, .92);
+    }
+
+    .checkout-topbar-inner {
+      width: min(1120px, calc(100% - 36px));
+      min-height: 82px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .checkout-brand {
+      color: var(--checkout-ink);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .checkout-brand strong {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 25px;
+      font-weight: 500;
+      letter-spacing: -.7px;
+    }
+
+    .checkout-brand span {
+      margin-top: 5px;
+      color: var(--checkout-gold);
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .checkout-secure {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--checkout-muted);
+      font-size: 11px;
+      letter-spacing: .5px;
+    }
+
+    .checkout-secure span {
+      color: var(--checkout-gold);
+      font-size: 17px;
+    }
+
+    .checkout-shell {
+      width: min(1050px, calc(100% - 36px));
+      margin: 52px auto 75px;
+    }
+
+    .checkout-heading {
+      margin-bottom: 32px;
+    }
+
+    .checkout-eyebrow {
+      margin: 0 0 12px;
+      color: var(--checkout-gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .checkout-heading h1 {
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(36px, 5vw, 52px);
+      font-weight: 400;
+      letter-spacing: -1.3px;
+      line-height: 1.1;
+    }
+
+    .checkout-heading > p:last-child {
+      margin: 13px 0 0;
+      color: var(--checkout-muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .checkout-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 27px 0 34px;
+      color: var(--checkout-muted);
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .checkout-progress .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkout-progress .number {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border: 1px solid var(--checkout-line);
+      border-radius: 50%;
+      font-size: 10px;
+    }
+
+    .checkout-progress .active {
+      color: var(--checkout-ink);
+      font-weight: 700;
+    }
+
+    .checkout-progress .active .number {
+      border-color: var(--checkout-gold);
+      background: var(--checkout-gold);
+      color: white;
+    }
+
+    .checkout-progress .line {
+      width: 35px;
+      height: 1px;
+      background: var(--checkout-line);
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(290px, .8fr);
+      align-items: start;
+      gap: 26px;
+    }
+
+    .checkout-card {
+      min-width: 0;
+      padding: clamp(22px, 4vw, 35px);
+      border: 1px solid var(--checkout-line);
+      background: var(--checkout-white);
+      box-shadow: 0 12px 38px rgba(43, 34, 19, .035);
+    }
+
+    .checkout-card-heading {
+      margin: 0 0 7px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 25px;
+      font-weight: 500;
+    }
+
+    .checkout-card-description {
+      margin: 0 0 27px;
+      color: var(--checkout-muted);
+      font-size: 12px;
+      line-height: 1.7;
     }
 
     .checkout-form {
       display: grid;
-      gap: 18px;
-      margin-top: 30px;
+      gap: 20px;
+      margin: 0;
     }
 
     .checkout-form label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 7px;
+      margin-bottom: 9px;
+      color: #39362f;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .35px;
     }
 
     .checkout-form input,
     .checkout-form textarea {
-      box-sizing: border-box;
+      display: block;
       width: 100%;
-      padding: 13px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      min-width: 0;
+      padding: 14px 15px;
+      border: 1px solid #e2dcd1;
+      border-radius: 2px;
+      outline: none;
+      background: #fffefa;
+      color: var(--checkout-ink);
       font: inherit;
+      font-size: 13px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .checkout-form input {
+      min-height: 49px;
     }
 
     .checkout-form textarea {
-      min-height: 110px;
+      min-height: 115px;
       resize: vertical;
+      line-height: 1.6;
+    }
+
+    .checkout-form input::placeholder,
+    .checkout-form textarea::placeholder {
+      color: #aaa397;
+    }
+
+    .checkout-form input:focus,
+    .checkout-form textarea:focus {
+      border-color: var(--checkout-gold);
+      box-shadow: 0 0 0 3px rgba(177, 138, 72, .1);
+    }
+
+    .checkout-form input:focus-visible,
+    .checkout-form textarea:focus-visible,
+    .checkout-submit:focus-visible {
+      outline: 2px solid var(--checkout-gold);
+      outline-offset: 3px;
     }
 
     .checkout-summary {
-      margin-top: 25px;
-      padding: 20px;
-      background: #f7f5f2;
-      border-radius: 8px;
+      min-width: 0;
+    }
+
+    .checkout-summary .checkout-card-heading {
+      margin-bottom: 7px;
+    }
+
+    .checkout-summary-intro {
+      margin: 0 0 23px;
+      color: var(--checkout-muted);
+      font-size: 12px;
+    }
+
+    #checkoutItems {
+      padding: 17px 0;
+      border-top: 1px solid var(--checkout-line);
+      border-bottom: 1px solid var(--checkout-line);
+      overflow-wrap: anywhere;
+    }
+
+    #checkoutItems:empty::before {
+      content: "Your selected products will appear here.";
+      display: block;
+      color: var(--checkout-muted);
+      font-size: 12px;
+    }
+
+    #checkoutItems img {
+      max-width: 100%;
+    }
+
+    #checkoutItems > * {
+      margin-top: 0;
+    }
+
+    .checkout-total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 21px 0;
+      font-size: 13px;
+    }
+
+    .checkout-total-row strong {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 25px;
+      font-weight: 500;
+      overflow-wrap: anywhere;
+      text-align: right;
     }
 
     .checkout-submit {
       width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 6px;
-      background: #222;
+      min-height: 54px;
+      padding: 15px 18px;
+      border: 1px solid var(--checkout-ink);
+      border-radius: 2px;
+      background: var(--checkout-ink);
       color: white;
       font: inherit;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
       cursor: pointer;
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+
+    .checkout-submit:hover:not(:disabled) {
+      border-color: var(--checkout-gold);
+      background: #30291e;
+      transform: translateY(-1px);
     }
 
     .checkout-submit:disabled {
-      opacity: 0.6;
+      opacity: .65;
       cursor: wait;
     }
 
+    .checkout-payment-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 17px 0 0;
+      color: var(--checkout-muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .checkout-payment-note span {
+      color: var(--checkout-gold);
+    }
+
     #checkoutMessage {
-      margin-top: 15px;
-      line-height: 1.6;
+      margin-top: 18px;
+      padding: 0;
+      color: var(--checkout-ink);
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .checkout-back {
+      display: inline-block;
+      margin-top: 24px;
+      color: var(--checkout-muted);
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .checkout-back:hover {
+      color: var(--checkout-gold);
+    }
+
+    .checkout-footer {
+      padding: 22px 18px;
+      border-top: 1px solid var(--checkout-line);
+      color: var(--checkout-muted);
+      font-size: 10px;
+      letter-spacing: .5px;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .checkout-topbar-inner {
+        min-height: 72px;
+      }
+
+      .checkout-brand strong {
+        font-size: 21px;
+      }
+
+      .checkout-secure {
+        font-size: 10px;
+      }
+
+      .checkout-shell {
+        margin-top: 35px;
+        margin-bottom: 45px;
+      }
+
+      .checkout-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      .checkout-summary {
+        grid-row: 1;
+      }
+
+      .checkout-progress {
+        gap: 8px;
+        font-size: 9px;
+      }
+
+      .checkout-progress .line {
+        width: 20px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .checkout-topbar-inner,
+      .checkout-shell {
+        width: calc(100% - 24px);
+      }
+
+      .checkout-secure {
+        gap: 4px;
+        font-size: 9px;
+      }
+
+      .checkout-brand strong {
+        font-size: 19px;
+      }
+
+      .checkout-card {
+        padding: 19px 16px;
+      }
+
+      .checkout-progress {
+        gap: 5px;
+        letter-spacing: .4px;
+      }
+
+      .checkout-progress .number {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .checkout-form input,
+      .checkout-form textarea,
+      .checkout-submit {
+        transition: none;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <main class="checkout-page">
+  <header class="checkout-topbar">
+    <div class="checkout-topbar-inner">
+      <a class="checkout-brand" href="index.html" aria-label="Jidderhs Heaven home">
+        <strong>Jidderhs Heaven</strong>
+        <span>Thoughtfully chosen</span>
+      </a>
 
-    <h1>Checkout</h1>
-
-    <p>Complete your delivery details to place your order.</p>
-
-    <div class="checkout-summary">
-      <h2>Your order</h2>
-      <div id="checkoutItems"></div>
-      <p>
-        <strong>Total:</strong>
-        <span id="checkoutTotal">₦0</span>
-      </p>
+      <div class="checkout-secure">
+        <span aria-hidden="true">♢</span>
+        Secure checkout
+      </div>
     </div>
+  </header>
 
-    <form id="checkoutForm" class="checkout-form">
+  <main class="checkout-shell">
 
-      <div>
-        <label for="customerName">Full name</label>
-        <input
-          id="customerName"
-          name="customer_name"
-          type="text"
-          autocomplete="name"
-          required
-        >
+    <section class="checkout-heading">
+      <p class="checkout-eyebrow">Your shopping experience</p>
+      <h1>Almost yours.</h1>
+      <p>Complete your details below and prepare your order.</p>
+    </section>
+
+    <nav class="checkout-progress" aria-label="Checkout progress">
+      <div class="step">
+        <span class="number">1</span>
+        <span>Bag</span>
       </div>
 
-      <div>
-        <label for="customerEmail">Email address</label>
-        <input
-          id="customerEmail"
-          name="customer_email"
-          type="email"
-          autocomplete="email"
-          required
-        >
+      <span class="line" aria-hidden="true"></span>
+
+      <div class="step active" aria-current="step">
+        <span class="number">2</span>
+        <span>Delivery</span>
       </div>
 
-      <div>
-        <label for="customerPhone">Phone number</label>
-        <input
-          id="customerPhone"
-          name="customer_phone"
-          type="tel"
-          autocomplete="tel"
-          required
-        >
+      <span class="line" aria-hidden="true"></span>
+
+      <div class="step">
+        <span class="number">3</span>
+        <span>Confirmation</span>
       </div>
+    </nav>
 
-      <div>
-        <label for="deliveryAddress">Delivery address</label>
-        <textarea
-          id="deliveryAddress"
-          name="delivery_address"
-          autocomplete="street-address"
-          required
-        ></textarea>
-      </div>
+    <div class="checkout-layout">
 
-      <button
-        type="submit"
-        id="placeOrderButton"
-        class="checkout-submit"
-      >
-        Place Order
-      </button>
+      <section class="checkout-card">
+        <h2 class="checkout-card-heading">Delivery details</h2>
+        <p class="checkout-card-description">
+          Tell us where to deliver your selection.
+        </p>
 
-    </form>
+        <form id="checkoutForm" class="checkout-form">
 
-    <div id="checkoutMessage" role="status" aria-live="polite"></div>
+          <div>
+            <label for="customerName">Full name</label>
+            <input
+              id="customerName"
+              name="customer_name"
+              type="text"
+              placeholder="Enter your full name"
+              autocomplete="name"
+              minlength="2"
+              required
+            >
+          </div>
 
-    <p>
-      <a href="index.html">← Continue shopping</a>
-    </p>
+          <div>
+            <label for="customerEmail">Email address</label>
+            <input
+              id="customerEmail"
+              name="customer_email"
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="customerPhone">Phone number</label>
+            <input
+              id="customerPhone"
+              name="customer_phone"
+              type="tel"
+              placeholder="Enter your phone number"
+              autocomplete="tel"
+              required
+            >
+          </div>
+
+          <div>
+            <label for="deliveryAddress">Full delivery address</label>
+            <textarea
+              id="deliveryAddress"
+              name="delivery_address"
+              placeholder="House number, street, area, city and state"
+              autocomplete="street-address"
+              minlength="8"
+              required
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            id="placeOrderButton"
+            class="checkout-submit"
+          >
+            Place my order &nbsp; → 
+          </button>
+
+        </form>
+
+        <div id="checkoutMessage" role="status" aria-live="polite"></div>
+
+        <a class="checkout-back" href="index.html">
+          ← Continue shopping
+        </a>
+      </section>
+
+      <aside class="checkout-card checkout-summary">
+        <h2 class="checkout-card-heading">Your selection</h2>
+        <p class="checkout-summary-intro">
+          A little something chosen for you.
+        </p>
+
+        <div id="checkoutItems"></div>
+
+        <div class="checkout-total-row">
+          <span>Order total</span>
+          <strong id="checkoutTotal">₦0</strong>
+        </div>
+
+        <p class="checkout-payment-note">
+          <span aria-hidden="true">✦</span>
+          <span>
+            Your order will be submitted for confirmation.
+            Payment is not processed by this button unless a payment
+            provider has been connected.
+          </span>
+        </p>
+      </aside>
+
+    </div>
 
   </main>
 
+  <footer class="checkout-footer">
+    Jidderhs Heaven &nbsp;·&nbsp; A thoughtful shopping experience
+  </footer>
+
   <script type="module" src="assets/javascript/checkout.js"></script>
-
-
 
 </body>
 </html>
