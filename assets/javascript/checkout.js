@@ -89,22 +89,26 @@ form.addEventListener("submit", async (event) => {
   const deliveryAddress =
     document.querySelector("#deliveryAddress").value.trim();
 
-  const items = cart.map((item) => ({
-    product_id: String(item.id).replace(/^supabase-/, ""),
-    quantity: Number(item.qty)
-  }));
+  const items = cart.map((item) => {
+  const productId = String(item.id).replace(/^supabase-/, "");
 
-  if (
-    items.some(item =>
-      !/^\d+$/.test(item.product_id) ||
-      !Number.isInteger(item.quantity) ||
-      item.quantity < 1
-    )
-  ) {
-    message.textContent =
-      "Some products have invalid database IDs. Please contact the store.";
-    return;
-  }
+  return {
+    product_id: productId,
+    quantity: Number(item.qty)
+  };
+});
+
+if (
+  items.some(item =>
+    !/^[1-9]\d*$/.test(item.product_id) ||
+    !Number.isInteger(item.quantity) ||
+    item.quantity < 1
+  )
+) {
+  message.textContent =
+    "One or more products have invalid IDs. Please refresh your bag and try again.";
+  return;
+}
 
   submitButton.disabled = true;
   message.textContent = "Submitting your order...";
