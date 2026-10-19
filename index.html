@@ -391,63 +391,107 @@
       <button class="button button-dark button-full" id="checkoutButton">Proceed to checkout</button>
     </div>
   </aside>
-<!-- Jiddahs Heaven Checkout -->
-<div id="checkoutModal" class="checkout-modal" hidden>
-  <div class="checkout-box">
-    <button
-      type="button"
-      id="closeCheckout"
-      class="checkout-close"
-      aria-label="Close checkout"
-    >&times;</button>
+<!-- JIDDAHS HEAVEN CHECKOUT -->
+<section id="checkoutSection" class="checkout-section" hidden>
 
-    <h2>Complete Your Order</h2>
-    <p>Enter your details to place your order.</p>
+  <div class="checkout-container">
 
-    <form id="checkoutForm">
-      <label for="customerName">Full Name</label>
-      <input
-        id="customerName"
-        name="customer_name"
-        type="text"
-        autocomplete="name"
-        required
-      >
+    <button type="button" id="backToShop" class="back-to-shop">
+      &larr; Continue Shopping
+    </button>
 
-      <label for="customerEmail">Email Address</label>
-      <input
-        id="customerEmail"
-        name="customer_email"
-        type="email"
-        autocomplete="email"
-        required
-      >
+    <div class="checkout-header">
+      <h2>Complete Your Order</h2>
+      <p>Enter your delivery details to continue.</p>
+    </div>
 
-      <label for="customerPhone">Phone Number</label>
-      <input
-        id="customerPhone"
-        name="customer_phone"
-        type="tel"
-        autocomplete="tel"
-        required
-      >
+    <div class="checkout-content">
 
-      <label for="deliveryAddress">Delivery Address</label>
-      <textarea
-        id="deliveryAddress"
-        name="delivery_address"
-        autocomplete="street-address"
-        required
-      ></textarea>
+      <!-- CUSTOMER DETAILS -->
+      <form id="jhCheckoutForm" class="checkout-form">
 
-      <div id="checkoutMessage" role="status" aria-live="polite"></div>
+        <h3>Delivery Information</h3>
 
-      <button type="submit" id="placeOrderBtn">
-        Place Order
-      </button>
-    </form>
+        <div class="form-group">
+          <label for="jhName">Full Name</label>
+          <input
+            type="text"
+            id="jhName"
+            name="customer_name"
+            placeholder="Enter your full name"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="jhEmail">Email Address</label>
+          <input
+            type="email"
+            id="jhEmail"
+            name="customer_email"
+            placeholder="Enter your email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="jhPhone">Phone Number</label>
+          <input
+            type="tel"
+            id="jhPhone"
+            name="customer_phone"
+            placeholder="Enter your phone number"
+            autocomplete="tel"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="jhAddress">Delivery Address</label>
+          <textarea
+            id="jhAddress"
+            name="delivery_address"
+            placeholder="Enter your full delivery address"
+            autocomplete="street-address"
+            required
+          ></textarea>
+        </div>
+
+        <div id="jhCheckoutMessage" role="status" aria-live="polite"></div>
+
+        <button type="submit" id="jhPlaceOrder" class="btn btn-primary">
+          Place Order
+        </button>
+
+        <p class="payment-note">
+          Payment will be arranged after your order is created.
+        </p>
+
+      </form>
+
+      <!-- ORDER SUMMARY -->
+      <div class="order-summary">
+
+        <h3>Order Summary</h3>
+
+        <div id="jhOrderItems">
+          <p>Your shopping bag items will appear here.</p>
+        </div>
+
+        <div class="order-total">
+          <span>Total</span>
+          <strong id="jhOrderTotal">₦0.00</strong>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
-</div>
+
+</section>
 
   <script type="module" src="./assets/javascript/index.js"></script>
 </body>
