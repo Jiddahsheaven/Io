@@ -1083,29 +1083,89 @@ $("#newsletterForm").addEventListener(
    CHECKOUT BUTTON
    ========================================================== */
 
-$("#checkoutButton").addEventListener(
-  "click",
-  () => {
+$("#checkoutButton").addEventListener("click", async () => {
+  if (!cart.length) {
+    showToast("Your bag is empty.");
+    return;
+  }
 
-    if (!cart.length) {
+  const customerName = prompt("Enter your full name:");
+  if (!customerName || !customerName.trim()) {
+    showToast("Your name is required.");
+    return;
+  }
 
-      showToast(
-        "Your bag is empty."
-      );
+  const customerEmail = prompt("Enter your email address:");
+  if (!customerEmail || !customerEmail.includes("@")) {
+    showToast("Please enter a valid email address.");
+    return;
+  }
 
-      return;
-    }
+  const customerPhone = prompt("Enter your phone number:");
+  if (!customerPhone || !customerPhone.trim()) {
+    showToast("Your phone number is required.");
+    return;
+  }
 
+  const deliveryAddress = prompt("Enter your full delivery address:");
+  if (!deliveryAddress || !deliveryAddress.trim()) {
+    showToast("Your delivery address is required.");
+    return;
+  }
 
-    showToast(
-      "Checkout is ready to connect to your payment system."
+  const orderItems = cart.map((item) => {
+    const originalId = String(item.id).replace(/^supabase-/, "");
+
+    return {
+      product_id: originalId,
+      quantity: Number(item.qty)
+    };
+  });
+
+  const checkoutButton = $("#checkoutButton");
+  checkoutButton.disabled = true;
+
+  try {
+    showToast("Creating your order...");
+
+    const { data, error } = await supabase.functions.invoke(
+      "create-orderr",
+      {
+        body: {
+          customer_name: customerName.trim(),
+          customer_email: customerEmail.trim(),
+          customer_phone: customerPhone.trim(),
+          delivery_address: deliveryAddress.trim(),
+          items: orderItems
+        }
+      }
     );
 
+    if (error) {
+      throw error;
+    }
+
+    if (!data || !data.order || !data.order.id) {
+      throw new Error(data?.error || "The order could not be created.");
+    }
+
+    showToast(
+      `Order created! Reference: ${data.order.id}`
+    );
+
+    console.log("Order created:", data.order);
+
+  } catch (error) {
+    console.error("Checkout error:", error);
+
+    showToast(
+      error.message || "Checkout failed. Please try again."
+    );
+
+  } finally {
+    checkoutButton.disabled = false;
   }
-);
-
-
-/* ==========================================================
+}); ==========================================================
    CURRENT YEAR
    ========================================================== */
 
