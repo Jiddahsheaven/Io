@@ -391,6 +391,63 @@
       <button class="button button-dark button-full" id="checkoutButton">Proceed to checkout</button>
     </div>
   </aside>
+<!-- Jiddahs Heaven Checkout -->
+<div id="checkoutModal" class="checkout-modal" hidden>
+  <div class="checkout-box">
+    <button
+      type="button"
+      id="closeCheckout"
+      class="checkout-close"
+      aria-label="Close checkout"
+    >&times;</button>
+
+    <h2>Complete Your Order</h2>
+    <p>Enter your details to place your order.</p>
+
+    <form id="checkoutForm">
+      <label for="customerName">Full Name</label>
+      <input
+        id="customerName"
+        name="customer_name"
+        type="text"
+        autocomplete="name"
+        required
+      >
+
+      <label for="customerEmail">Email Address</label>
+      <input
+        id="customerEmail"
+        name="customer_email"
+        type="email"
+        autocomplete="email"
+        required
+      >
+
+      <label for="customerPhone">Phone Number</label>
+      <input
+        id="customerPhone"
+        name="customer_phone"
+        type="tel"
+        autocomplete="tel"
+        required
+      >
+
+      <label for="deliveryAddress">Delivery Address</label>
+      <textarea
+        id="deliveryAddress"
+        name="delivery_address"
+        autocomplete="street-address"
+        required
+      ></textarea>
+
+      <div id="checkoutMessage" role="status" aria-live="polite"></div>
+
+      <button type="submit" id="placeOrderBtn">
+        Place Order
+      </button>
+    </form>
+  </div>
+</div>
 
   <script type="module" src="./assets/javascript/index.js"></script>
 </body>
