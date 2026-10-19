@@ -1094,7 +1094,8 @@ $("#checkoutButton").addEventListener("click", () => {
   }
 
   window.location.href = "checkout.html";
-});
+  }
+);
 
 */ ==========================================================
    CURRENT YEAR
