@@ -1079,12 +1079,8 @@ $("#newsletterForm").addEventListener(
 );
 
 
-/* ==========================================================
-   CHECKOUT BUTTON
-   ========================================================== */
-
 /* ========================================
-   JIDDAMARH CHECKOUT PAGE
+   JIDDAMARH CHECKOUT
 ======================================== */
 
 $("#checkoutButton").addEventListener("click", () => {
@@ -1094,8 +1090,7 @@ $("#checkoutButton").addEventListener("click", () => {
   }
 
   window.location.href = "checkout.html";
-  }
-);
+});
 
 */ ==========================================================
    CURRENT YEAR
