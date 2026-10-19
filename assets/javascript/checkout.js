@@ -111,7 +111,7 @@ form.addEventListener("submit", async (event) => {
 
   try {
     const { data, error } = await supabase.functions.invoke(
-      "create-orderr",
+      "create-order",
       {
         body: {
           customer_name: customerName,
