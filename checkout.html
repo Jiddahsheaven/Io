@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Checkout | Jiddamarh</title>
+
+  <!-- Reuse your existing website stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    .checkout-page {
+      max-width: 850px;
+      margin: 50px auto;
+      padding: 24px;
+    }
+
+    .checkout-page h1 {
+      margin-bottom: 10px;
+    }
+
+    .checkout-form {
+      display: grid;
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .checkout-form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .checkout-form input,
+    .checkout-form textarea {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    .checkout-form textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .checkout-summary {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f7f5f2;
+      border-radius: 8px;
+    }
+
+    .checkout-submit {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 6px;
+      background: #222;
+      color: white;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .checkout-submit:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    #checkoutMessage {
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="checkout-page">
+
+    <h1>Checkout</h1>
+
+    <p>Complete your delivery details to place your order.</p>
+
+    <div class="checkout-summary">
+      <h2>Your order</h2>
+      <div id="checkoutItems"></div>
+      <p>
+        <strong>Total:</strong>
+        <span id="checkoutTotal">₦0</span>
+      </p>
+    </div>
+
+    <form id="checkoutForm" class="checkout-form">
+
+      <div>
+        <label for="customerName">Full name</label>
+        <input
+          id="customerName"
+          name="customer_name"
+          type="text"
+          autocomplete="name"
+          required
+        >
+      </div>
+
+      <div>
+        <label for="customerEmail">Email address</label>
+        <input
+          id="customerEmail"
+          name="customer_email"
+          type="email"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+      <div>
+        <label for="customerPhone">Phone number</label>
+        <input
+          id="customerPhone"
+          name="customer_phone"
+          type="tel"
+          autocomplete="tel"
+          required
+        >
+      </div>
+
+      <div>
+        <label for="deliveryAddress">Delivery address</label>
+        <textarea
+          id="deliveryAddress"
+          name="delivery_address"
+          autocomplete="street-address"
+          required
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        id="placeOrderButton"
+        class="checkout-submit"
+      >
+        Place Order
+      </button>
+
+    </form>
+
+    <div id="checkoutMessage" role="status" aria-live="polite"></div>
+
+    <p>
+      <a href="index.html">← Continue shopping</a>
+    </p>
+
+  </main>
+
+  <script type="module" src="assets/javascript/checkout.js"></script>
+
+</body>
+</html>
