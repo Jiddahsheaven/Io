@@ -125,21 +125,20 @@ form.addEventListener("submit", async (event) => {
 
     if (error) throw error;
 
-    if (!data?.order?.id) {
-      throw new Error(
-        data?.error || "The server did not return an order reference."
-      );
-    }
+if (!data?.success || !data?.order_id) {
+  throw new Error(
+    data?.error ||
+    "The server did not return an order reference."
+  );
+}
 
-    message.textContent =
-      `Your order was created successfully. Reference: ${data.order.id}. Payment has not been processed.`;
+message.textContent =
+  `Your order was created successfully. Reference: ${data.order_id}. Payment has not been processed.`;
 
-    localStorage.removeItem(CART_KEY);
-
-    cart = [];
-    renderOrder();
-    form.reset();
-
+localStorage.removeItem(CART_KEY);
+cart = [];
+renderOrder();
+form.reset();
   } catch (error) {
     console.error("Order submission failed:", error);
 
