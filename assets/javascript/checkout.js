@@ -127,7 +127,22 @@ if (
       }
     );
 
-    if (error) throw error;
+    if (error) {
+  console.error("Checkout error:", error);
+
+  let details = null;
+
+  try {
+    details = await error.context?.clone().json();
+  } catch (e) {
+    console.error("Could not read error details:", e);
+  }
+
+  message.textContent =
+    details?.error || error.message;
+
+  return;
+}
 
 if (!data?.success || !data?.order_id) {
   throw new Error(
