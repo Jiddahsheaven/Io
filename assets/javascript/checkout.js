@@ -280,6 +280,7 @@ message.textContent = "Redirecting to secure Paystack checkout...";
 
 // STEP 3: Redirect the customer to Paystack
 window.location.assign(paymentData.authorization_url);
+
   } catch (error) {
     console.error("Order submission failed:", error);
 
