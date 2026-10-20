@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirming Payment | Jidderhs Heaven</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #f8f5f0;
+      color: #28231f;
+      font-family: Arial, sans-serif;
+    }
+
+    main {
+      width: 100%;
+      max-width: 480px;
+      padding: 32px 24px;
+      text-align: center;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px #00000012;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+    }
+
+    #status {
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      background: #28231f;
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Jidderhs Heaven</h1>
+    <p id="status" role="status" aria-live="polite">
+      Checking your payment with Paystack. Please wait...
+    </p>
+    <a href="./index.html">Return to the store</a>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://esm.sh/@supabase/supabase-js@2";
+
+    const SUPABASE_URL =
+      "https://vqglmkwpqstljxilpauh.supabase.co";
+
+    // Use your existing Supabase publishable/anon key here.
+    // Never put your Supabase service-role key or Paystack secret here.
+    const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const statusElement = document.getElementById("status");
+
+    async function verifyPayment() {
+      const params = new URLSearchParams(window.location.search);
+
+      const reference =
+        params.get("reference") ||
+        params.get("trxref");
+
+      if (!reference) {
+        statusElement.textContent =
+          "No payment reference was found. Please check your order before trying again.";
+        return;
+      }
+
+      try {
+        statusElement.textContent =
+          "Verifying your transaction securely...";
+
+        const { data, error } =
+          await supabase.functions.invoke(
+            "verify-payment",
+            {
+              body: { reference }
+            }
+          );
+
+        if (error) {
+          let details = null;
+
+          try {
+            details = await error.context?.clone().json();
+          } catch (_) {}
+
+          throw new Error(
+            details?.error ||
+            error.message ||
+            "We could not verify your payment."
+          );
+        }
+
+        if (data?.success && data?.payment_status === "paid") {
+          statusElement.textContent =
+            "Payment confirmed successfully! Your order has been marked as paid. Thank you for shopping with Jidderhs Heaven.";
+
+          localStorage.removeItem("jiddamarh-cart");
+          sessionStorage.removeItem("jh_payment_reference");
+          sessionStorage.removeItem("jh_order_id");
+          return;
+        }
+
+        statusElement.textContent =
+          data?.message ||
+          "Payment has not been confirmed. Your order remains unpaid. If you completed payment, please contact the store before paying again.";
+
+      } catch (error) {
+        console.error("Payment verification failed:", error);
+
+        statusElement.textContent =
+          (error.message || "Payment verification failed.") +
+          " Do not pay again until you have checked your order status.";
+      }
+    }
+
+    if (
+      SUPABASE_ANON_KEY ===
+      "PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE"
+    ) {
+      statusElement.textContent =
+        "Setup is incomplete: add your Supabase publishable/anon key to this page before testing.";
+    } else {
+      verifyPayment();
+    }
+  </script>
+</body>
+</html>
