@@ -36,13 +36,16 @@
     console.group("🔍 CHECKOUT DIAGNOSTICS");
 
     const selectors = [
-      "form",
-      "#checkoutButton",
-      "#email",
-      "#name",
-      "#phone",
-      "#address"
-    ];
+  "#checkoutForm",
+  "#placeOrderButton",
+  "#customerEmail",
+  "#customerName",
+  "#customerPhone",
+  "#deliveryAddress",
+  "#checkoutItems",
+  "#checkoutTotal",
+  "#checkoutMessage"
+];
 
     selectors.forEach((selector) => {
       const element = document.querySelector(selector);
