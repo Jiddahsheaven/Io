@@ -185,22 +185,22 @@ if (
   customer_email: customerEmail,
   items
 });
-    const { data, error } = await supabase.functions.invoke(
-      "create-order",
-      {
-        body: {
-          customer_name: customerName,
-          customer_email: customerEmail,
-          customer_phone: customerPhone,
-          delivery_address: deliveryAddress,
-          items
-        }
-      }
-    );
+    // STEP 1: Create the order in Supabase
+const { data, error } = await supabase.functions.invoke(
+  "create-order",
+  {
+    body: {
+      customer_name: customerName,
+      customer_email: customerEmail,
+      customer_phone: customerPhone,
+      delivery_address: deliveryAddress,
+      items
+    }
+  }
+);
 
-    if (error) {
-  console.error("Edge Function invocation error:", error);
-  console.error("Checkout error:", error);
+if (error) {
+  console.error("Order creation error:", error);
 
   let details = null;
 
@@ -210,26 +210,76 @@ if (
     console.error("Could not read error details:", e);
   }
 
-  message.textContent =
-    details?.error || error.message;
-
-  return;
+  throw new Error(
+    details?.error || error.message || "Could not create your order."
+  );
 }
 
 if (!data?.success || !data?.order_id) {
   throw new Error(
-    data?.error ||
-    "The server did not return an order reference."
+    data?.error || "The server did not return an order reference."
   );
 }
 
-message.textContent =
-  `Your order was created successfully. Reference: ${data.order_id}. Payment has not been processed.`;
+// STEP 2: Initialize payment with Paystack
+message.textContent = "Order created. Preparing secure payment...";
+submitButton.disabled = true;
 
-localStorage.removeItem(CART_KEY);
-cart = [];
-renderOrder();
-form.reset();
+const { data: paymentData, error: paymentError } =
+  await supabase.functions.invoke(
+    "initialize-payment",
+    {
+      body: {
+        order_id: data.order_id
+      }
+    }
+  );
+
+if (paymentError) {
+  console.error("Payment initialization error:", paymentError);
+
+  let details = null;
+
+  try {
+    details = await paymentError.context?.clone().json();
+  } catch (e) {
+    console.error("Could not read payment error details:", e);
+  }
+
+  throw new Error(
+    details?.error ||
+    paymentError.message ||
+    "Your order was created, but payment could not be started. Please contact the store before trying checkout again."
+  );
+}
+
+if (
+  !paymentData?.success ||
+  !paymentData?.authorization_url ||
+  !paymentData?.reference
+) {
+  throw new Error(
+    paymentData?.error ||
+    "Paystack did not return a valid checkout link."
+  );
+}
+
+// Save the reference in case the customer returns to the website
+sessionStorage.setItem(
+  "jh_payment_reference",
+  paymentData.reference
+);
+
+sessionStorage.setItem(
+  "jh_order_id",
+  data.order_id
+);
+
+// Keep the cart until payment verification is implemented.
+message.textContent = "Redirecting to secure Paystack checkout...";
+
+// STEP 3: Redirect the customer to Paystack
+window.location.assign(paymentData.authorization_url);
   } catch (error) {
     console.error("Order submission failed:", error);
 
