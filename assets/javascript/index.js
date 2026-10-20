@@ -37,7 +37,6 @@
 
     const selectors = [
       "#checkoutButton",
-      "#cart",
       "#searchInput"
     ];
 
