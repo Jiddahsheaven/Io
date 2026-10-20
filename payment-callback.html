@@ -3,8 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirming Payment | Jidderhs Heaven</title>
+
+  <meta
+    name="theme-color"
+    content="#f8f5f0"
+  >
+
+  <meta
+    name="description"
+    content="Secure payment confirmation for Jidderhs Heaven."
+  >
+
+  <title>Payment Confirmation | Jidderhs Heaven</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
+    :root {
+      --cream: #f8f5f0;
+      --white: #ffffff;
+      --ink: #29231f;
+      --muted: #81776f;
+      --gold: #b78b51;
+      --gold-light: #f5ead9;
+      --green: #26734d;
+      --green-light: #e8f5ed;
+      --red: #b83d3d;
+      --red-light: #fff0ed;
+      --border: #ece5dc;
+      --shadow: 0 24px 80px rgba(54, 39, 25, 0.08);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -12,102 +51,820 @@
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
       padding: 24px;
-      background: #f8f5f0;
-      color: #28231f;
-      font-family: Arial, sans-serif;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 0%,
+          #fffaf2 0%,
+          var(--cream) 58%
+        );
+
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
     }
 
-    main {
-      width: 100%;
-      max-width: 480px;
-      padding: 32px 24px;
-      text-align: center;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px #00000012;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-    }
-
-    #status {
-      line-height: 1.7;
-      overflow-wrap: anywhere;
+    button,
+    a {
+      font: inherit;
     }
 
     a {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      background: #28231f;
+      color: inherit;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 560px;
+      margin: auto;
+    }
+
+    /* BRAND */
+
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+
+      display: grid;
+      place-items: center;
+
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+
+      color: var(--gold);
+      font-family: "Playfair Display", serif;
+      font-size: 25px;
+      font-weight: 600;
+    }
+
+    .brand-name {
+      margin: 0;
+
+      font-family: "Playfair Display", serif;
+      font-size: 29px;
+      font-weight: 600;
+      letter-spacing: -0.7px;
+    }
+
+    .brand-tagline {
+      margin: 7px 0 0;
+
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* MAIN CARD */
+
+    .card {
+      overflow: hidden;
+
+      background: var(--white);
+      border: 1px solid rgba(183, 139, 81, 0.18);
+      border-radius: 24px;
+
+      box-shadow: var(--shadow);
+
+      animation: enter 0.65s ease both;
+    }
+
+    .card-top {
+      padding: 42px 30px 34px;
+      text-align: center;
+    }
+
+    .status-icon {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 26px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+      background: var(--gold-light);
+      color: var(--gold);
+    }
+
+    .status-icon svg {
+      width: 39px;
+      height: 39px;
+    }
+
+    .status-icon.success {
+      background: var(--green-light);
+      color: var(--green);
+      animation: pop 0.45s ease both;
+    }
+
+    .status-icon.pending {
+      background: var(--gold-light);
+      color: var(--gold);
+    }
+
+    .status-icon.error {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+
+      font-family: "Playfair Display", serif;
+      font-size: clamp(29px, 7vw, 39px);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.7px;
+    }
+
+    .message {
+      max-width: 390px;
+      margin: 16px auto 0;
+
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.85;
+
+      overflow-wrap: anywhere;
+    }
+
+    /* VERIFICATION INDICATOR */
+
+    .loader {
+      width: 34px;
+      height: 34px;
+
+      border: 3px solid #eadfce;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loader.hidden {
+      display: none;
+    }
+
+    /* REFERENCE */
+
+    .reference-box {
+      margin: 0 26px;
+      padding: 19px;
+
+      background: #fbf9f6;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .reference-label {
+      margin: 0 0 9px;
+
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+    }
+
+    .reference-value {
+      margin: 0;
+
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.7;
+
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    /* PAYMENT STATUS */
+
+    .status-row {
+      margin: 20px 26px 0;
+      padding: 16px 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .status-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status-pill {
+      padding: 8px 12px;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      border-radius: 30px;
+
+      background: var(--gold-light);
+      color: #89632f;
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-pill.success {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .status-pill.error {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      flex-shrink: 0;
+
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ACTIONS */
+
+    .actions {
+      padding: 26px;
+    }
+
+    .button {
+      min-height: 54px;
+      width: 100%;
+      padding: 16px 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      border: 1px solid transparent;
+      border-radius: 12px;
+
+      background: var(--ink);
       color: white;
+
       text-decoration: none;
+      text-align: center;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .button:hover {
+      background: #49382a;
+      transform: translateY(-2px);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .secondary-link {
+      margin-top: 18px;
+
+      display: block;
+
+      color: var(--muted);
+      text-align: center;
+      text-decoration: none;
+
+      font-size: 12px;
+    }
+
+    .secondary-link:hover {
+      color: var(--ink);
+    }
+
+    /* SECURITY NOTE */
+
+    .security-note {
+      margin: 0;
+      padding: 19px 22px;
+
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 9px;
+
+      background: #fbf9f6;
+      border-top: 1px solid var(--border);
+
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .security-note svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+
+      color: var(--gold);
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 27px 10px 5px;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0;
+
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    footer strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.75);
+        opacity: 0.5;
+      }
+
+      70% {
+        transform: scale(1.08);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 22px 15px;
+      }
+
+      .brand {
+        margin-bottom: 24px;
+      }
+
+      .brand-name {
+        font-size: 26px;
+      }
+
+      .card {
+        border-radius: 20px;
+      }
+
+      .card-top {
+        padding: 34px 21px 28px;
+      }
+
+      .status-icon {
+        width: 76px;
+        height: 76px;
+        margin-bottom: 23px;
+      }
+
+      .reference-box {
+        margin: 0 17px;
+        padding: 16px;
+      }
+
+      .status-row {
+        margin: 18px 17px 0;
+      }
+
+      .actions {
+        padding: 22px 17px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
+
 <body>
-  <main>
-    <h1>Jidderhs Heaven</h1>
-    <p id="status" role="status" aria-live="polite">
-      Checking your payment with Paystack. Please wait...
-    </p>
-    <a href="./index.html">Return to the store</a>
-  </main>
+
+  <div class="page">
+
+    <!-- BRAND -->
+
+    <header class="brand">
+      <div class="brand-mark" aria-hidden="true">J</div>
+
+      <p class="brand-name">Jidderhs Heaven</p>
+
+      <p class="brand-tagline">
+        Your style, your heaven
+      </p>
+    </header>
+
+
+    <!-- PAYMENT CARD -->
+
+    <main class="card">
+
+      <section class="card-top">
+
+        <!-- Loading icon -->
+        <div
+          class="status-icon"
+          id="statusIcon"
+          aria-hidden="true"
+        >
+          <div class="loader" id="loader"></div>
+
+          <svg
+            id="resultIcon"
+            class="hidden"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              id="resultPath"
+              d="M5 12.5l4.5 4.5L19 7"
+            />
+          </svg>
+        </div>
+
+        <p class="eyebrow" id="eyebrow">
+          Secure checkout
+        </p>
+
+        <h1 id="heading">
+          Confirming your payment
+        </h1>
+
+        <p
+          class="message"
+          id="message"
+          role="status"
+          aria-live="polite"
+        >
+          Please wait while we securely verify your transaction.
+          Do not close this page yet.
+        </p>
+
+      </section>
+
+
+      <!-- PAYMENT REFERENCE -->
+
+      <section class="reference-box">
+
+        <p class="reference-label">
+          Payment reference
+        </p>
+
+        <p
+          class="reference-value"
+          id="referenceValue"
+        >
+          Retrieving reference...
+        </p>
+
+      </section>
+
+
+      <!-- STATUS -->
+
+      <div class="status-row">
+
+        <span class="status-label">
+          Transaction status
+        </span>
+
+        <span
+          class="status-pill"
+          id="statusPill"
+        >
+          <span class="status-dot"></span>
+          <span id="statusText">Verifying</span>
+        </span>
+
+      </div>
+
+
+      <!-- ACTIONS -->
+
+      <div class="actions">
+
+        <a
+          class="button"
+          id="storeButton"
+          href="./index.html"
+        >
+          Continue shopping
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <a
+          class="secondary-link hidden"
+          id="retryLink"
+          href="./checkout.html"
+        >
+          Return to checkout
+        </a>
+
+      </div>
+
+
+      <!-- SECURITY NOTE -->
+
+      <div class="security-note">
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect
+            x="4"
+            y="10"
+            width="16"
+            height="11"
+            rx="2"
+          />
+
+          <path
+            d="M8 10V7a4 4 0 018 0v3"
+          />
+        </svg>
+
+        <span>
+          Your transaction is checked securely.
+          We never display a successful payment status
+          without confirmation from the payment verification service.
+        </span>
+
+      </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+      <p>
+        Thank you for choosing
+        <strong>Jidderhs Heaven.</strong>
+      </p>
+
+      <p>
+        Shop with confidence. Shop with love.
+      </p>
+    </footer>
+
+  </div>
+
 
   <script type="module">
     import { createClient } from
       "https://esm.sh/@supabase/supabase-js@2";
 
+
+    // SUPABASE CONFIGURATION
+
     const SUPABASE_URL =
       "https://vqglmkwpqstljxilpauh.supabase.co";
 
-    // Use your existing Supabase publishable/anon key here.
-    // Never put your Supabase service-role key or Paystack secret here.
-    const SUPABASE_ANON_KEY = "sb_publishable_KggKpO67JeTutir7W_w8XQ_VxUVf_Gx";
+    // This is your public/publishable key.
+    // Never place your service-role key or Paystack secret here.
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_KggKpO67JeTutir7W_w8XQ_VxUVf_Gx";
+
 
     const supabase = createClient(
       SUPABASE_URL,
       SUPABASE_ANON_KEY
     );
 
-    const statusElement = document.getElementById("status");
+
+    // PAGE ELEMENTS
+
+    const statusIcon =
+      document.getElementById("statusIcon");
+
+    const loader =
+      document.getElementById("loader");
+
+    const resultIcon =
+      document.getElementById("resultIcon");
+
+    const resultPath =
+      document.getElementById("resultPath");
+
+    const eyebrow =
+      document.getElementById("eyebrow");
+
+    const heading =
+      document.getElementById("heading");
+
+    const message =
+      document.getElementById("message");
+
+    const referenceValue =
+      document.getElementById("referenceValue");
+
+    const statusPill =
+      document.getElementById("statusPill");
+
+    const statusText =
+      document.getElementById("statusText");
+
+    const retryLink =
+      document.getElementById("retryLink");
+
+
+    // DISPLAY A STATUS
+
+    function showStatus({
+      type,
+      eyebrowText,
+      title,
+      description,
+      label,
+      iconPath,
+      showRetry = false
+    }) {
+      loader.classList.add("hidden");
+      resultIcon.classList.remove("hidden");
+
+      statusIcon.className = "status-icon " + type;
+
+      resultPath.setAttribute("d", iconPath);
+
+      eyebrow.textContent = eyebrowText;
+      heading.textContent = title;
+      message.textContent = description;
+      statusText.textContent = label;
+
+      statusPill.className = "status-pill " + type;
+
+      retryLink.classList.toggle(
+        "hidden",
+        !showRetry
+      );
+    }
+
+
+    // VERIFY PAYMENT
 
     async function verifyPayment() {
-      const params = new URLSearchParams(window.location.search);
+      const params = new URLSearchParams(
+        window.location.search
+      );
 
       const reference =
         params.get("reference") ||
         params.get("trxref");
 
       if (!reference) {
-        statusElement.textContent =
-          "No payment reference was found. Please check your order before trying again.";
+        referenceValue.textContent =
+          "No reference provided";
+
+        showStatus({
+          type: "error",
+          eyebrowText: "Reference missing",
+          title: "Payment not verified",
+          description:
+            "We could not find a payment reference in this page's address. Please check your order status before attempting another payment.",
+          label: "Not verified",
+          iconPath:
+            "M7 7l10 10M17 7L7 17",
+          showRetry: true
+        });
+
         return;
       }
 
-      try {
-        statusElement.textContent =
-          "Verifying your transaction securely...";
 
+      referenceValue.textContent = reference;
+
+
+      // Prevent malformed or excessively long references
+      // from being sent to the Edge Function.
+
+      if (
+        reference.length > 200 ||
+        !/^[A-Za-z0-9_.= -]+$/.test(reference)
+      ) {
+        showStatus({
+          type: "error",
+          eyebrowText: "Invalid reference",
+          title: "Payment not verified",
+          description:
+            "The payment reference format is invalid. Please check your order status before trying again.",
+          label: "Invalid reference",
+          iconPath:
+            "M7 7l10 10M17 7L7 17",
+          showRetry: true
+        });
+
+        return;
+      }
+
+
+      try {
         const { data, error } =
           await supabase.functions.invoke(
             "verify-payment",
             {
-              body: { reference }
+              body: {
+                reference
+              }
             }
           );
+
 
         if (error) {
           let details = null;
 
           try {
-            details = await error.context?.clone().json();
-          } catch (_) {}
+            details =
+              await error.context?.clone().json();
+          } catch (_) {
+            // The response may not contain JSON.
+          }
 
           throw new Error(
             details?.error ||
@@ -116,38 +873,108 @@
           );
         }
 
-        if (data?.success && data?.payment_status === "paid") {
-          statusElement.textContent =
-            "Payment confirmed successfully! Your order has been marked as paid. Thank you for shopping with Jidderhs Heaven.";
+
+        // SUCCESS MUST COME FROM THE VERIFICATION FUNCTION.
+
+        if (
+          data?.success === true &&
+          data?.payment_status === "paid"
+        ) {
+          showStatus({
+            type: "success",
+            eyebrowText: "Payment confirmed",
+            title: "Thank you for your order!",
+            description:
+              "Your payment has been verified successfully. Your order is marked as paid. Thank you for shopping with Jidderhs Heaven.",
+            label: "Payment successful",
+            iconPath:
+              "M5 12.5l4.5 4.5L19 7"
+          });
+
+
+          // Clear the cart only after verified success.
 
           localStorage.removeItem("jiddamarh-cart");
-          sessionStorage.removeItem("jh_payment_reference");
-          sessionStorage.removeItem("jh_order_id");
+
+          sessionStorage.removeItem(
+            "jh_payment_reference"
+          );
+
+          sessionStorage.removeItem(
+            "jh_order_id"
+          );
+
           return;
         }
 
-        statusElement.textContent =
-          data?.message ||
-          "Payment has not been confirmed. Your order remains unpaid. If you completed payment, please contact the store before paying again.";
+
+        // PAYMENT NOT CONFIRMED
+
+        const paymentStatus =
+          String(data?.payment_status || "")
+            .toLowerCase();
+
+        if (paymentStatus === "failed") {
+          showStatus({
+            type: "error",
+            eyebrowText: "Payment unsuccessful",
+            title: "Payment was not completed",
+            description:
+              "The payment verification service reports that this transaction failed. Check your order status before trying another payment.",
+            label: "Payment failed",
+            iconPath:
+              "M7 7l10 10M17 7L7 17",
+            showRetry: true
+          });
+
+          return;
+        }
+
+
+        // Pending or unconfirmed payments are NOT success.
+
+        showStatus({
+          type: "pending",
+          eyebrowText: "Awaiting confirmation",
+          title: "Your payment is not confirmed yet",
+          description:
+            data?.message ||
+            "We have not received confirmation of this payment yet. Your order may still be processing. Please check your order status before trying to pay again.",
+          label: "Pending",
+          iconPath:
+            "M12 7v5l3 2"
+        });
+
 
       } catch (error) {
-        console.error("Payment verification failed:", error);
+        console.error(
+          "Payment verification failed:",
+          error
+        );
 
-        statusElement.textContent =
-          (error.message || "Payment verification failed.") +
-          " Do not pay again until you have checked your order status.";
+
+        showStatus({
+          type: "error",
+          eyebrowText: "Verification issue",
+          title: "We couldn't verify your payment",
+          description:
+            (error.message ||
+            "An unexpected error occurred.") +
+            " Your payment status is uncertain. Please check your order status or contact the store before attempting another payment.",
+          label: "Unable to verify",
+          iconPath:
+            "M7 7l10 10M17 7L7 17",
+          showRetry: true
+        });
       }
     }
 
-    if (
-      SUPABASE_ANON_KEY ===
-      "PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE"
-    ) {
-      statusElement.textContent =
-        "Setup is incomplete: add your Supabase publishable/anon key to this page before testing.";
-    } else {
-      verifyPayment();
-    }
+
+    // START VERIFICATION
+
+    verifyPayment();
+
   </script>
+
 </body>
 </html>
