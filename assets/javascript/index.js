@@ -1,3 +1,67 @@
+/* ========================================
+   JIDDERHS HEAVEN — FRONTEND DEBUGGER
+======================================== */
+
+(() => {
+  "use strict";
+
+  console.log(
+    "%c JIDDERHS HEAVEN ",
+    "background:#111;color:#fff;padding:8px;font-weight:bold;"
+  );
+
+  console.info("Frontend debugger initialized.");
+  console.info("Page:", window.location.href);
+  console.info("Browser:", navigator.userAgent);
+  console.info("Time:", new Date().toISOString());
+
+  // Detect JavaScript errors
+  window.addEventListener("error", (event) => {
+    console.error("❌ JAVASCRIPT ERROR", {
+      message: event.message,
+      file: event.filename,
+      line: event.lineno,
+      column: event.colno,
+      error: event.error
+    });
+  });
+
+  // Detect failed asynchronous operations
+  window.addEventListener("unhandledrejection", (event) => {
+    console.error("❌ UNHANDLED PROMISE REJECTION:", event.reason);
+  });
+
+  // Check whether important page elements exist
+  window.addEventListener("DOMContentLoaded", () => {
+    console.group("🔍 FRONTEND DIAGNOSTICS");
+
+    const selectors = [
+      "#checkoutButton",
+      "#cart",
+      "#searchInput"
+    ];
+
+    selectors.forEach((selector) => {
+      const element = document.querySelector(selector);
+
+      if (element) {
+        console.log("✅ Element found:", selector);
+      } else {
+        console.warn(
+          "⚠️ Element not found (check whether this page needs it):",
+          selector
+        );
+      }
+    });
+
+    console.log("Current page:", location.pathname);
+    console.log("DOM ready:", document.readyState);
+
+    console.groupEnd();
+  });
+
+})();
+
 import { supabase, testDatabaseConnection } from './supabase.js';
 
 testDatabaseConnection();
