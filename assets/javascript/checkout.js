@@ -180,6 +180,11 @@ if (
   message.textContent = "Submitting your order...";
 
   try {
+ console.log("Sending order to create-order:", {
+  customer_name: customerName,
+  customer_email: customerEmail,
+  items
+});
     const { data, error } = await supabase.functions.invoke(
       "create-order",
       {
@@ -194,6 +199,7 @@ if (
     );
 
     if (error) {
+  console.error("Edge Function invocation error:", error);
   console.error("Checkout error:", error);
 
   let details = null;
