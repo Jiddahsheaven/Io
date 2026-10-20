@@ -1,3 +1,66 @@
+/* ========================================
+   JIDDERHS HEAVEN — CHECKOUT DEBUGGER
+======================================== */
+
+(() => {
+  "use strict";
+
+  console.log(
+    "%c CHECKOUT DEBUGGER ",
+    "background:#174;color:#fff;padding:8px;font-weight:bold;"
+  );
+
+  console.info("Checkout page:", location.href);
+  console.info("Checkout debugger initialized.");
+
+  // Detect JavaScript errors
+  window.addEventListener("error", (event) => {
+    console.error("❌ CHECKOUT JAVASCRIPT ERROR", {
+      message: event.message,
+      file: event.filename,
+      line: event.lineno,
+      column: event.colno
+    });
+  });
+
+  // Detect failed asynchronous operations
+  window.addEventListener("unhandledrejection", (event) => {
+    console.error(
+      "❌ CHECKOUT ASYNC ERROR:",
+      event.reason
+    );
+  });
+
+  // Inspect checkout form elements
+  window.addEventListener("DOMContentLoaded", () => {
+    console.group("🔍 CHECKOUT DIAGNOSTICS");
+
+    const selectors = [
+      "form",
+      "#checkoutButton",
+      "#email",
+      "#name",
+      "#phone",
+      "#address"
+    ];
+
+    selectors.forEach((selector) => {
+      const element = document.querySelector(selector);
+
+      console.log(
+        element ? "✅ Found:" : "⚠️ Not found:",
+        selector
+      );
+    });
+
+    console.log("Checkout DOM ready:", document.readyState);
+
+    console.groupEnd();
+  });
+
+})();
+
+
 import { supabase } from "./supabase.js";
 
 const CART_KEY = "jiddamarh-cart";
