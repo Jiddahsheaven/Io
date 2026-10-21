@@ -1584,6 +1584,52 @@ const ADMIN_UID = '2631d680-907b-4336-9133-cd03ff87fb4a';
     refunds: []
   };
 
+async function loadProductsFromSupabase() {
+  const status = document.getElementById("productConnectionStatus");
+
+  try {
+    setText("productConnectionStatus", "Loading products...");
+
+    const { data, error } = await supabase
+      .from("products")
+      .select(
+        "id, name, description, category, price, image_url, stock, is_active, created_at"
+      )
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    dashboardData.products = data || [];
+
+    renderProducts(dashboardData.products);
+
+    setText(
+      "productConnectionStatus",
+      `${dashboardData.products.length} products loaded`
+    );
+
+    console.info(
+      "Products loaded successfully:",
+      dashboardData.products.length
+    );
+
+    return dashboardData.products;
+  } catch (error) {
+    console.error("Product loading failed:", error.message);
+
+    setText("productConnectionStatus", "Connection failed");
+
+    showNotice(
+      "Could not load products: " + error.message,
+      "error"
+    );
+
+    return [];
+  }
+}
+
   function showNotice(message, type = "normal") {
     dashboardNotice.textContent = message;
     dashboardNotice.className = "notice";
