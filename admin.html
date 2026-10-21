@@ -2360,10 +2360,19 @@ async function checkExistingAdminSession() {
     }
 
     if (data.session) {
-      await verifyAdminSession(data.session);
-      adminLoginGate.remove();
-      console.info("Administrator session verified.");
-    }
+  await verifyAdminSession(data.session);
+
+  setText("authStatus", "Connected");
+  setText("adminStatus", "Verified");
+
+  adminLoginGate.remove();
+
+  console.info("Administrator session verified.");
+} else {
+  setText("authStatus", "Signed out");
+  setText("adminStatus", "Not verified");
+}
+
   } catch (error) {
     message.textContent = error.message;
   }
