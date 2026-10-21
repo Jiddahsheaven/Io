@@ -3,32 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <meta name="theme-color" content="#f7f3ec">
-  <meta name="description" content="Jiddahs Heaven secure administration dashboard">
-
+  <meta name="theme-color" content="#f8f5ef">
   <title>Admin Dashboard | Jiddahs Heaven</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --cream: #f7f3ec;
+      --cream: #f8f5ef;
       --white: #ffffff;
-      --dark: #24231f;
-      --muted: #817d73;
-      --gold: #b89b62;
-      --gold-light: #e9ddc3;
-      --border: #e9e3d9;
-      --green: #47785b;
-      --red: #a74e47;
-      --orange: #b77935;
-      --radius: 18px;
-      --shadow: 0 8px 30px rgba(36, 35, 31, .045);
+      --dark: #282820;
+      --muted: #77776e;
+      --gold: #b89552;
+      --green: #64765a;
+      --border: #e9e4da;
+      --red: #b94b45;
+      --shadow: 0 8px 28px rgba(40, 40, 32, 0.06);
+      --radius: 16px;
     }
 
     * {
@@ -37,9 +30,9 @@
 
     body {
       margin: 0;
+      font-family: "DM Sans", sans-serif;
       background: var(--cream);
       color: var(--dark);
-      font-family: "DM Sans", sans-serif;
     }
 
     button, input, select, textarea {
@@ -50,216 +43,250 @@
       cursor: pointer;
     }
 
-    button:focus-visible,
-    a:focus-visible,
-    input:focus-visible,
-    select:focus-visible,
-    textarea:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: 3px;
-    }
-
-    .announcement {
-      background: var(--dark);
-      color: #f5eee0;
-      text-align: center;
-      padding: 10px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 3px;
-    }
-
-    .layout {
+    .app {
       min-height: 100vh;
     }
 
     .sidebar {
-      background: var(--white);
-      border-right: 1px solid var(--border);
-      padding: 28px 20px;
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 250px;
+      padding: 28px 18px;
+      background: var(--dark);
+      color: var(--white);
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform .25s ease;
     }
 
     .brand {
-      text-align: center;
-      margin-bottom: 38px;
+      padding: 0 12px 28px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
     }
 
-    .brand-top {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 5px;
-      font-weight: 700;
-    }
-
-    .brand-bottom {
-      display: block;
-      margin-top: 3px;
-      font-family: "Playfair Display", serif;
-      font-size: 28px;
-      letter-spacing: 2px;
-    }
-
-    .brand-caption {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 2px;
-    }
-
-    .nav-label {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 2px;
-      margin: 25px 0 10px;
-    }
-
-    .nav-button {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      border: 0;
-      border-radius: 11px;
-      padding: 13px 12px;
-      margin-bottom: 5px;
-      color: #69665e;
-      background: transparent;
-      text-align: left;
-      font-size: 13px;
-    }
-
-    .nav-button:hover,
-    .nav-button.active {
-      background: var(--cream);
-      color: var(--dark);
-    }
-
-    .nav-button.active {
-      border-left: 3px solid var(--gold);
-      font-weight: 700;
-    }
-
-    .nav-icon {
-      width: 23px;
-      text-align: center;
-      font-size: 17px;
-    }
-
-    .sidebar-note {
-      margin-top: 40px;
-      padding: 17px;
-      background: var(--cream);
-      border-radius: 14px;
-    }
-
-    .sidebar-note strong {
-      display: block;
-      font-family: "Playfair Display", serif;
-      font-size: 17px;
-      margin-bottom: 7px;
-    }
-
-    .sidebar-note p {
-      font-size: 11px;
-      line-height: 1.7;
-      color: var(--muted);
+    .brand h1 {
       margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: 25px;
+      font-weight: 600;
     }
 
-    .main {
-      min-width: 0;
-      padding: 24px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      font-size: 10px;
-      font-weight: 700;
+    .brand p {
+      margin: 7px 0 0;
+      color: #c9c3b7;
+      font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
     }
 
-    h1, h2, h3, p {
-      margin-top: 0;
+    .nav-label {
+      margin: 26px 12px 12px;
+      color: #aaa79e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
     }
 
-    h1 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(27px, 4vw, 38px);
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-
-    h1 em, h2 em {
-      font-weight: 500;
-    }
-
-    .subtitle {
-      color: var(--muted);
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin: 5px 0;
+      padding: 13px 14px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #e3dfd5;
+      text-align: left;
       font-size: 13px;
-      line-height: 1.7;
-      margin-bottom: 0;
+      transition: background .2s ease, color .2s ease;
     }
 
-    .admin-chip {
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(184,149,82,.19);
+      color: #e8c98c;
+    }
+
+    .nav-icon {
+      display: inline-flex;
+      justify-content: center;
+      width: 22px;
+      font-size: 17px;
+    }
+
+    .sidebar-bottom {
+      margin-top: 35px;
+      padding: 18px 12px 0;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: #aaa79e;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .main {
+      min-height: 100vh;
+      margin-left: 250px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 82px;
+      padding: 16px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(248,245,239,.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .topbar h2 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .topbar p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-badge {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: var(--white);
+      padding: 8px 12px;
       border: 1px solid var(--border);
-      padding: 10px 14px;
-      border-radius: 30px;
-      font-size: 12px;
-      white-space: nowrap;
+      border-radius: 12px;
+      background: var(--white);
     }
 
-    .admin-avatar {
+    .avatar {
       display: grid;
       place-items: center;
-      width: 34px;
-      height: 34px;
+      width: 35px;
+      height: 35px;
       border-radius: 50%;
-      background: var(--gold-light);
+      background: #e9dfcc;
+      color: var(--dark);
       font-weight: 700;
     }
 
-    .section-view {
+    .admin-badge strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .admin-badge small {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .menu-button {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--white);
+      font-size: 20px;
+    }
+
+    .content {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 30px 32px 45px;
+    }
+
+    .page-section {
       display: none;
     }
 
-    .section-view.active {
+    .page-section.active {
       display: block;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: 27px;
+      font-weight: 600;
+    }
+
+    .section-heading p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 23px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .card-description {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-      margin-bottom: 22px;
+      gap: 18px;
+      margin-bottom: 23px;
     }
 
     .stat-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      min-width: 0;
+      position: relative;
+      overflow: hidden;
     }
 
     .stat-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
     }
 
     .stat-label {
@@ -270,816 +297,796 @@
     .stat-icon {
       display: grid;
       place-items: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
-      background: var(--cream);
-      font-size: 18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #f4eee2;
+      font-size: 19px;
     }
 
     .stat-number {
+      margin: 17px 0 8px;
       font-family: "Playfair Display", serif;
-      font-size: 33px;
-      margin: 18px 0 6px;
-      overflow-wrap: anywhere;
+      font-size: 32px;
+      font-weight: 600;
     }
 
     .stat-note {
-      font-size: 11px;
       color: var(--muted);
+      font-size: 11px;
     }
 
-    .progress-track {
-      height: 5px;
-      background: #eee9e0;
-      border-radius: 20px;
-      overflow: hidden;
-      margin-top: 15px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0;
-      background: var(--gold);
-      border-radius: inherit;
-      transition: width .4s ease;
-    }
-
-    .progress-fill.green {
-      background: var(--green);
-    }
-
-    .progress-fill.orange {
-      background: var(--orange);
-    }
-
-    .progress-fill.red {
-      background: var(--red);
-    }
-
-    .panel-grid {
+    .overview-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .85fr);
-      gap: 20px;
-      margin-bottom: 22px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-bottom: 23px;
     }
 
-    .panel {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 23px;
-      margin-bottom: 20px;
-      min-width: 0;
-      box-shadow: var(--shadow);
+    .progress-item {
+      margin-top: 24px;
     }
 
-    .panel-heading {
+    .progress-label {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 22px;
-    }
-
-    .panel-heading h2 {
-      font-family: "Playfair Display", serif;
-      font-weight: 500;
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-
-    .panel-heading p {
-      color: var(--muted);
+      margin-bottom: 9px;
       font-size: 12px;
-      margin-bottom: 0;
     }
 
-    .text-button {
-      border: 0;
-      background: transparent;
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: 700;
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #eeeae2;
     }
 
-    .metric {
-      margin-bottom: 23px;
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--green);
+      transition: width .4s ease;
     }
 
-    .metric:last-child {
-      margin-bottom: 0;
+    .pending-fill {
+      background: var(--gold);
     }
 
-    .metric-heading {
+    .other-fill {
+      background: #8d8a9b;
+    }
+
+    .quick-actions {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 11px 17px;
+      border: 1px solid transparent;
+      border-radius: 10px;
       font-size: 12px;
-      margin-bottom: 10px;
-    }
-
-    .metric-heading span:last-child {
       font-weight: 700;
+      transition: opacity .2s ease, transform .2s ease;
     }
 
-    .metric small {
-      display: block;
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .quick-action {
-      min-height: 110px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: #fffdfa;
-      padding: 16px;
-      text-align: left;
-    }
-
-    .quick-action:hover {
-      border-color: var(--gold);
+    .btn:hover {
+      opacity: .88;
       transform: translateY(-1px);
     }
 
-    .quick-action span {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 13px;
+    .btn-primary {
+      background: var(--dark);
+      color: var(--white);
     }
 
-    .quick-action strong {
-      display: block;
-      font-size: 12px;
+    .btn-gold {
+      background: var(--gold);
+      color: var(--white);
     }
 
-    .quick-action small {
-      display: block;
+    .btn-outline {
+      border-color: var(--border);
+      background: var(--white);
+      color: var(--dark);
+    }
+
+    .btn-danger {
+      background: #f9e9e7;
+      color: var(--red);
+    }
+
+    .btn-small {
+      min-height: 32px;
+      padding: 7px 10px;
+      font-size: 11px;
+    }
+
+    .table-card {
+      margin-bottom: 24px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .table-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 22px 23px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-heading h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .table-heading p {
+      margin: 6px 0 0;
       color: var(--muted);
-      font-size: 10px;
-      margin-top: 5px;
+      font-size: 11px;
     }
 
     .table-wrap {
-      overflow-x: auto;
       width: 100%;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      text-align: left;
       white-space: nowrap;
+    }
+
+    th, td {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f0ede7;
+      text-align: left;
       font-size: 12px;
     }
 
     th {
-      background: #faf8f4;
+      background: #fcfaf6;
       color: var(--muted);
       font-size: 10px;
-      letter-spacing: 1px;
+      font-weight: 700;
+      letter-spacing: .5px;
       text-transform: uppercase;
     }
 
-    th, td {
-      padding: 15px 12px;
-      border-bottom: 1px solid var(--border);
+    td {
+      color: #48483f;
     }
 
     tbody tr:last-child td {
       border-bottom: 0;
     }
 
-    .badge {
-      display: inline-block;
-      border-radius: 20px;
+    .status {
+      display: inline-flex;
+      align-items: center;
       padding: 6px 9px;
+      border-radius: 30px;
       font-size: 10px;
       font-weight: 700;
-      background: var(--cream);
+      text-transform: capitalize;
     }
 
-    .badge.paid,
-    .badge.completed,
-    .badge.approved,
-    .badge.active {
-      color: var(--green);
-      background: #eaf4ed;
+    .status-paid,
+    .status-completed,
+    .status-approved,
+    .status-active {
+      background: #e6f2e7;
+      color: #356e3d;
     }
 
-    .badge.pending {
-      color: var(--orange);
-      background: #fff3df;
+    .status-pending {
+      background: #fbf0d8;
+      color: #8a671d;
     }
 
-    .badge.failed,
-    .badge.rejected,
-    .badge.inactive {
-      color: var(--red);
-      background: #faeae8;
+    .status-failed,
+    .status-rejected,
+    .status-cancelled {
+      background: #f9e6e4;
+      color: #a43d37;
+    }
+
+    .status-inactive,
+    .status-refunded {
+      background: #eceaf2;
+      color: #625779;
     }
 
     .toolbar {
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
       margin-bottom: 20px;
     }
 
-    .input, .select, .textarea {
-      width: 100%;
-      min-width: 0;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: white;
-      padding: 12px;
-      color: var(--dark);
-      font-size: 12px;
-    }
-
-    .toolbar .input {
-      flex: 1 1 200px;
-    }
-
-    .button {
-      border: 1px solid var(--dark);
-      border-radius: 10px;
-      padding: 12px 17px;
-      background: var(--dark);
-      color: white;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .button:hover {
-      opacity: .88;
-    }
-
-    .button.secondary {
-      background: white;
-      color: var(--dark);
-      border-color: var(--border);
-    }
-
-    .button.gold {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: white;
-    }
-
-    .button.danger {
-      background: #fff;
-      border-color: #e5c5c1;
-      color: var(--red);
-    }
-
-    .empty-state {
-      padding: 35px 12px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.8;
-      white-space: normal;
-    }
-
-    .empty-state strong {
-      display: block;
-      font-family: "Playfair Display", serif;
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--dark);
-      margin-bottom: 8px;
-    }
-
-    .notice {
-      border: 1px solid var(--border);
-      background: #fffdfa;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 12px;
-      line-height: 1.7;
-      color: var(--muted);
-      margin-bottom: 18px;
-    }
-
-    .notice strong {
-      color: var(--dark);
-    }
-
-    .notice.warning {
-      border-color: #e8d5ae;
-      background: #fff9ec;
+    .toolbar input,
+    .toolbar select {
+      flex: 1 1 180px;
+      width: auto;
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
+      gap: 18px;
     }
 
-    .form-field {
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       min-width: 0;
     }
 
-    .form-field.full {
+    .form-group.full {
       grid-column: 1 / -1;
     }
 
-    .form-field label {
-      display: block;
-      font-size: 11px;
+    .form-group label {
+      font-size: 12px;
       font-weight: 700;
-      margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea,
+    .toolbar input,
+    .toolbar select {
+      min-height: 44px;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+      background: var(--white);
+      color: var(--dark);
+      font-size: 12px;
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus,
+    .toolbar input:focus,
+    .toolbar select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(184,149,82,.12);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .checkbox-row input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--green);
     }
 
     .form-actions {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      gap: 10px;
+      margin-top: 20px;
     }
 
-    .inline-actions {
+    .notice {
+      margin-bottom: 20px;
+      padding: 14px 16px;
+      border: 1px solid #e6d7b6;
+      border-radius: 10px;
+      background: #fff9eb;
+      color: #745a26;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .notice.error {
+      border-color: #efc8c5;
+      background: #fff1f0;
+      color: #913a35;
+    }
+
+    .notice.success {
+      border-color: #cde2cf;
+      background: #eff8ef;
+      color: #356e3d;
+    }
+
+    .empty-state {
+      padding: 35px 20px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .product-cell {
       display: flex;
-      gap: 6px;
+      align-items: center;
+      gap: 12px;
+      min-width: 180px;
     }
 
-    .inline-actions button {
-      padding: 7px 9px;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      background: white;
+    .product-thumb {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 45px;
+      height: 45px;
+      overflow: hidden;
+      border-radius: 9px;
+      background: var(--cream);
+      font-size: 19px;
+    }
+
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-cell strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .product-cell small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
       font-size: 10px;
     }
 
-    .login-shell {
-      max-width: 440px;
-      margin: 40px auto;
-    }
-
-    .login-card {
-      background: white;
+    .details-box {
+      margin-top: 20px;
+      padding: 20px;
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-    }
-
-    .login-card h2 {
-      font-family: "Playfair Display", serif;
-      font-size: 28px;
-      font-weight: 500;
-    }
-
-    .login-card .form-field {
-      margin-bottom: 16px;
-    }
-
-    .login-card .button {
-      width: 100%;
-      margin-top: 5px;
-    }
-
-    .message {
-      margin-top: 15px;
-      font-size: 12px;
-      line-height: 1.7;
+      border-radius: 12px;
+      background: #fcfaf6;
       overflow-wrap: anywhere;
     }
 
-    .message.error {
-      color: var(--red);
+    .details-box h4 {
+      margin: 0 0 15px;
+      font-size: 14px;
     }
 
-    .message.success {
-      color: var(--green);
+    .details-box p {
+      font-size: 12px;
+      line-height: 1.8;
     }
 
-    .footer-note {
-      padding: 15px 0;
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .detail-row:last-child {
+      border-bottom: 0;
+    }
+
+    .detail-row span:first-child {
       color: var(--muted);
-      font-size: 10px;
+    }
+
+    .connection-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .connection-dot.connected {
+      background: var(--green);
+    }
+
+    .connection-dot.error {
+      background: var(--red);
+    }
+
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 20px 32px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
       text-align: center;
+      font-size: 11px;
     }
 
-    .mobile-menu {
-      display: none;
+    .quick-action-card {
+      flex: 1 1 180px;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--white);
+      text-align: left;
     }
 
-    @media (min-width: 1000px) {
-      .layout {
-        display: grid;
-        grid-template-columns: 240px minmax(0, 1fr);
-      }
+    .quick-action-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
 
+    .quick-action-card span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1150px) {
       .sidebar {
-        min-height: calc(100vh - 35px);
+        width: 225px;
       }
 
       .main {
-        padding: 32px;
+        margin-left: 225px;
       }
-    }
 
-    @media (max-width: 1100px) {
       .stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .panel-grid {
-        grid-template-columns: 1fr;
+      .topbar {
+        padding-right: 22px;
+        padding-left: 22px;
+      }
+
+      .content {
+        padding-right: 22px;
+        padding-left: 22px;
       }
     }
 
-    @media (max-width: 999px) {
-      .layout {
-        display: block;
-      }
-
-      .mobile-menu {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        width: 42px;
-        height: 42px;
-        background: white;
-        font-size: 20px;
-      }
-
-      .topbar {
-        align-items: flex-start;
-      }
-
+    @media (max-width: 800px) {
       .sidebar {
-        display: none;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
+        transform: translateX(-100%);
       }
 
       .sidebar.open {
-        display: block;
+        transform: translateX(0);
+        box-shadow: 10px 0 40px rgba(0,0,0,.18);
       }
 
-      .brand {
-        margin-bottom: 20px;
-      }
-
-      .sidebar-note {
-        margin-top: 20px;
-      }
-    }
-
-    @media (max-width: 560px) {
       .main {
-        padding: 18px 12px;
+        margin-left: 0;
+      }
+
+      .menu-button {
+        display: inline-grid;
+        place-items: center;
       }
 
       .topbar {
-        gap: 10px;
-        margin-bottom: 24px;
+        min-height: 75px;
+        padding: 13px 16px;
       }
 
-      .topbar h1 {
-        font-size: 27px;
+      .topbar h2 {
+        font-size: 21px;
       }
 
-      .admin-chip {
-        padding: 7px;
+      .topbar-right {
+        gap: 7px;
       }
 
-      .admin-chip > span:last-child {
+      .admin-badge {
+        padding: 5px;
+      }
+
+      .admin-badge > div:last-child {
         display: none;
       }
 
+      .content {
+        padding: 22px 16px 35px;
+      }
+
+      .overview-grid,
+      .account-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading h2 {
+        font-size: 23px;
+      }
+
+      .footer {
+        padding: 18px 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
       .stats-grid {
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
 
       .stat-card {
-        padding: 14px;
+        padding: 15px;
       }
 
       .stat-number {
-        font-size: 27px;
-      }
-
-      .stat-label {
-        font-size: 11px;
+        font-size: 26px;
       }
 
       .stat-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 15px;
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
       }
 
-      .panel {
-        padding: 16px;
-      }
-
-      .quick-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .stat-label {
+        font-size: 10px;
       }
 
       .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .form-field.full {
+      .form-group.full {
         grid-column: auto;
       }
 
-      .announcement {
-        font-size: 9px;
-        letter-spacing: 2px;
+      .card {
+        padding: 17px;
+      }
+
+      .table-heading {
+        padding: 17px;
+      }
+
+      .section-heading {
+        flex-direction: column;
+      }
+
+      .quick-actions {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 
 <body>
+<div class="app">
 
-  <div class="announcement">
-    STYLE &nbsp; ✦ &nbsp; JIDDAHS HEAVEN &nbsp; ✦ &nbsp; QUALITY
-  </div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <h1>Jiddahs Heaven</h1>
+      <p>Store administration</p>
+    </div>
 
-  <div class="layout">
+    <div class="nav-label">Workspace</div>
 
-    <aside class="sidebar" id="sidebar">
+    <button class="nav-link active" type="button" data-section="overview">
+      <span class="nav-icon">⌂</span> Overview
+    </button>
 
-      <div class="brand">
-        <span class="brand-top">JIDDAHS</span>
-        <span class="brand-bottom">HEAVEN</span>
-        <div class="brand-caption">ADMINISTRATION</div>
+    <button class="nav-link" type="button" data-section="products">
+      <span class="nav-icon">◇</span> Products
+    </button>
+
+    <button class="nav-link" type="button" data-section="orders">
+      <span class="nav-icon">▤</span> Orders
+    </button>
+
+    <button class="nav-link" type="button" data-section="refunds">
+      <span class="nav-icon">↩</span> Refund requests
+    </button>
+
+    <div class="nav-label">Settings</div>
+
+    <button class="nav-link" type="button" data-section="account">
+      <span class="nav-icon">⚙</span> Admin account
+    </button>
+
+    <div class="sidebar-bottom">
+      <strong>Jiddahs Heaven</strong><br>
+      Premium shopping, thoughtfully curated.
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-button" id="menuButton"
+          type="button" aria-label="Open navigation"
+          aria-expanded="false">☰</button>
+
+        <div>
+          <h2 id="pageTitle">Overview</h2>
+          <p>Manage your store in one place.</p>
+        </div>
       </div>
 
-      <div class="nav-label">WORKSPACE</div>
-
-      <button class="nav-button active" data-view="overview">
-        <span class="nav-icon">◫</span> Overview
-      </button>
-
-      <button class="nav-button" data-view="products">
-        <span class="nav-icon">◇</span> Products
-      </button>
-
-      <button class="nav-button" data-view="orders">
-        <span class="nav-icon">▤</span> Orders
-      </button>
-
-      <button class="nav-button" data-view="refunds">
-        <span class="nav-icon">↻</span> Refund requests
-      </button>
-
-      <div class="nav-label">ACCOUNT</div>
-
-      <button class="nav-button" data-view="account">
-        <span class="nav-icon">◎</span> Admin account
-      </button>
-
-      <button class="nav-button" id="logoutButton" hidden>
-        <span class="nav-icon">↗</span> Sign out
-      </button>
-
-      <div class="sidebar-note">
-        <strong>Everyday luxury.</strong>
-        <p>Manage your store, orders and customer requests from one place.</p>
-      </div>
-
-    </aside>
-
-    <main class="main">
-
-      <header class="topbar">
-
-        <div style="display:flex;gap:12px;align-items:flex-start">
-
-          <button class="mobile-menu" id="menuButton"
-                  aria-label="Toggle navigation"
-                  aria-expanded="false">☰</button>
-
+      <div class="topbar-right">
+        <div class="admin-badge">
+          <div class="avatar">JH</div>
           <div>
-            <div class="eyebrow" id="pageEyebrow">YOUR STORE AT A GLANCE</div>
-            <h1 id="pageTitle">Welcome <em>back.</em></h1>
-            <p class="subtitle" id="pageSubtitle">
-              A little overview of your Jiddahs Heaven store.
-            </p>
-          </div>
-
-        </div>
-
-        <div class="admin-chip">
-          <span class="admin-avatar">JH</span>
-          <span id="adminLabel">Administrator</span>
-        </div>
-
-      </header>
-
-      <!-- LOGIN -->
-
-      <section class="section-view" id="view-login">
-
-        <div class="login-shell">
-          <div class="login-card">
-
-            <div class="eyebrow">PRIVATE ADMIN ACCESS</div>
-            <h2>Welcome <em>back.</em></h2>
-
-            <p class="subtitle" style="margin-bottom:25px">
-              Sign in with your authorised administrator account.
-            </p>
-
-            <form id="loginForm">
-
-              <div class="form-field">
-                <label for="loginEmail">Email address</label>
-                <input class="input" id="loginEmail" type="email"
-                       autocomplete="username" required>
-              </div>
-
-              <div class="form-field">
-                <label for="loginPassword">Password</label>
-                <input class="input" id="loginPassword" type="password"
-                       autocomplete="current-password" required>
-              </div>
-
-              <button class="button" id="loginSubmit" type="submit">
-                Sign in securely →
-              </button>
-
-              <div class="message" id="loginMessage" role="status"></div>
-
-            </form>
-
+            <strong>Store Admin</strong>
+            <small>Jiddahs Heaven</small>
           </div>
         </div>
+      </div>
+    </header>
 
-      </section>
+    <div class="content">
 
-            <!-- OVERVIEW -->
+      <!-- PART 2 CONTINUES DIRECTLY HERE -->
+             <section class="page-section active" id="overview">
+        <div class="section-heading">
+          <div>
+            <h2>Store overview</h2>
+            <p>A clear view of your store's products, orders and payments.</p>
+          </div>
 
-      <section class="section-view active" id="view-overview">
+          <button class="btn btn-outline" id="refreshButton" type="button">
+            ↻ Refresh dashboard
+          </button>
+        </div>
 
-        <div class="notice warning" id="connectionNotice">
-          <strong>Dashboard preview.</strong>
-          Connect Supabase authentication and database access before using
-          this dashboard to manage live store data.
+        <div class="notice" id="dashboardNotice" role="status">
+          Dashboard interface is ready. Database connection and admin
+          authentication must be configured before using real store data.
         </div>
 
         <div class="stats-grid">
-
-          <article class="stat-card">
+          <article class="card stat-card">
             <div class="stat-top">
               <span class="stat-label">Total products</span>
               <span class="stat-icon">◇</span>
             </div>
-            <div class="stat-number" id="statProducts">—</div>
-            <div class="stat-note" id="productStatNote">Awaiting connection</div>
-            <div class="progress-track">
-              <div class="progress-fill" id="productProgress"></div>
-            </div>
+            <div class="stat-number" id="totalProducts">—</div>
+            <div class="stat-note">Products in your catalogue</div>
           </article>
 
-          <article class="stat-card">
+          <article class="card stat-card">
             <div class="stat-top">
               <span class="stat-label">Total orders</span>
               <span class="stat-icon">▤</span>
             </div>
-            <div class="stat-number" id="statOrders">—</div>
-            <div class="stat-note">Orders recorded in your store</div>
-            <div class="progress-track">
-              <div class="progress-fill" id="orderProgress"></div>
-            </div>
+            <div class="stat-number" id="totalOrders">—</div>
+            <div class="stat-note">Orders recorded in the store</div>
           </article>
 
-          <article class="stat-card">
+          <article class="card stat-card">
             <div class="stat-top">
               <span class="stat-label">Paid orders</span>
               <span class="stat-icon">✓</span>
             </div>
-            <div class="stat-number" id="statPaid">—</div>
-            <div class="stat-note" id="paidStatNote">Verified payment status</div>
-            <div class="progress-track">
-              <div class="progress-fill green" id="paidProgress"></div>
-            </div>
+            <div class="stat-number" id="paidOrders">—</div>
+            <div class="stat-note">Orders marked as paid</div>
           </article>
 
-          <article class="stat-card">
+          <article class="card stat-card">
             <div class="stat-top">
               <span class="stat-label">Pending orders</span>
               <span class="stat-icon">◷</span>
             </div>
-            <div class="stat-number" id="statPending">—</div>
-            <div class="stat-note" id="pendingStatNote">Awaiting payment</div>
-            <div class="progress-track">
-              <div class="progress-fill orange" id="pendingProgress"></div>
+            <div class="stat-number" id="pendingOrders">—</div>
+            <div class="stat-note">Awaiting payment or confirmation</div>
+          </article>
+        </div>
+
+        <div class="overview-grid">
+          <article class="card">
+            <h3>Order payment progress</h3>
+            <p class="card-description">
+              Payment status across recorded orders.
+            </p>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Paid orders</span>
+                <strong id="paidPercentage">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="paidProgress"></div>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Pending orders</span>
+                <strong id="pendingPercentage">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill pending-fill" id="pendingProgress"></div>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Other payment statuses</span>
+                <strong id="otherPercentage">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill other-fill" id="otherProgress"></div>
+              </div>
             </div>
           </article>
 
+          <article class="card">
+            <h3>Quick actions</h3>
+            <p class="card-description">
+              Jump to common store management tasks.
+            </p>
+
+            <div class="quick-actions">
+              <button class="quick-action-card" type="button" data-go="products">
+                <strong>＋ Manage products</strong>
+                <span>Add products, update prices and manage stock.</span>
+              </button>
+
+              <button class="quick-action-card" type="button" data-go="orders">
+                <strong>▤ View orders</strong>
+                <span>Review customer orders and payment status.</span>
+              </button>
+
+              <button class="quick-action-card" type="button" data-go="refunds">
+                <strong>↩ Refund requests</strong>
+                <span>Review and track customer refund requests.</span>
+              </button>
+            </div>
+          </article>
         </div>
 
-        <div class="panel-grid">
-
-          <section class="panel">
-            <div class="panel-heading">
-              <div>
-                <h2>Store performance</h2>
-                <p>Order and product activity</p>
-              </div>
-            </div>
-
-            <div class="metric">
-              <div class="metric-heading">
-                <span>Payment completion</span>
-                <span id="paidRate">—</span>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill green" id="paidRateProgress"></div>
-              </div>
-              <small>Paid orders as a percentage of all recorded orders.</small>
-            </div>
-
-            <div class="metric">
-              <div class="metric-heading">
-                <span>Pending payments</span>
-                <span id="pendingRate">—</span>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill orange" id="pendingRateProgress"></div>
-              </div>
-              <small>Orders that have not yet reached paid status.</small>
-            </div>
-
-            <div class="metric">
-              <div class="metric-heading">
-                <span>Active product listing</span>
-                <span id="activeRate">—</span>
-              </div>
-              <div class="progress-track">
-                <div class="progress-fill" id="activeRateProgress"></div>
-              </div>
-              <small>Active products as a percentage of all products.</small>
-            </div>
-          </section>
-
-          <section class="panel">
-            <div class="panel-heading">
-              <div>
-                <h2>Quick actions</h2>
-                <p>Jump straight into your workflow</p>
-              </div>
-            </div>
-
-            <div class="quick-grid">
-              <button class="quick-action" data-jump="products">
-                <span>＋</span>
-                <strong>Add product</strong>
-                <small>Grow your collection</small>
-              </button>
-
-              <button class="quick-action" data-jump="orders">
-                <span>▤</span>
-                <strong>View orders</strong>
-                <small>Check customer orders</small>
-              </button>
-
-              <button class="quick-action" data-jump="refunds">
-                <span>↻</span>
-                <strong>Refund requests</strong>
-                <small>Review customer requests</small>
-              </button>
-
-              <button class="quick-action" data-jump="account">
-                <span>◎</span>
-                <strong>Admin account</strong>
-                <small>Check access status</small>
-              </button>
-            </div>
-          </section>
-
-        </div>
-
-        <section class="panel">
-          <div class="panel-heading">
+        <article class="card table-card">
+          <div class="table-heading">
             <div>
-              <h2>Recent orders</h2>
-              <p>The latest orders from your store.</p>
+              <h3>Recent orders</h3>
+              <p>Your latest recorded orders.</p>
             </div>
 
-            <button class="text-button" data-jump="orders">
-              View all →
-            </button>
+            <button class="btn btn-outline btn-small" type="button"
+              data-go="orders">View all</button>
           </div>
 
           <div class="table-wrap">
@@ -1093,59 +1100,54 @@
                   <th>Date</th>
                 </tr>
               </thead>
-
               <tbody id="recentOrdersBody">
                 <tr>
-                  <td colspan="5">
-                    <div class="empty-state">
-                      <strong>Your orders will appear here.</strong>
-                      Connect the dashboard to Supabase to load real order records.
-                    </div>
+                  <td colspan="5" class="empty-state">
+                    Orders will appear here after the database is connected.
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </section>
-
+        </article>
       </section>
 
-      <!-- PRODUCTS -->
+      <!-- PRODUCTS SECTION -->
 
-      <section class="section-view" id="view-products">
-        <section class="panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Product collection</h2>
-              <p>Manage products listed in your online store.</p>
-            </div>
-
-            <button class="button gold" id="addProductButton">
-              + Add product
-            </button>
+      <section class="page-section" id="products">
+        <div class="section-heading">
+          <div>
+            <h2>Product management</h2>
+            <p>Manage your catalogue, pricing, inventory and product visibility.</p>
           </div>
+        </div>
 
-          <div class="notice">
-            Product changes must be saved to Supabase. This interface will
-            be connected to your existing products table.
-          </div>
+        <div class="notice">
+          Product changes must be connected to Supabase and protected by
+          database permissions before they can be saved securely.
+        </div>
 
-          <div id="productFormContainer" hidden>
+        <div class="overview-grid">
+          <article class="card">
             <h3 id="productFormTitle">Add a product</h3>
+            <p class="card-description">
+              Enter the product details below.
+            </p>
 
             <form id="productForm">
               <input type="hidden" id="productId">
 
-              <div class="form-grid">
-                <div class="form-field">
+              <div class="form-grid" style="margin-top:20px;">
+                <div class="form-group full">
                   <label for="productName">Product name</label>
-                  <input class="input" id="productName" required maxlength="200">
+                  <input id="productName" name="name" type="text"
+                    maxlength="150" required placeholder="Enter product name">
                 </div>
 
-                <div class="form-field">
+                <div class="form-group">
                   <label for="productCategory">Category</label>
-                  <select class="select" id="productCategory" required>
-                    <option value="">Select category</option>
+                  <select id="productCategory" name="category" required>
+                    <option value="">Choose category</option>
                     <option value="apparel">Apparel</option>
                     <option value="beauty">Beauty</option>
                     <option value="kitchen">Kitchen</option>
@@ -1153,57 +1155,100 @@
                   </select>
                 </div>
 
-                <div class="form-field">
+                <div class="form-group">
                   <label for="productPrice">Price (₦)</label>
-                  <input class="input" id="productPrice" type="number"
-                         min="0" step="0.01" required>
+                  <input id="productPrice" name="price" type="number"
+                    min="0" step="0.01" required placeholder="0.00">
                 </div>
 
-                <div class="form-field">
+                <div class="form-group">
                   <label for="productStock">Stock quantity</label>
-                  <input class="input" id="productStock" type="number"
-                         min="0" step="1" required>
+                  <input id="productStock" name="stock" type="number"
+                    min="0" step="1" required placeholder="0">
                 </div>
 
-                <div class="form-field full">
+                <div class="form-group">
                   <label for="productImage">Image URL</label>
-                  <input class="input" id="productImage" type="url">
+                  <input id="productImage" name="image_url" type="url"
+                    placeholder="https://example.com/image.jpg">
                 </div>
 
-                <div class="form-field full">
+                <div class="form-group full">
                   <label for="productDescription">Description</label>
-                  <textarea class="textarea" id="productDescription"
-                            rows="4" maxlength="5000"></textarea>
+                  <textarea id="productDescription" name="description"
+                    maxlength="3000" placeholder="Describe the product"></textarea>
                 </div>
 
-                <div class="form-field full">
-                  <label>
-                    <input id="productActive" type="checkbox" checked>
-                    Active — show this product in the storefront
+                <div class="form-group full">
+                  <label class="checkbox-row" for="productActive">
+                    <input id="productActive" name="is_active"
+                      type="checkbox" checked>
+                    Make this product visible in the store
                   </label>
                 </div>
               </div>
 
               <div class="form-actions">
-                <button class="button" type="submit">Save product</button>
-                <button class="button secondary" type="button"
-                        id="cancelProductButton">Cancel</button>
+                <button class="btn btn-primary" type="submit">
+                  Save product
+                </button>
+                <button class="btn btn-outline" id="resetProductButton"
+                  type="button">Clear form</button>
               </div>
-
-              <div class="message" id="productFormMessage" role="status"></div>
             </form>
+          </article>
+
+          <article class="card">
+            <h3>Catalogue summary</h3>
+            <p class="card-description">
+              Keep your product information accurate and up to date.
+            </p>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Active products</span>
+                <strong id="activeProductsCount">—</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="activeProductsProgress"></div>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-label">
+                <span>Out of stock</span>
+                <strong id="outOfStockCount">—</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill pending-fill" id="outOfStockProgress"></div>
+              </div>
+            </div>
+
+            <div class="notice" style="margin-top:24px;">
+              Editing a product should update the existing product record.
+              Deleting a product should require confirmation.
+            </div>
+          </article>
+        </div>
+
+        <article class="card table-card">
+          <div class="table-heading">
+            <div>
+              <h3>All products</h3>
+              <p>Search and review your product catalogue.</p>
+            </div>
           </div>
 
-          <div class="toolbar">
-            <input class="input" id="productSearch"
-                   placeholder="Search products..." type="search">
+          <div class="toolbar" style="padding:20px 22px 0;">
+            <input id="productSearch" type="search"
+              placeholder="Search product names or categories"
+              aria-label="Search products">
 
-            <select class="select" id="productCategoryFilter" style="width:auto">
-              <option value="">All categories</option>
-              <option value="apparel">Apparel</option>
-              <option value="beauty">Beauty</option>
-              <option value="kitchen">Kitchen</option>
-              <option value="toiletries">Toiletries</option>
+            <select id="productStatusFilter" aria-label="Filter products">
+              <option value="all">All products</option>
+              <option value="active">Active products</option>
+              <option value="inactive">Inactive products</option>
+              <option value="out">Out of stock</option>
             </select>
           </div>
 
@@ -1219,49 +1264,54 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-
-              <tbody id="productsBody">
+              <tbody id="productsTableBody">
                 <tr>
-                  <td colspan="6">
-                    <div class="empty-state">
-                      <strong>No product data loaded yet.</strong>
-                      Connect Supabase to manage your live products.
-                    </div>
+                  <td colspan="6" class="empty-state">
+                    Products will appear here after the database is connected.
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </section>
+        </article>
       </section>
 
-      <!-- ORDERS -->
+      <!-- PART 3 CONTINUES DIRECTLY HERE -->
+             <!-- ORDERS SECTION -->
 
-      <section class="section-view" id="view-orders">
-        <section class="panel">
-          <div class="panel-heading">
+      <section class="page-section" id="orders">
+        <div class="section-heading">
+          <div>
+            <h2>Customer orders</h2>
+            <p>Review orders, customer details, delivery information and payment status.</p>
+          </div>
+        </div>
+
+        <div class="notice">
+          Payment status must come from verified payment records. Do not mark
+          an order as paid merely because a customer reports making payment.
+        </div>
+
+        <article class="card table-card">
+          <div class="table-heading">
             <div>
-              <h2>Order management</h2>
-              <p>Review payments, customer details and delivery information.</p>
+              <h3>All orders</h3>
+              <p>Search by customer, order ID or payment reference.</p>
             </div>
           </div>
 
-          <div class="toolbar">
-            <input class="input" id="orderSearch" type="search"
-                   placeholder="Search order, customer or reference...">
+          <div class="toolbar" style="padding:20px 22px 0;">
+            <input id="orderSearch" type="search"
+              placeholder="Search orders or customers"
+              aria-label="Search orders">
 
-            <select class="select" id="orderStatusFilter" style="width:auto">
-              <option value="">All payment statuses</option>
+            <select id="orderStatusFilter" aria-label="Filter order payment status">
+              <option value="all">All payment statuses</option>
               <option value="paid">Paid</option>
               <option value="pending">Pending</option>
               <option value="failed">Failed</option>
+              <option value="refunded">Refunded</option>
             </select>
-          </div>
-
-          <div class="notice">
-            <strong>Payment safety:</strong> an order must not be marked paid
-            merely because a customer says they paid. Confirm payment through
-            trusted server-side verification.
           </div>
 
           <div class="table-wrap">
@@ -1270,74 +1320,69 @@
                 <tr>
                   <th>Order ID</th>
                   <th>Customer</th>
-                  <th>Total</th>
-                  <th>Payment</th>
+                  <th>Amount</th>
+                  <th>Payment status</th>
                   <th>Reference</th>
                   <th>Date</th>
                   <th>Details</th>
                 </tr>
               </thead>
-
-              <tbody id="ordersBody">
+              <tbody id="ordersTableBody">
                 <tr>
-                  <td colspan="7">
-                    <div class="empty-state">
-                      <strong>Your order list will appear here.</strong>
-                      Connect Supabase to load your existing orders.
-                    </div>
+                  <td colspan="7" class="empty-state">
+                    Orders will appear here after the database is connected.
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </section>
+        </article>
+
+        <article class="card">
+          <h3>Order details</h3>
+          <p class="card-description">
+            Select an order above to inspect its information.
+          </p>
+
+          <div id="orderDetails" class="details-box">
+            <p class="muted">
+              No order selected.
+            </p>
+          </div>
+        </article>
       </section>
 
-      <!-- REFUNDS -->
+      <!-- REFUNDS SECTION -->
 
-      <section class="section-view" id="view-refunds">
-        <section class="panel">
-          <div class="panel-heading">
+      <section class="page-section" id="refunds">
+        <div class="section-heading">
+          <div>
+            <h2>Refund requests</h2>
+            <p>Review customer refund requests and track their progress separately from payment status.</p>
+          </div>
+        </div>
+
+        <div class="notice">
+          This section requires a real refund-request table in Supabase.
+          A refund must not be marked completed until the money has actually
+          been returned and the refund has been verified.
+        </div>
+
+        <article class="card table-card">
+          <div class="table-heading">
             <div>
-              <h2>Refund requests</h2>
-              <p>Review and track customer refund requests.</p>
+              <h3>Refund queue</h3>
+              <p>Track requests from submission to resolution.</p>
             </div>
           </div>
 
-          <div class="notice warning">
-            <strong>Important:</strong> changing a refund request's status
-            does not transfer money. Mark a refund completed only after the
-            refund has actually been processed.
-          </div>
+          <div class="toolbar" style="padding:20px 22px 0;">
+            <input id="refundSearch" type="search"
+              placeholder="Search refund or order ID"
+              aria-label="Search refund requests">
 
-          <div class="stats-grid" style="margin-bottom:20px">
-            <article class="stat-card">
-              <div class="stat-label">Total requests</div>
-              <div class="stat-number" id="refundTotal">—</div>
-            </article>
-
-            <article class="stat-card">
-              <div class="stat-label">Pending review</div>
-              <div class="stat-number" id="refundPending">—</div>
-            </article>
-
-            <article class="stat-card">
-              <div class="stat-label">Approved</div>
-              <div class="stat-number" id="refundApproved">—</div>
-            </article>
-
-            <article class="stat-card">
-              <div class="stat-label">Completed</div>
-              <div class="stat-number" id="refundCompleted">—</div>
-            </article>
-          </div>
-
-          <div class="toolbar">
-            <input class="input" id="refundSearch" type="search"
-                   placeholder="Search refund requests...">
-
-            <select class="select" id="refundStatusFilter" style="width:auto">
-              <option value="">All refund statuses</option>
+            <select id="refundStatusFilter" aria-label="Filter refund status">
+              <option value="all">All refund statuses</option>
               <option value="pending">Pending</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
@@ -1351,171 +1396,793 @@
                 <tr>
                   <th>Request ID</th>
                   <th>Order ID</th>
-                  <th>Reason</th>
+                  <th>Customer</th>
                   <th>Amount</th>
-                  <th>Status</th>
+                  <th>Reason</th>
+                  <th>Refund status</th>
                   <th>Date</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-
-              <tbody id="refundsBody">
+              <tbody id="refundsTableBody">
                 <tr>
-                  <td colspan="7">
-                    <div class="empty-state">
-                      <strong>No refund records loaded.</strong>
-                      Connect the refund_requests table to manage requests.
-                    </div>
+                  <td colspan="8" class="empty-state">
+                    Refund requests will appear here once the refund table
+                    and secure database integration are configured.
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </section>
-      </section>
+        </article>
 
-      <!-- ADMIN ACCOUNT -->
+        <article class="card">
+          <h3>Refund process</h3>
+          <p class="card-description">
+            A request's workflow is separate from the original order's payment status.
+          </p>
 
-      <section class="section-view" id="view-account">
-        <section class="panel">
-          <div class="panel-heading">
+          <div class="overview-grid" style="margin-top:20px;">
             <div>
-              <h2>Admin account</h2>
-              <p>Authentication and administrative access.</p>
+              <div class="progress-label">
+                <span>Pending review</span>
+                <strong>1</strong>
+              </div>
+              <p class="card-description">
+                Check the order, reason and refund eligibility.
+              </p>
+            </div>
+
+            <div>
+              <div class="progress-label">
+                <span>Decision</span>
+                <strong>2</strong>
+              </div>
+              <p class="card-description">
+                Approve or reject with an appropriate reason.
+              </p>
+            </div>
+
+            <div>
+              <div class="progress-label">
+                <span>Money returned</span>
+                <strong>3</strong>
+              </div>
+              <p class="card-description">
+                Process and verify the actual refund.
+              </p>
+            </div>
+
+            <div>
+              <div class="progress-label">
+                <span>Completion</span>
+                <strong>4</strong>
+              </div>
+              <p class="card-description">
+                Record the completion only after verification.
+              </p>
             </div>
           </div>
-
-          <div class="notice warning">
-            <strong>Administrator-only access.</strong>
-            The admin_users table must authorise your signed-in user.
-            Hiding this page or its buttons is not a security control.
-          </div>
-
-          <div class="metric">
-            <div class="metric-heading">
-              <span>Authentication status</span>
-              <span id="authStatus">Not connected</span>
-            </div>
-          </div>
-
-          <div class="metric">
-            <div class="metric-heading">
-              <span>Admin authorisation</span>
-              <span id="adminStatus">Not verified</span>
-            </div>
-          </div>
-
-          <div class="metric">
-            <div class="metric-heading">
-              <span>Signed-in email</span>
-              <span id="adminEmail">—</span>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button class="button" id="accountLoginButton">Sign in</button>
-            <button class="button danger" id="accountLogoutButton">Sign out</button>
-          </div>
-
-          <div class="message" id="accountMessage" role="status"></div>
-        </section>
+        </article>
       </section>
 
-      <footer class="footer-note">
-        © <span id="year"></span> Jiddahs Heaven · Everyday essentials, beautifully chosen.
-      </footer>
+      <!-- ADMIN ACCOUNT SECTION -->
 
-    </main>
-  </div>
+      <section class="page-section" id="account">
+        <div class="section-heading">
+          <div>
+            <h2>Admin account</h2>
+            <p>Administrative access and connection information.</p>
+          </div>
+        </div>
 
-  <script>
-    const pageInfo = {
-      overview: {
-        eyebrow: "YOUR STORE AT A GLANCE",
-        title: "Welcome <em>back.</em>",
-        subtitle: "A little overview of your Jiddahs Heaven store."
-      },
-      products: {
-        eyebrow: "YOUR COLLECTION",
-        title: "Product studio.",
-        subtitle: "Keep your collection organised and up to date."
-      },
-      orders: {
-        eyebrow: "CUSTOMER ORDERS",
-        title: "Orders & payments.",
-        subtitle: "Keep track of customer purchases and payment status."
-      },
-      refunds: {
-        eyebrow: "CUSTOMER CARE",
-        title: "Refund requests.",
-        subtitle: "Review requests carefully and keep refund records accurate."
-      },
-      account: {
-        eyebrow: "SECURE ACCESS",
-        title: "Admin account.",
-        subtitle: "Check your authentication and administrator access."
-      }
-    };
+        <div class="notice error">
+          The visual dashboard is not a security boundary. Before using this
+          page for real customer data, we must connect Supabase Auth, verify
+          your administrator account, and enforce access with database RLS.
+        </div>
 
-    const navButtons = document.querySelectorAll("[data-view]");
-    const views = document.querySelectorAll(".section-view");
-    const sidebar = document.getElementById("sidebar");
+        <div class="account-grid">
+          <article class="card">
+            <h3>Administrator access</h3>
+            <p class="card-description">
+              Only your authorized administrator account should access
+              customer records and store management actions.
+            </p>
 
-    function showView(name) {
-      if (name === "login") {
-        views.forEach(view => view.classList.remove("active"));
-        document.getElementById("view-login").classList.add("active");
-        sidebar.style.display = "none";
+            <div class="details-box">
+              <div class="detail-row">
+                <span>Store</span>
+                <strong>Jiddahs Heaven</strong>
+              </div>
+
+              <div class="detail-row">
+                <span>Authentication</span>
+                <strong id="authStatus">Not connected</strong>
+              </div>
+
+              <div class="detail-row">
+                <span>Administrator verification</span>
+                <strong id="adminStatus">Not verified</strong>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-outline" id="signOutButton"
+                type="button">Sign out</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Database connection</h3>
+            <p class="card-description">
+              Check whether the dashboard has been connected to its backend.
+            </p>
+
+            <div class="details-box">
+              <div class="detail-row">
+                <span>Connection status</span>
+                <span class="connection-indicator">
+                  <span class="connection-dot" id="connectionDot"></span>
+                  <span id="connectionStatus">Not connected</span>
+                </span>
+              </div>
+
+              <div class="detail-row">
+                <span>Product management</span>
+                <strong id="productConnectionStatus">Not connected</strong>
+              </div>
+
+              <div class="detail-row">
+                <span>Order management</span>
+                <strong id="orderConnectionStatus">Not connected</strong>
+              </div>
+
+              <div class="detail-row">
+                <span>Refund management</span>
+                <strong id="refundConnectionStatus">Not connected</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+       </div>
+
+    <footer class="footer">
+      © <span id="year"></span> Jiddahs Heaven. Store administration.
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  "use strict";
+
+  const sidebar = document.getElementById("sidebar");
+  const menuButton = document.getElementById("menuButton");
+  const pageTitle = document.getElementById("pageTitle");
+
+  const dashboardNotice = document.getElementById("dashboardNotice");
+  const connectionStatus = document.getElementById("connectionStatus");
+  const connectionDot = document.getElementById("connectionDot");
+
+  const pageNames = {
+    overview: "Overview",
+    products: "Products",
+    orders: "Orders",
+    refunds: "Refund requests",
+    account: "Admin account"
+  };
+
+  const dashboardData = {
+    products: [],
+    orders: [],
+    refunds: []
+  };
+
+  function showNotice(message, type = "normal") {
+    dashboardNotice.textContent = message;
+    dashboardNotice.className = "notice";
+
+    if (type === "error") {
+      dashboardNotice.classList.add("error");
+    } else if (type === "success") {
+      dashboardNotice.classList.add("success");
+    }
+  }
+
+  function navigateTo(sectionName) {
+    const section = document.getElementById(sectionName);
+
+    if (!section) {
+      return;
+    }
+
+    document.querySelectorAll(".page-section").forEach((item) => {
+      item.classList.toggle("active", item.id === sectionName);
+    });
+
+    document.querySelectorAll(".nav-link[data-section]").forEach((item) => {
+      item.classList.toggle(
+        "active",
+        item.dataset.section === sectionName
+      );
+    });
+
+    pageTitle.textContent = pageNames[sectionName] || "Dashboard";
+
+    sidebar.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  document.querySelectorAll(".nav-link[data-section]").forEach((button) => {
+    button.addEventListener("click", () => {
+      navigateTo(button.dataset.section);
+    });
+  });
+
+  document.querySelectorAll("[data-go]").forEach((button) => {
+    button.addEventListener("click", () => {
+      navigateTo(button.dataset.go);
+    });
+  });
+
+  menuButton.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+
+    menuButton.setAttribute(
+      "aria-expanded",
+      sidebar.classList.contains("open") ? "true" : "false"
+    );
+  });
+
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+  function formatCurrency(amount) {
+    const value = Number(amount);
+
+    if (!Number.isFinite(value)) {
+      return "—";
+    }
+
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 2
+    }).format(value);
+  }
+
+  function formatDate(value) {
+    if (!value) {
+      return "—";
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "—";
+    }
+
+    return date.toLocaleDateString("en-NG", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+  }
+
+  function safeText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (character) => {
+      const replacements = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      };
+
+      return replacements[character];
+    });
+  }
+
+  function setProgress(elementId, percentage) {
+    const element = document.getElementById(elementId);
+
+    if (!element) {
+      return;
+    }
+
+    const safePercentage = Math.max(
+      0,
+      Math.min(100, Number(percentage) || 0)
+    );
+
+    element.style.width = safePercentage + "%";
+  }
+
+  function setText(elementId, value) {
+    const element = document.getElementById(elementId);
+
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  function updateStatistics(products, orders) {
+    const productList = Array.isArray(products) ? products : [];
+    const orderList = Array.isArray(orders) ? orders : [];
+
+    const paid = orderList.filter((order) =>
+      String(order.payment_status || "").toLowerCase() === "paid"
+    ).length;
+
+    const pending = orderList.filter((order) =>
+      String(order.payment_status || "").toLowerCase() === "pending"
+    ).length;
+
+    const other = Math.max(0, orderList.length - paid - pending);
+
+    const total = orderList.length;
+
+    const paidPercent = total ? (paid / total) * 100 : 0;
+    const pendingPercent = total ? (pending / total) * 100 : 0;
+    const otherPercent = total ? (other / total) * 100 : 0;
+
+    setText("totalProducts", productList.length);
+    setText("totalOrders", total);
+    setText("paidOrders", paid);
+    setText("pendingOrders", pending);
+
+    setText("paidPercentage", Math.round(paidPercent) + "%");
+    setText("pendingPercentage", Math.round(pendingPercent) + "%");
+    setText("otherPercentage", Math.round(otherPercent) + "%");
+
+    setProgress("paidProgress", paidPercent);
+    setProgress("pendingProgress", pendingPercent);
+    setProgress("otherProgress", otherPercent);
+
+    const activeProducts = productList.filter((product) =>
+      product.is_active === true
+    ).length;
+
+    const outOfStock = productList.filter((product) =>
+      Number(product.stock) <= 0
+    ).length;
+
+    setText("activeProductsCount", activeProducts);
+    setText("outOfStockCount", outOfStock);
+
+    setProgress(
+      "activeProductsProgress",
+      productList.length ? activeProducts / productList.length * 100 : 0
+    );
+
+    setProgress(
+      "outOfStockProgress",
+      productList.length ? outOfStock / productList.length * 100 : 0
+    );
+  }
+
+  function renderRecentOrders(orders) {
+    const tbody = document.getElementById("recentOrdersBody");
+
+    if (!Array.isArray(orders) || orders.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="empty-state">
+            No orders to display.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = orders.slice(0, 5).map((order) => {
+      const status = safeText(
+        String(order.payment_status || "pending").toLowerCase()
+      );
+
+      return `
+        <tr>
+          <td>${safeText(String(order.id || "").slice(0, 8))}</td>
+          <td>${safeText(order.customer_name || "Customer")}</td>
+          <td>${formatCurrency(order.total_amount)}</td>
+          <td>
+            <span class="status status-${status}">
+              ${safeText(order.payment_status || "pending")}
+            </span>
+          </td>
+          <td>${formatDate(order.created_at)}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderProducts(products) {
+    const tbody = document.getElementById("productsTableBody");
+    const search = document.getElementById("productSearch").value
+      .trim()
+      .toLowerCase();
+
+    const filter = document.getElementById("productStatusFilter").value;
+
+    const filtered = products.filter((product) => {
+      const matchesSearch =
+        String(product.name || "").toLowerCase().includes(search) ||
+        String(product.category || "").toLowerCase().includes(search);
+
+      const active = product.is_active === true;
+      const stock = Number(product.stock || 0);
+
+      const matchesFilter =
+        filter === "all" ||
+        (filter === "active" && active) ||
+        (filter === "inactive" && !active) ||
+        (filter === "out" && stock <= 0);
+
+      return matchesSearch && matchesFilter;
+    });
+
+    if (!filtered.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="empty-state">
+            No matching products. Connect the database to load your catalogue.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((product) => {
+      const active = product.is_active === true;
+      const stock = Number(product.stock || 0);
+
+      const image = product.image_url
+        ? `<img src="${safeText(product.image_url)}" alt=""
+             loading="lazy" referrerpolicy="no-referrer">`
+        : "◇";
+
+      return `
+        <tr>
+          <td>
+            <div class="product-cell">
+              <div class="product-thumb">${image}</div>
+              <div>
+                <strong>${safeText(product.name)}</strong>
+                <small>ID: ${safeText(product.id)}</small>
+              </div>
+            </div>
+          </td>
+          <td>${safeText(product.category || "—")}</td>
+          <td>${formatCurrency(product.price)}</td>
+          <td>${stock}</td>
+          <td>
+            <span class="status ${active ? "status-active" : "status-inactive"}">
+              ${active ? "Active" : "Inactive"}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-outline btn-small"
+              type="button" data-edit-product="${safeText(product.id)}">
+              Edit
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderOrders(orders) {
+    const tbody = document.getElementById("ordersTableBody");
+    const search = document.getElementById("orderSearch").value
+      .trim()
+      .toLowerCase();
+
+    const filter = document.getElementById("orderStatusFilter").value;
+
+    const filtered = orders.filter((order) => {
+      const status = String(order.payment_status || "pending").toLowerCase();
+
+      const matchesSearch = [
+        order.id,
+        order.customer_name,
+        order.customer_email,
+        order.payment_reference
+      ].some((value) =>
+        String(value || "").toLowerCase().includes(search)
+      );
+
+      return matchesSearch && (filter === "all" || status === filter);
+    });
+
+    if (!filtered.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty-state">
+            No matching orders found.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((order) => {
+      const status = String(order.payment_status || "pending").toLowerCase();
+
+      return `
+        <tr>
+          <td>${safeText(order.id)}</td>
+          <td>${safeText(order.customer_name || "—")}</td>
+          <td>${formatCurrency(order.total_amount)}</td>
+          <td>
+            <span class="status status-${safeText(status)}">
+              ${safeText(status)}
+            </span>
+          </td>
+          <td>${safeText(order.payment_reference || "—")}</td>
+          <td>${formatDate(order.created_at)}</td>
+          <td>
+            <button class="btn btn-outline btn-small"
+              type="button" data-view-order="${safeText(order.id)}">
+              View
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderRefunds(refunds) {
+    const tbody = document.getElementById("refundsTableBody");
+    const search = document.getElementById("refundSearch").value
+      .trim()
+      .toLowerCase();
+
+    const filter = document.getElementById("refundStatusFilter").value;
+
+    const filtered = refunds.filter((refund) => {
+      const status = String(refund.status || "pending").toLowerCase();
+
+      const matchesSearch = [
+        refund.id,
+        refund.order_id,
+        refund.customer_name,
+        refund.reason
+      ].some((value) =>
+        String(value || "").toLowerCase().includes(search)
+      );
+
+      return matchesSearch && (filter === "all" || status === filter);
+    });
+
+    if (!filtered.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="empty-state">
+            No refund requests available. The refund table is not connected.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((refund) => {
+      const status = String(refund.status || "pending").toLowerCase();
+
+      return `
+        <tr>
+          <td>${safeText(refund.id)}</td>
+          <td>${safeText(refund.order_id || "—")}</td>
+          <td>${safeText(refund.customer_name || "—")}</td>
+          <td>${formatCurrency(refund.amount)}</td>
+          <td>${safeText(refund.reason || "—")}</td>
+          <td>
+            <span class="status status-${safeText(status)}">
+              ${safeText(status)}
+            </span>
+          </td>
+          <td>${formatDate(refund.created_at)}</td>
+          <td>Requires secure backend</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function resetProductForm() {
+    document.getElementById("productForm").reset();
+    document.getElementById("productId").value = "";
+    document.getElementById("productActive").checked = true;
+    document.getElementById("productFormTitle").textContent = "Add a product";
+  }
+
+  document.getElementById("resetProductButton").addEventListener(
+    "click",
+    resetProductForm
+  );
+
+  document.getElementById("productForm").addEventListener(
+    "submit",
+    (event) => {
+      event.preventDefault();
+
+      showNotice(
+        "Products cannot be saved yet. The secure Supabase database connection must be implemented first.",
+        "error"
+      );
+    }
+  );
+
+  document.getElementById("refreshButton").addEventListener("click", () => {
+    showNotice(
+      "The dashboard interface is ready, but live database refresh has not been connected.",
+      "error"
+    );
+  });
+
+  document.getElementById("signOutButton").addEventListener("click", () => {
+    showNotice(
+      "Supabase authentication has not been connected. No real sign-out action is available yet.",
+      "error"
+    );
+  });
+
+  document.getElementById("productSearch").addEventListener("input", () => {
+    renderProducts(dashboardData.products);
+  });
+
+  document.getElementById("productStatusFilter").addEventListener("change", () => {
+    renderProducts(dashboardData.products);
+  });
+
+  document.getElementById("orderSearch").addEventListener("input", () => {
+    renderOrders(dashboardData.orders);
+  });
+
+  document.getElementById("orderStatusFilter").addEventListener("change", () => {
+    renderOrders(dashboardData.orders);
+  });
+
+  document.getElementById("refundSearch").addEventListener("input", () => {
+    renderRefunds(dashboardData.refunds);
+  });
+
+  document.getElementById("refundStatusFilter").addEventListener("change", () => {
+    renderRefunds(dashboardData.refunds);
+  });
+
+  document.getElementById("productsTableBody").addEventListener(
+    "click",
+    (event) => {
+      const button = event.target.closest("[data-edit-product]");
+
+      if (!button) {
         return;
       }
 
-      if (!pageInfo[name]) return;
+      const product = dashboardData.products.find(
+        (item) => String(item.id) === button.dataset.editProduct
+      );
 
-      views.forEach(view => view.classList.remove("active"));
+      if (!product) {
+        showNotice("The product could not be found.", "error");
+        return;
+      }
 
-      const view = document.getElementById("view-" + name);
-      if (view) view.classList.add("active");
+      document.getElementById("productId").value = product.id;
+      document.getElementById("productName").value = product.name || "";
+      document.getElementById("productCategory").value = product.category || "";
+      document.getElementById("productPrice").value = product.price ?? "";
+      document.getElementById("productStock").value = product.stock ?? "";
+      document.getElementById("productImage").value = product.image_url || "";
+      document.getElementById("productDescription").value =
+        product.description || "";
+      document.getElementById("productActive").checked =
+        product.is_active === true;
 
-      navButtons.forEach(button => {
-        button.classList.toggle("active", button.dataset.view === name);
-      });
+      document.getElementById("productFormTitle").textContent = "Edit product";
 
-      document.getElementById("pageEyebrow").textContent =
-        pageInfo[name].eyebrow;
+      navigateTo("products");
 
-      document.getElementById("pageTitle").textContent =
-        pageInfo[name].title.replace(/<[^>]*>/g, "");
+      document.getElementById("productName").focus();
 
-      document.getElementById("pageSubtitle").textContent =
-        pageInfo[name].subtitle;
-
-      sidebar.classList.remove("open");
-      sidebar.style.display = "";
-
-      document.getElementById("menuButton")
-        .setAttribute("aria-expanded", "false");
+      showNotice(
+        "Product loaded into the form. Saving changes still requires the secure database integration.",
+        "error"
+      );
     }
+  );
 
-    navButtons.forEach(button => {
-      button.addEventListener("click", () => showView(button.dataset.view));
-    });
+  document.getElementById("ordersTableBody").addEventListener(
+    "click",
+    (event) => {
+      const button = event.target.closest("[data-view-order]");
 
-    document.querySelectorAll("[data-jump]").forEach(button => {
-      button.addEventListener("click", () => showView(button.dataset.jump));
-    });
+      if (!button) {
+        return;
+      }
 
-    document.getElementById("menuButton").addEventListener("click", () => {
-      sidebar.classList.toggle("open");
+      const order = dashboardData.orders.find(
+        (item) => String(item.id) === button.dataset.viewOrder
+      );
 
-      document.getElementById("menuButton")
-        .setAttribute("aria-expanded",
-          sidebar.classList.contains("open") ? "true" : "false");
-    });
+      if (!order) {
+        return;
+      }
 
-    document.getElementById("year").textContent = new Date().getFullYear();
+      const details = document.getElementById("orderDetails");
 
-    
-  </script>
+      details.innerHTML = `
+        <h4>Order ${safeText(order.id)}</h4>
+
+        <div class="detail-row">
+          <span>Customer</span>
+          <strong>${safeText(order.customer_name || "—")}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>Email</span>
+          <strong>${safeText(order.customer_email || "—")}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>Phone</span>
+          <strong>${safeText(order.customer_phone || "—")}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>Delivery address</span>
+          <strong>${safeText(order.delivery_address || "—")}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>Total</span>
+          <strong>${formatCurrency(order.total_amount)}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>Payment status</span>
+          <strong>${safeText(order.payment_status || "pending")}</strong>
+        </div>
+
+        <div class="detail-row">
+          <span>Payment reference</span>
+          <strong>${safeText(order.payment_reference || "—")}</strong>
+        </div>
+
+        <h4 style="margin-top:20px;">Items</h4>
+        <pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;">${safeText(
+          JSON.stringify(order.items || [], null, 2)
+        )}</pre>
+      `;
+    }
+  );
+
+  updateStatistics([], []);
+  renderRecentOrders([]);
+  renderProducts([]);
+  renderOrders([]);
+  renderRefunds([]);
+
+  connectionStatus.textContent = "Not connected";
+  connectionDot.classList.remove("connected");
+  connectionDot.classList.add("error");
+
+  setText("authStatus", "Not connected");
+  setText("adminStatus", "Not verified");
+  setText("productConnectionStatus", "Not connected");
+  setText("orderConnectionStatus", "Not connected");
+  setText("refundConnectionStatus", "Not connected");
+
+  console.info(
+    "Jiddahs Heaven Admin: interface loaded. Supabase authentication and database integration are still required."
+  );
+</script>
+
 </body>
 </html>
-      
