@@ -2029,12 +2029,32 @@ const ADMIN_UID = '2631d680-907b-4336-9133-cd03ff87fb4a';
     );
   });
 
-  document.getElementById("signOutButton").addEventListener("click", () => {
+  document.getElementById("signOutButton").addEventListener("click", async () => {
+  const button = document.getElementById("signOutButton");
+
+  button.disabled = true;
+  button.textContent = "Signing out...";
+
+  try {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      throw error;
+    }
+
+    window.location.reload();
+  } catch (error) {
+    console.error("Sign-out error:", error.message);
+
     showNotice(
-      "Supabase authentication has not been connected. No real sign-out action is available yet.",
+      "Sign-out failed: " + error.message,
       "error"
     );
-  });
+
+    button.disabled = false;
+    button.textContent = "Sign out";
+  }
+});
 
   document.getElementById("productSearch").addEventListener("input", () => {
     renderProducts(dashboardData.products);
@@ -2315,10 +2335,11 @@ async function verifyAdminSession(session) {
     .maybeSingle();
 
   if (error) {
-    throw new Error(
-      "Could not verify administrator permissions. Check the admin_users RLS policy."
-    );
-  }
+  console.error("Administrator verification error:", error.message);
+  throw new Error(
+    "Could not verify administrator permissions: " + error.message
+  );
+}
 
   if (!data || data.user_id !== ADMIN_UID) {
     await supabase.auth.signOut();
