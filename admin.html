@@ -2233,11 +2233,14 @@ async function loadProductsFromSupabase() {
     }
   );
 
-  updateStatistics([], []);
+    updateStatistics([], []);
   renderRecentOrders([]);
   renderProducts([]);
   renderOrders([]);
   renderRefunds([]);
+
+  // Load real products from Supabase.
+  loadProductsFromSupabase();
 
   connectionStatus.textContent = "Not connected";
   connectionDot.classList.remove("connected");
