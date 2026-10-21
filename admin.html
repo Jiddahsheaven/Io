@@ -2375,8 +2375,9 @@ document
       });
 
       if (error) {
-        throw new Error("Sign-in failed. Check your email and password.");
-      }
+  console.error("Supabase sign-in error:", error.message);
+  throw new Error(error.message);
+}
 
       await verifyAdminSession(data.session);
 
