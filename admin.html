@@ -2197,11 +2197,11 @@ const ADMIN_UID = '2631d680-907b-4336-9133-cd03ff87fb4a';
   connectionDot.classList.remove("connected");
   connectionDot.classList.add("error");
 
-  setText("authStatus", "Not connected");
-  setText("adminStatus", "Not verified");
-  setText("productConnectionStatus", "Not connected");
-  setText("orderConnectionStatus", "Not connected");
-  setText("refundConnectionStatus", "Not connected");
+  setText("authStatus", "Checking...");
+setText("adminStatus", "Checking...");
+setText("productConnectionStatus", "Not connected");
+setText("orderConnectionStatus", "Not connected");
+setText("refundConnectionStatus", "Not connected");
 
   console.info(
     "Jiddahs Heaven Admin: interface loaded. Supabase authentication and database integration are still required."
