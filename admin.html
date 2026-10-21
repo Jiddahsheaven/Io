@@ -2187,5 +2187,212 @@ const ADMIN_UID = '2631d680-907b-4336-9133-cd03ff87fb4a';
   );
 </script>
 
+// ===== JIDDAHS HEAVEN ADMIN AUTHENTICATION =====
+
+const adminLoginStyle = document.createElement("style");
+
+adminLoginStyle.textContent = `
+  #adminLoginGate {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #f8f5ef;
+    font-family: Arial, sans-serif;
+  }
+
+  #adminLoginCard {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 24px;
+    background: #fff;
+    border: 1px solid #e7dfd0;
+    border-radius: 18px;
+    box-shadow: 0 15px 45px rgba(0,0,0,.08);
+  }
+
+  #adminLoginCard h2 {
+    margin: 0 0 8px;
+    color: #25231f;
+  }
+
+  #adminLoginCard p {
+    color: #777;
+    line-height: 1.5;
+  }
+
+  #adminLoginCard label {
+    display: block;
+    margin: 18px 0 7px;
+    color: #333;
+    font-size: 14px;
+  }
+
+  #adminLoginCard input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd5c8;
+    border-radius: 9px;
+    font-size: 16px;
+  }
+
+  #adminLoginCard button {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    border: 0;
+    border-radius: 9px;
+    background: #b89553;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  #adminLoginMessage {
+    color: #a32626 !important;
+    overflow-wrap: anywhere;
+  }
+`;
+
+document.head.appendChild(adminLoginStyle);
+
+const adminLoginGate = document.createElement("div");
+
+adminLoginGate.id = "adminLoginGate";
+
+adminLoginGate.innerHTML = `
+  <div id="adminLoginCard">
+    <h2>Jiddahs Heaven</h2>
+    <p>Administrator sign in</p>
+
+    <form id="adminLoginForm">
+      <label for="adminLoginEmail">Email address</label>
+      <input
+        id="adminLoginEmail"
+        type="email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="adminLoginPassword">Password</label>
+      <input
+        id="adminLoginPassword"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button id="adminLoginButton" type="submit">
+        Sign in securely
+      </button>
+
+      <p id="adminLoginMessage" role="alert"></p>
+    </form>
+  </div>
+`;
+
+document.body.appendChild(adminLoginGate);
+
+async function verifyAdminSession(session) {
+  if (!session?.user) {
+    return false;
+  }
+
+  if (session.user.id !== ADMIN_UID) {
+    await supabase.auth.signOut();
+    throw new Error("This account is not authorized as an administrator.");
+  }
+
+  const { data, error } = await supabase
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(
+      "Could not verify administrator permissions. Check the admin_users RLS policy."
+    );
+  }
+
+  if (!data || data.user_id !== ADMIN_UID) {
+    await supabase.auth.signOut();
+    throw new Error("Administrator verification failed.");
+  }
+
+  return true;
+}
+
+async function checkExistingAdminSession() {
+  const message = document.getElementById("adminLoginMessage");
+
+  try {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+      throw error;
+    }
+
+    if (data.session) {
+      await verifyAdminSession(data.session);
+      adminLoginGate.remove();
+      console.info("Administrator session verified.");
+    }
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
+
+document
+  .getElementById("adminLoginForm")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const button = document.getElementById("adminLoginButton");
+    const message = document.getElementById("adminLoginMessage");
+
+    const email = document
+      .getElementById("adminLoginEmail")
+      .value.trim();
+
+    const password = document
+      .getElementById("adminLoginPassword")
+      .value;
+
+    button.disabled = true;
+    button.textContent = "Verifying...";
+    message.textContent = "";
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        throw new Error("Sign-in failed. Check your email and password.");
+      }
+
+      await verifyAdminSession(data.session);
+
+      adminLoginGate.remove();
+
+      console.info("Administrator signed in successfully.");
+    } catch (error) {
+      message.textContent = error.message;
+
+      button.disabled = false;
+      button.textContent = "Sign in securely";
+    }
+  });
+
+checkExistingAdminSession();
+
+// ===== END ADMIN AUTHENTICATION =====
 </body>
 </html>
