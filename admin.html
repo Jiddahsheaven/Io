@@ -2064,6 +2064,96 @@ async function loadProductsFromSupabase() {
     const form = event.currentTarget;
     const submitButton = form.querySelector('[type="submit"]');
 
+    const productId = document.getElementById("productId").value.trim();
+
+    const product = {
+      name: document.getElementById("productName").value.trim(),
+      category: document.getElementById("productCategory").value,
+      price: Number(document.getElementById("productPrice").value),
+      stock: Number(document.getElementById("productStock").value),
+      image_url:
+        document.getElementById("productImage").value.trim() || null,
+      description:
+        document.getElementById("productDescription").value.trim() || null,
+      is_active: document.getElementById("productActive").checked
+    };
+
+    if (
+      !product.name ||
+      !product.category ||
+      !Number.isFinite(product.price) ||
+      product.price < 0 ||
+      !Number.isInteger(product.stock) ||
+      product.stock < 0
+    ) {
+      showNotice(
+        "Enter a valid product name, category, price, and stock quantity.",
+        "error"
+      );
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Saving...";
+
+    try {
+      if (productId) {
+        // Update an existing product.
+        const { data, error } = await supabase
+          .from("products")
+          .update(product)
+          .eq("id", productId)
+          .select("id");
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          throw new Error(
+            "No product was updated. Check administrator permissions."
+          );
+        }
+      } else {
+        // Insert a new product.
+        const { error } = await supabase
+          .from("products")
+          .insert(product);
+
+        if (error) throw error;
+      }
+
+      await loadProductsFromSupabase();
+
+      updateStatistics(
+        dashboardData.products,
+        dashboardData.orders
+      );
+
+      resetProductForm();
+
+      showNotice(
+        productId
+          ? "Product updated successfully."
+          : "Product added successfully.",
+        "success"
+      );
+
+    } catch (error) {
+      console.error("Product save failed:", error);
+
+      showNotice(
+        "Could not save product: " + error.message,
+        "error"
+      );
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = "Save product";
+    }
+  }
+);
+
+    const form = event.currentTarget;
+    const submitButton = form.querySelector('[type="submit"]');
+
     // Read the product ID if we are editing an existing product.
     const productId = document.getElementById("productId").value;
 
