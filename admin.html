@@ -2525,7 +2525,6 @@ document
     message.textContent = "";
 
     try {
-      // Step 1: Authenticate with Supabase
       const { data, error } =
         await supabase.auth.signInWithPassword({
           email,
@@ -2536,65 +2535,24 @@ document
         throw new Error(error.message);
       }
 
-      // Step 2: Confirm that a session exists
       if (!data.session || !data.user) {
         throw new Error(
           "Login failed: no authenticated session was returned."
         );
       }
 
-      // Step 3: Verify administrator authorization
       await verifyAdminSession(data.session);
 
-      // Step 4: Confirm successful login
       console.info("Administrator authenticated and verified.");
 
-      // Step 5: Remove the login screen only after verification
+      setText("authStatus", "Connected");
+      setText("adminStatus", "Verified");
+
       adminLoginGate.remove();
 
     } catch (error) {
       console.error("Administrator login failed:", error);
 
-      message.textContent = error.message;
-
-      button.disabled = false;
-      button.textContent = "Sign in securely";
-    }
-  });
-    event.preventDefault();
-
-    const button = document.getElementById("adminLoginButton");
-    const message = document.getElementById("adminLoginMessage");
-
-    const email = document
-      .getElementById("adminLoginEmail")
-      .value.trim();
-
-    const password = document
-      .getElementById("adminLoginPassword")
-      .value;
-
-    button.disabled = true;
-    button.textContent = "Verifying...";
-    message.textContent = "";
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) {
-  console.error("Supabase sign-in error:", error.message);
-  throw new Error(error.message);
-}
-
-      await verifyAdminSession(data.session);
-
-      adminLoginGate.remove();
-
-      console.info("Administrator signed in successfully.");
-    } catch (error) {
       message.textContent = error.message;
 
       button.disabled = false;
