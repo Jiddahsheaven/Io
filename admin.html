@@ -1603,7 +1603,12 @@ async function loadProductsFromSupabase() {
 
     dashboardData.products = data || [];
 
-    renderProducts(dashboardData.products);
+renderProducts(dashboardData.products);
+
+updateStatistics(
+  dashboardData.products,
+  dashboardData.orders
+);
 
     setText(
       "productConnectionStatus",
