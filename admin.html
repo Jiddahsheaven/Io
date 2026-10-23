@@ -1,2384 +1,2913 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Jiddahs Heaven | Executive Command Centre</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111326">
+<title>Jidderhs Heaven — Command Centre</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
-
 :root {
-  --bg: #f7f7fb;
-  --surface: #ffffff;
-  --navy: #15172b;
-  --navy-light: #202440;
-  --gold: #d5b477;
-  --gold-light: #f5ebd7;
-  --purple: #6257e8;
-  --text: #202238;
-  --muted: #8b8da3;
-  --border: #ececf3;
-  --green: #19a875;
-  --red: #e45b69;
-  --radius: 18px;
+  --bg: #f5f6fb;
+  --paper: #fff;
+  --ink: #17192e;
+  --muted: #85899e;
+  --line: #e9eaf2;
+  --violet: #6558f5;
+  --violet2: #8e82ff;
+  --mint: #b8f3d7;
+  --gold: #edc982;
+  --rose: #ffbfc9;
+  --nav: #121426;
+  --shadow: 0 12px 35px #25244b0b;
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+* { box-sizing: border-box; }
 body {
-  font-family: 'DM Sans', sans-serif;
+  margin: 0;
   background: var(--bg);
-  color: var(--text);
-  font-size: 13px;
+  font: 13px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
 }
-
-button, input, select {
-  font: inherit;
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #aaa3ff;
+  outline-offset: 2px;
 }
-
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+.shell {
   min-height: 100vh;
-  padding: 16px;
-  gap: 0;
+  display: grid;
+  grid-template-columns: 250px minmax(0,1fr);
+  max-width: 1700px;
+  margin: auto;
 }
-
-/* SIDEBAR */
-
-.sidebar {
-  background: var(--navy);
+.side {
+  background: var(--nav);
   color: #fff;
-  border-radius: 20px 0 0 20px;
-  padding: 27px 17px;
+  padding: 25px 17px;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 32px);
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
 }
-
-.brand {
+.logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 0 8px;
-  margin-bottom: 37px;
+  gap: 11px;
+  padding: 3px 8px 29px;
 }
-
-.brand-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 13px;
-  background: linear-gradient(135deg, #e6ce9c, #b38b48);
-  color: #18192c;
+.logo-mark {
+  height: 39px;
+  width: 39px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,#9b8eff,#6253ef);
   display: grid;
   place-items: center;
-  font-family: 'Playfair Display', serif;
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 900;
+  box-shadow: 0 7px 20px #6958f577;
 }
-
-.brand-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  line-height: 1.3;
+.logo-name {
+  font-weight: 850;
+  letter-spacing: .8px;
+  font-size: 12px;
 }
-
-.brand-name small {
+.logo-name small {
   display: block;
-  font-family: 'DM Sans', sans-serif;
+  color: #8e91ad;
   font-size: 9px;
-  color: var(--gold);
+  font-weight: 500;
   letter-spacing: 2px;
-  margin-top: 4px;
+  margin-top: 3px;
 }
-
 .nav-label {
-  color: #8588a7;
+  color: #71758f;
   font-size: 9px;
-  letter-spacing: 1.6px;
-  margin: 20px 10px 10px;
+  letter-spacing: 1.5px;
+  margin: 16px 10px 9px;
 }
-
-.nav {
-  display: grid;
-  gap: 5px;
-}
-
+.nav { display: grid; gap: 5px; }
 .nav button {
   border: 0;
   background: transparent;
-  color: #b8bbd0;
+  color: #a9abc0;
+  text-align: left;
+  padding: 11px 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  text-align: left;
   font-size: 12px;
-  transition: .2s;
+  transition: .18s;
 }
-
-.nav button:hover,
-.nav button.active {
-  background: linear-gradient(100deg, #33345c, #272a49);
-  color: #fff;
-}
-
-.nav button.active {
-  box-shadow: inset 3px 0 var(--gold);
-}
-
-.nav-icon {
-  font-size: 17px;
-  width: 22px;
+.nav button .ico {
+  width: 19px;
   text-align: center;
-}
-
-.sidebar-footer {
-  margin-top: auto;
-  border-top: 1px solid #30324a;
-  padding-top: 18px;
-}
-
-.admin-profile {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 9px;
-}
-
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: #514b83;
-  font-weight: 700;
-}
-
-.admin-profile strong {
-  display: block;
-  font-size: 11px;
-}
-
-.admin-profile small {
-  display: block;
-  font-size: 9px;
-  color: #a9abc1;
-  margin-top: 4px;
-}
-
-/* MAIN */
-
-.main {
-  background: var(--surface);
-  border-radius: 0 20px 20px 0;
-  min-width: 0;
-  border: 1px solid var(--border);
-}
-
-.topbar {
-  min-height: 76px;
-  padding: 15px 26px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.mobile-menu {
-  display: none;
-}
-
-.breadcrumb {
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.breadcrumb strong {
-  display: block;
-  color: var(--text);
   font-size: 16px;
-  margin-top: 4px;
 }
-
-.top-actions {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.nav button:hover { background: #ffffff0d; color: #fff; }
+.nav button.active {
+  background: linear-gradient(110deg,#6c5cf6,#5143df);
+  color: white;
+  box-shadow: 0 8px 18px #5143df3a;
 }
-
-.search-box {
-  position: relative;
+.side-bottom { margin-top: auto; padding-top: 24px; }
+.health {
+  padding: 13px;
+  background: #ffffff08;
+  border: 1px solid #ffffff12;
+  border-radius: 12px;
+  margin: 14px 3px 13px;
 }
-
-.search-box input {
-  width: 235px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 11px 12px 11px 34px;
-  outline: none;
-  background: #fafaff;
-  font-size: 11px;
-}
-
-.search-box span {
-  position: absolute;
-  left: 12px;
-  top: 10px;
-  color: var(--muted);
-}
-
-.icon-button {
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--border);
-  background: #fff;
-  border-radius: 10px;
-  color: var(--text);
-}
-
-.content {
-  padding: 26px;
-}
-
-.view {
-  display: none;
-  animation: fadeIn .22s ease;
-}
-
-.view.active {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* HEADINGS */
-
-.page-heading {
+.health-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 23px;
-}
-
-.page-heading h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 27px;
-  font-weight: 600;
-  letter-spacing: -.5px;
-}
-
-.page-heading p {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 7px;
-}
-
-.button {
-  border: 0;
-  border-radius: 9px;
-  background: var(--navy);
-  color: #fff;
-  padding: 12px 16px;
-  font-weight: 600;
-  font-size: 11px;
-  transition: .2s;
-}
-
-.button:hover {
-  transform: translateY(-1px);
-}
-
-.button.gold {
-  background: var(--gold);
-  color: var(--navy);
-}
-
-.button.light {
-  background: #f0efff;
-  color: var(--purple);
-}
-
-.button.danger {
-  background: #fff0f1;
-  color: var(--red);
-}
-
-.button.small {
-  padding: 7px 10px;
   font-size: 10px;
+  color: #d9d9e7;
 }
-
-/* METRIC CARDS */
-
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px;
-  margin-bottom: 19px;
-}
-
-.metric {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  background: #fff;
-  min-width: 0;
-  transition: .2s;
-}
-
-.metric:hover {
-  box-shadow: 0 9px 30px #20223808;
-  transform: translateY(-2px);
-}
-
-.metric-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 10px;
-}
-
-.metric-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 11px;
-  display: grid;
-  place-items: center;
-  background: var(--gold-light);
-  color: #a5813f;
-  font-size: 17px;
-}
-
-.metric-value {
-  font-size: clamp(19px, 2vw, 27px);
-  font-weight: 700;
-  letter-spacing: -1px;
-  margin: 17px 0 9px;
-  overflow-wrap: anywhere;
-}
-
-.metric-bottom {
-  font-size: 9px;
-  color: var(--muted);
-}
-
-.metric-bottom strong {
-  color: var(--green);
-}
-
-/* PANELS */
-
-.panel {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: #fff;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.panel-header {
-  padding: 19px 20px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-
-.panel-header h2 {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.panel-header p {
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 5px;
-}
-
-.panel-body {
-  padding: 18px 20px;
-}
-
-.analytics-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr);
-  gap: 17px;
-  margin-bottom: 18px;
-}
-
-.chart-container {
-  position: relative;
-  height: 260px;
-}
-
-.chart-container.donut {
-  height: 225px;
-}
-
-.chart-summary {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 10px;
-}
-
-.chart-summary span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.legend-dot {
-  width: 8px;
-  height: 8px;
+.pulse {
+  height: 7px;
+  width: 7px;
   border-radius: 50%;
-  background: var(--purple);
+  background: #5ee3ac;
+  box-shadow: 0 0 0 4px #5ee3ac20;
 }
-
-/* LOWER DASHBOARD */
-
-.lower-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 17px;
+.health p { font-size: 9px; color: #8d91ab; margin: 7px 0 0; }
+.side-foot { font-size: 9px; color: #6e728b; padding: 0 9px; }
+.main { min-width: 0; }
+.topbar {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 clamp(15px,3vw,40px);
+  border-bottom: 1px solid var(--line);
+  background: #ffffffd9;
+  backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
-
-.table-wrap {
-  overflow-x: auto;
-  max-width: 100%;
+.hamb { display: none; }
+.crumb { font-size: 11px; color: var(--muted); }
+.crumb strong { display: block; color: var(--ink); font-size: 15px; }
+.search {
+  position: relative;
+  max-width: 350px;
+  flex: 1;
+  margin-left: auto;
 }
-
-table {
+.search input {
   width: 100%;
-  border-collapse: collapse;
-  white-space: nowrap;
+  border: 1px solid #eeeef5;
+  border-radius: 10px;
+  background: #f8f8fc;
+  padding: 11px 35px 11px 13px;
+  font-size: 11px;
 }
-
-th {
-  padding: 13px 12px;
-  background: #fafaff;
-  text-align: left;
-  color: var(--muted);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .5px;
+.search span {
+  position: absolute;
+  right: 12px;
+  top: 9px;
+  color: #888ba1;
+  font-size: 16px;
 }
-
-td {
-  padding: 14px 12px;
-  border-bottom: 1px solid #f0f0f6;
-  font-size: 10px;
+.icon-btn {
+  height: 37px;
+  width: 37px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 11px;
+  color: #656980;
+  position: relative;
 }
-
-tbody tr:hover {
-  background: #fafaff;
+.icon-btn .ping {
+  position: absolute;
+  right: 7px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff7e9b;
 }
-
-.empty-state {
-  text-align: center;
-  padding: 30px;
-  color: var(--muted);
-  white-space: normal;
-}
-
-.status {
-  display: inline-block;
-  padding: 5px 8px;
-  border-radius: 6px;
-  font-size: 9px;
-  background: #e6f8ef;
-  color: #16865b;
-}
-
-.status-pending,
-.status-processing {
-  background: #fff4df;
-  color: #b57b25;
-}
-
-.status-failed,
-.status-cancelled {
-  background: #fff0f1;
-  color: #d94d5a;
-}
-
-.product-cell {
+.user-chip {
   display: flex;
   align-items: center;
   gap: 9px;
+  margin-left: 3px;
+  white-space: nowrap;
 }
-
-.product-image {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: #f1efff;
-  object-fit: cover;
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#ffe2b9,#f0b6cb);
+  display: grid;
+  place-items: center;
+  color: #58364a;
+  font-weight: 850;
 }
-
-/* MANAGEMENT SECTIONS */
-
-.section-toolbar {
-  padding: 17px;
+.user-chip strong { display: block; font-size: 10px; }
+.user-chip small { display: block; color: var(--muted); font-size: 9px; }
+.wrap { padding: clamp(15px,3vw,38px); max-width: 1600px; margin: auto; }
+.view { display: none; animation: fade .22s ease; }
+.view.active { display: block; }
+@keyframes fade {
+  from { opacity: .4; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+.hero {
+  border-radius: 20px;
+  background: linear-gradient(112deg,#191a36 0%,#28254e 57%,#5145a7 100%);
+  color: white;
+  padding: clamp(20px,3vw,33px);
+  position: relative;
+  overflow: hidden;
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 21px;
+  min-height: 154px;
 }
-
-.section-toolbar input,
-.section-toolbar select,
-.form-field input,
-.form-field textarea,
-.form-field select {
-  padding: 11px 12px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #fff;
-  outline: none;
+.hero:before, .hero:after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero:before {
+  width: 270px;
+  height: 270px;
+  right: 12%;
+  top: -175px;
+  border: 1px solid #ffffff20;
+  box-shadow: 0 0 0 28px #ffffff06, 0 0 0 58px #ffffff05;
+}
+.hero:after {
+  width: 170px;
+  height: 170px;
+  right: -38px;
+  bottom: -115px;
+  background: linear-gradient(140deg,#9d8dff44,#8d7eff00);
+}
+.hero-content { position: relative; z-index: 1; }
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #c2bcff;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.hero h1 {
+  font-size: clamp(21px,2.5vw,30px);
+  line-height: 1.16;
+  letter-spacing: -.8px;
+  margin: 0 0 9px;
+}
+.hero p { margin: 0; color: #c1c1db; font-size: 11px; max-width: 470px; }
+.hero-actions { display: flex; gap: 9px; flex-wrap: wrap; position: relative; z-index: 1; }
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  background: var(--violet);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 5px 13px #6558f51e;
+  transition: transform .15s,filter .15s;
+}
+.btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.btn.light { background: white; color: #242344; }
+.btn.glass { background: #ffffff13; color: #fff; border: 1px solid #ffffff28; box-shadow: none; }
+.btn.soft { background: #f0efff; color: #5d50e7; box-shadow: none; }
+.btn.red { background: #fff0f1; color: #d54c67; box-shadow: none; }
+.btn.sm { padding: 7px 9px; font-size: 10px; border-radius: 7px; }
+.stats { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 13px; margin-bottom: 17px; }
+.stat {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 17px;
+  box-shadow: var(--shadow);
   min-width: 0;
 }
-
-.section-toolbar input {
-  flex: 1;
-  min-width: 160px;
+.stat-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; color: #73778e; font-size: 10px; }
+.stat-icon { width: 33px; height: 33px; display: grid; place-items: center; border-radius: 11px; font-size: 15px; background: #f0efff; color: #6b5cf6; }
+.stat-icon.mint { background: #e7fbf2; color: #19966b; }
+.stat-icon.gold { background: #fff5df; color: #b8882d; }
+.stat-icon.rose { background: #fff0f3; color: #dc6278; }
+.stat-val {
+  font-size: clamp(20px,2.3vw,28px);
+  font-weight: 850;
+  letter-spacing: -1px;
+  margin: 13px 0 7px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-.section-toolbar select {
+.stat-foot { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--muted); }
+.trend { color: #159768; background: #e8fbf1; border-radius: 5px; padding: 3px 5px; font-weight: 750; }
+.trend.neutral { color: #85899e; background: #f1f2f7; }
+.grid-main { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(260px,.85fr); gap: 16px; margin-bottom: 16px; }
+.grid-lower { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(260px,.85fr); gap: 16px; margin-bottom: 16px; }
+.panel {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+  overflow: hidden;
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 17px 18px 0; }
+.panel-head h2 { margin: 0; font-size: 12px; font-weight: 800; }
+.panel-head p { margin: 5px 0 0; font-size: 9px; color: var(--muted); }
+.panel-body { padding: 14px 18px 18px; }
+.chart { height: 235px; position: relative; }
+.chart.donut { height: 205px; max-width: 250px; margin: 0 auto; }
+.chart-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 9px; color: #74788c; margin-top: 10px; }
+.key { display: inline-block; width: 7px; height: 7px; border-radius: 3px; background: #6558f5; margin-right: 5px; }
+.pill { border: 1px solid var(--line); border-radius: 8px; background: #fff; color: #7b7f93; font-size: 10px; padding: 7px; }
+.panel-foot { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 11px 18px; border-top: 1px solid #f0f1f6; color: var(--muted); font-size: 9px; }
+.table-wrap { overflow: auto; }
+table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+th { text-align: left; color: #9295a7; font-size: 9px; font-weight: 650; letter-spacing: .5px; padding: 11px 12px; border-bottom: 1px solid #f0f1f6; }
+td { padding: 12px; font-size: 10px; border-bottom: 1px solid #f4f4f8; }
+tr:last-child td { border-bottom: 0; }
+.item-name { display: flex; align-items: center; gap: 9px; }
+.thumb { width: 34px; height: 34px; border-radius: 9px; 
+  background: #f0efff;
+  display: grid;
+  place-items: center;
+  object-fit: cover;
+  color: #6558f5;
+  flex-shrink: 0;
+}
+.item-name strong { display: block; font-size: 10px; }
+.item-name small { display: block; font-size: 9px; color: var(--muted); margin-top: 3px; }
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  padding: 5px 8px;
+  background: #e9fbf2;
+  color: #17875e;
+  font-size: 9px;
+  font-weight: 750;
+}
+.status:before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  border-radius: 50%;
+}
+.status.pending { background: #fff5df; color: #ae8126; }
+.status.processing { background: #efefff; color: #6255e8; }
+.status.failed { background: #fff0f2; color: #d6536c; }
+.status.unknown { background: #f1f2f7; color: #777b90; }
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 17px;
+}
+.section-title h1 { font-size: 22px; margin: 0; letter-spacing: -.5px; }
+.section-title p { color: var(--muted); font-size: 11px; margin: 5px 0 0; }
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.field {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 10px 11px;
+  background: white;
+  color: var(--ink);
+  min-width: 0;
   font-size: 11px;
 }
-
+.field.search-field { flex: 1; min-width: 170px; }
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 13px;
 }
-
-.form-field label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  margin-bottom: 7px;
-}
-
-.form-field input,
-.form-field textarea,
-.form-field select {
+.form-group { display: grid; gap: 6px; }
+.form-group.full { grid-column: 1/-1; }
+.form-group label { font-size: 10px; font-weight: 750; color: #666a81; }
+.form-group input,
+.form-group textarea,
+.form-group select {
   width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 11px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 11px;
 }
-
-.form-field textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.form-field.full {
-  grid-column: 1 / -1;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.notice {
-  padding: 13px 15px;
-  background: #f6f5ff;
-  border-radius: 10px;
-  color: #67619a;
-  font-size: 10px;
-  line-height: 1.6;
-  margin-top: 15px;
-}
-
-/* MODAL */
-
+.form-group textarea { resize: vertical; min-height: 85px; }
+.check-row { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+.empty { text-align: center; padding: 25px 12px; color: var(--muted); white-space: normal; }
 .modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: #111426a8;
-  z-index: 100;
-  padding: 20px;
+  z-index: 50;
+  background: #1113269c;
+  backdrop-filter: blur(5px);
   align-items: center;
   justify-content: center;
+  padding: 18px;
 }
-
-.modal.open {
-  display: flex;
-}
-
+.modal.open { display: flex; }
 .modal-card {
-  width: 100%;
-  max-width: 600px;
+  background: white;
+  width: min(570px,100%);
   max-height: 90vh;
-  overflow-y: auto;
-  background: #fff;
-  border-radius: 19px;
-  padding: 25px;
+  overflow: auto;
+  border-radius: 17px;
+  box-shadow: 0 25px 80px #11132640;
 }
-
-.modal-card h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 23px;
-  margin-bottom: 22px;
+.modal-head {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
-
-/* TOAST */
-
+.modal-head h2 { margin: 0; font-size: 14px; }
+.modal-body { padding: 20px; }
+.modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+}
 .toast {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 200;
-  max-width: calc(100vw - 40px);
-  padding: 14px 18px;
-  background: var(--navy);
-  color: #fff;
-  border-radius: 11px;
-  box-shadow: 0 8px 30px #0002;
+  z-index: 100;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%,20px);
+  background: #191a36;
+  color: white;
+  padding: 12px 17px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px #0002;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+  max-width: calc(100% - 30px);
+  font-size: 11px;
+}
+.toast.show { opacity: 1; transform: translate(-50%,0); }
+.login-screen {
   display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: linear-gradient(135deg,#14152c,#30275b);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
-
-.toast.show {
-  display: block;
+.login-card {
+  width: min(420px,100%);
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 30px 100px #0005;
 }
-
-/* RESPONSIVE */
-
-@media (max-width: 1100px) {
-  .layout {
-    grid-template-columns: 220px minmax(0, 1fr);
-    padding: 10px;
-  }
-
-  .sidebar {
-    min-height: calc(100vh - 20px);
-  }
-
-  .metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .content {
-    padding: 19px;
-  }
-
-  .search-box input {
-    width: 175px;
-  }
+.login-card .logo { padding: 0 0 24px; }
+.login-card h1 { font-size: 23px; margin: 0 0 8px; letter-spacing: -.6px; }
+.login-card > p { color: var(--muted); font-size: 11px; line-height: 1.7; margin-bottom: 22px; }
+.login-card form { display: grid; gap: 14px; }
+.login-message { font-size: 10px; color: #d6536c; line-height: 1.6; }
+.login-note { margin-top: 18px; font-size: 9px; color: var(--muted); line-height: 1.7; }
+.config-box {
+  background: #f7f7fc;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 15px;
 }
-
-@media (max-width: 760px) {
-  .layout {
-    display: block;
-    padding: 8px;
-  }
-
-  .sidebar {
-    display: none;
+.config-box h3 { margin: 0 0 7px; font-size: 11px; }
+.config-box p { font-size: 10px; color: var(--muted); line-height: 1.7; }
+.config-box .form-group { margin-top: 10px; }
+.config-result { font-size: 10px; margin-top: 10px; color: #6558f5; overflow-wrap: anywhere; }
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.mini-stat {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 15px;
+}
+.mini-stat small { display: block; color: var(--muted); font-size: 9px; }
+.mini-stat strong { display: block; font-size: 21px; margin-top: 7px; }
+.note {
+  background: #f0efff;
+  color: #5d50d7;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 10px;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.two-col { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+.muted { color: var(--muted); }
+.mt { margin-top: 16px; }
+@media(max-width:1100px) {
+  .shell { grid-template-columns: 220px minmax(0,1fr); }
+  .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .grid-main,.grid-lower { grid-template-columns: minmax(0,1fr); }
+}
+@media(max-width:760px) {
+  .shell { display: block; }
+  .side {
     position: fixed;
-    z-index: 300;
-    top: 8px;
-    bottom: 8px;
-    left: 8px;
-    width: 265px;
+    z-index: 20;
+    top: 0;
+    left: -270px;
+    width: 250px;
+    height: 100dvh;
     min-height: 0;
-    overflow-y: auto;
-    border-radius: 17px;
-    box-shadow: 0 15px 50px #0004;
+    transition: left .22s;
   }
-
-  .sidebar.open {
-    display: flex;
+  .side.open { left: 0; }
+  .hamb {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--line);
+    background: white;
+    border-radius: 9px;
   }
-
-  .main {
-    border-radius: 17px;
-  }
-
-  .mobile-menu {
-    display: block;
-    flex-shrink: 0;
-  }
-
-  .topbar {
-    padding: 13px;
-    gap: 9px;
-  }
-
-  .search-box input {
-    width: 100%;
-  }
-
-  .top-actions {
-    min-width: 0;
-    gap: 6px;
-  }
-
-  .analytics-grid,
-  .lower-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .page-heading h1 {
-    font-size: 23px;
-  }
-
-  .content {
-    padding: 15px;
-  }
-
-  .panel-header {
-    padding: 16px 15px 0;
-  }
-
-  .panel-body {
-    padding: 14px;
-  }
+  .topbar { height: 66px; padding: 0 13px; gap: 9px; }
+  .user-chip > div:last-child { display: none; }
+  .search { max-width: none; }
+  .search input { padding: 10px 28px 10px 9px; }
+  .wrap { padding: 16px 12px; }
+  .hero { align-items: flex-start; flex-direction: column; }
+  .stats { gap: 9px; }
+  .stat { padding: 13px; }
+  .stat-val { font-size: 22px; }
+  .mini-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .two-col { grid-template-columns: minmax(0,1fr); }
+  .section-title { align-items: flex-start; flex-direction: column; }
 }
-
-@media (max-width: 440px) {
-  .metrics {
-    grid-template-columns: 1fr 1fr;
-    gap: 9px;
-  }
-
-  .metric {
-    padding: 13px;
-    border-radius: 13px;
-  }
-
-  .metric-value {
-    font-size: 20px;
-    margin: 13px 0 7px;
-  }
-
-  .metric-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .metric-top {
-    font-size: 9px;
-  }
-
-  .page-heading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .page-heading h1 {
-    font-size: 22px;
-  }
-
-  .topbar {
-    flex-wrap: wrap;
-  }
-
-  .breadcrumb {
-    flex: 1;
-  }
-
-  .top-actions {
-    width: 100%;
-    margin: 0;
-  }
-
-  .search-box {
-    flex: 1;
-  }
-
-  .search-box input {
-    width: 100%;
-  }
-
-  .chart-container {
-    height: 220px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-field.full {
-    grid-column: auto;
-  }
-
-  .modal-card {
-    padding: 19px;
-  }
+@media(max-width:420px) {
+  .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .stat-head { align-items: flex-start; }
+  .stat-icon { width: 28px; height: 28px; }
+  .stat-val { font-size: 19px; }
+  .form-grid { grid-template-columns: minmax(0,1fr); }
+  .form-group.full { grid-column: auto; }
 }
 </style>
 </head>
-
 <body>
-
-<div class="layout">
-
-<aside class="sidebar" id="sidebar">
-
-  <div class="brand">
-    <div class="brand-mark">JH</div>
-    <div class="brand-name">
-      Jiddahs Heaven
-      <small>EXECUTIVE COMMERCE</small>
+<div class="shell">
+  <aside class="side" id="sidebar">
+    <div class="logo">
+      <div class="logo-mark">JH</div>
+      <div class="logo-name">JIDDERHS HEAVEN<small>ADMIN COMMAND CENTRE</small></div>
     </div>
-  </div>
 
-  <div class="nav-label">WORKSPACE</div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="nav">
+      <button class="active" data-view="overview"><span class="ico">◈</span> Overview</button>
+      <button data-view="products"><span class="ico">▦</span> Product studio</button>
+      <button data-view="orders"><span class="ico">↗</span> Order desk <span id="orderNavCount"></span></button>
+      <button data-view="customers"><span class="ico">♙</span> Customers</button>
+      <button data-view="audience"><span class="ico">✉</span> Signups &amp; waitlist</button>
+      <button data-view="inventory"><span class="ico">▤</span> Inventory watch</button>
+      <button data-view="refunds"><span class="ico">↩</span> Refund centre</button>
+      <button data-view="insights"><span class="ico">⌁</span> Store insights</button>
+    </nav>
 
-  <nav class="nav">
-    <button class="active" data-view="overview">
-      <span class="nav-icon">⌂</span> Overview
-    </button>
-    <button data-view="orders">
-      <span class="nav-icon">▤</span> Order Management
-    </button>
-    <button data-view="products">
-      <span class="nav-icon">◇</span> Product Studio
-    </button>
-    <button data-view="inventory">
-      <span class="nav-icon">▦</span> Inventory Intelligence
-    </button>
-    <button data-view="customers">
-      <span class="nav-icon">♙</span> Customer Intelligence
-    </button>
-    <button data-view="refunds">
-      <span class="nav-icon">↶</span> Refund Centre
-    </button>
-  </nav>
+    <div class="nav-label">PREFERENCES</div>
+    <nav class="nav">
+      <button data-view="account"><span class="ico">⚙</span> Admin &amp; security</button>
+    </nav>
 
-  <div class="nav-label">BUSINESS INTELLIGENCE</div>
-
-  <nav class="nav">
-    <button data-view="analytics">
-      <span class="nav-icon">⌁</span> Sales Analytics
-    </button>
-    <button data-view="insights">
-      <span class="nav-icon">✧</span> Store Insights
-    </button>
-  </nav>
-
-  <div class="nav-label">SYSTEM</div>
-
-  <nav class="nav">
-    <button data-view="account">
-      <span class="nav-icon">⚙</span> Admin & Security
-    </button>
-    <button id="sidebarSignOut">
-      <span class="nav-icon">⇥</span> Sign Out
-    </button>
-  </nav>
-
-  <div class="sidebar-footer">
-    <div class="admin-profile">
-      <div class="avatar">JH</div>
-      <div>
-        <strong>Store Administrator</strong>
-        <small id="sidebarAdminEmail">Secure session</small>
+    <div class="side-bottom">
+      <div class="health">
+        <div class="health-top">
+          <span>DATABASE CONNECTION</span>
+          <span class="pulse" id="connectionPulse"></span>
+        </div>
+        <p id="connectionText">Checking connection…</p>
       </div>
+      <div class="side-foot">Jidderhs Heaven · Private admin area</div>
     </div>
-  </div>
+  </aside>
 
-</aside>
-
-<main class="main">
-
-<header class="topbar">
-
-  <button class="icon-button mobile-menu" id="menuButton" aria-label="Open navigation">
-    ☰
-  </button>
-
-  <div class="breadcrumb">
-    Jiddahs Heaven / Workspace
-    <strong id="pageTitle">Executive Overview</strong>
-  </div>
-
-  <div class="top-actions">
-    <div class="search-box">
-      <span>⌕</span>
-      <input id="globalSearch" placeholder="Search your store..." aria-label="Search store">
-    </div>
-    <button class="icon-button" id="refreshButton" title="Refresh dashboard">↻</button>
-    <button class="icon-button" id="notificationButton" title="Notifications">♧</button>
-  </div>
-
-</header>
-
-<div class="content">
-
-<!-- OVERVIEW -->
-
-<section class="view active" id="view-overview">
-
-  <div class="page-heading">
-    <div>
-      <h1>Your business, at a glance.</h1>
-      <p>Welcome to your Jiddahs Heaven executive command centre.</p>
-    </div>
-    <button class="button gold" data-action="add-product">＋ Create Product</button>
-  </div>
-
-  <div class="metrics">
-
-    <article class="metric">
-      <div class="metric-top">
-        Gross Order Value
-        <span class="metric-icon">₦</span>
+  <main class="main">
+    <header class="topbar">
+      <button class="hamb" id="menuButton" aria-label="Open menu">☰</button>
+      <div class="crumb">
+        STORE MANAGEMENT
+        <strong id="pageTitle">Overview</strong>
       </div>
-      <div class="metric-value" id="totalRevenue">₦0</div>
-      <div class="metric-bottom">Calculated from available order records</div>
-    </article>
-
-    <article class="metric">
-      <div class="metric-top">
-        Total Orders
-        <span class="metric-icon">▤</span>
+      <div class="search">
+        <input id="globalSearch" type="search" placeholder="Search products or orders…" aria-label="Search products or orders">
+        <span>⌕</span>
       </div>
-      <div class="metric-value" id="totalOrders">0</div>
-      <div class="metric-bottom">Orders recorded in your database</div>
-    </article>
-
-    <article class="metric">
-      <div class="metric-top">
-        Average Order Value
-        <span class="metric-icon">↗</span>
-      </div>
-      <div class="metric-value" id="averageOrderValue">₦0</div>
-      <div class="metric-bottom">Gross order value divided by orders</div>
-    </article>
-
-    <article class="metric">
-      <div class="metric-top">
-        Products in Store
-        <span class="metric-icon">◇</span>
-      </div>
-      <div class="metric-value" id="totalProducts">0</div>
-      <div class="metric-bottom">Products in your catalogue</div>
-    </article>
-
-  </div>
-
-  <div class="analytics-grid">
-
-    <article class="panel">
-      <div class="panel-header">
+      <button class="icon-btn" id="refreshButton" title="Refresh dashboard" aria-label="Refresh dashboard">↻</button>
+      <div class="user-chip">
+        <div class="avatar">JH</div>
         <div>
-          <h2>Revenue Performance</h2>
-          <p>Monthly order value over time</p>
-        </div>
-        <select class="section-toolbar" id="salesPeriod" aria-label="Chart period" style="padding:8px;border:1px solid var(--border);border-radius:8px;background:white">
-          <option value="6">6 months</option>
-          <option value="12">12 months</option>
-        </select>
-      </div>
-      <div class="panel-body">
-        <div class="chart-container">
-          <canvas id="salesChart"></canvas>
+          <strong>Store administrator</strong>
+          <small id="adminEmailShort">Secure session</small>
         </div>
       </div>
-    </article>
+    </header>
 
-    <article class="panel">
-      <div class="panel-header">
-        <div>
-          <h2>Order Intelligence</h2>
-          <p>Breakdown by current payment status</p>
+    <div class="wrap">
+      <section class="view active" id="view-overview">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="eyebrow">YOUR BUSINESS, AT A GLANCE</div>
+            <h1>Welcome to your<br>command centre.</h1>
+            <p>Manage your catalogue, monitor orders, and keep Jidderhs Heaven running smoothly.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn light" id="quickAddButton">＋ Add product</button>
+            <button class="btn glass" id="quickOrdersButton">View orders ↗</button>
+          </div>
         </div>
-      </div>
-      <div class="panel-body">
-        <div class="chart-container donut">
-          <canvas id="statusChart"></canvas>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-head"><span>Active products</span><span class="stat-icon">▦</span></div>
+            <div class="stat-val" id="totalProducts">—</div>
+            <div class="stat-foot"><span class="trend neutral" id="activeCount">—</span><span>in your catalogue</span></div>
+          </div>
+          <div class="stat">
+            <div class="stat-head"><span>Total orders</span><span class="stat-icon mint">↗</span></div>
+            <div class="stat-val" id="totalOrders">—</div>
+            <div class="stat-foot"><span class="trend neutral" id="pendingOrders">— pending</span><span>across the store</span></div>
+          </div>
+          <div class="stat">
+            <div class="stat-head"><span>Recorded sales</span><span class="stat-icon gold">₦</span></div>
+            <div class="stat-val" id="totalSales">—</div>
+            <div class="stat-foot"><span class="trend neutral">Orders</span><span>combined order value</span></div>
+          </div>
+          <div class="stat">
+            <div class="stat-head"><span>Average order</span><span class="stat-icon rose">◷</span></div>
+            <div class="stat-val" id="averageOrder">—</div>
+            <div class="stat-foot"><span class="trend neutral">AOV</span><span>average order value</span></div>
+          </div>
         </div>
-        <div class="chart-summary">
-          <span><i class="legend-dot"></i> Completed</span>
-          <span><i class="legend-dot" style="background:#e4bc76"></i> Pending</span>
-          <span><i class="legend-dot" style="background:#e9a5b3"></i> Other</span>
+        <div class="grid-main">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Sales overview</h2>
+                <p>Recorded order value over time</p>
+              </div>
+              <select class="pill" id="salesPeriod" aria-label="Sales period">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
+            </div>
+            <div class="panel-body">
+              <div class="chart">
+                <canvas id="salesChart"></canvas>
+              </div>
+              <div class="chart-legend">
+                <span><i class="key"></i>Recorded sales</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Order status</h2>
+                <p>Current order breakdown</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart donut">
+                <canvas id="statusChart"></canvas>
+              </div>
+              <div class="chart-legend" id="statusLegend"></div>
+            </div>
+          </section>
         </div>
-      </div>
-    </article>
 
-  </div>
+        <div class="grid-lower">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Recent orders</h2>
+                <p>The latest activity from your store</p>
+              </div>
+              <button class="btn soft sm" data-goto="orders">View all ↗</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ORDER</th>
+                    <th>CUSTOMER</th>
+                    <th>AMOUNT</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrders">
+                  <tr><td colspan="4" class="empty">Loading orders…</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="panel-foot">
+              <span id="recentOrderFoot">Recent store activity</span>
+              <button class="btn soft sm" data-goto="orders">Open order desk</button>
+            </div>
+          </section>
 
-  <div class="lower-grid">
-
-    <article class="panel">
-      <div class="panel-header">
-        <div>
-          <h2>Recent Transactions</h2>
-          <p>Your latest customer orders</p>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Inventory watch</h2>
+                <p>Products that may need attention</p>
+              </div>
+              <button class="btn soft sm" data-goto="inventory">View all</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>PRODUCT</th>
+                    <th>STOCK</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryWatch">
+                  <tr><td colspan="3" class="empty">Loading inventory…</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="panel-foot">
+              <span id="inventoryFoot">Stock overview</span>
+              <button class="btn soft sm" data-goto="products">Manage products</button>
+            </div>
+          </section>
         </div>
-        <button class="button light small" data-view="orders">View Orders</button>
-      </div>
+      </section>
 
-      <div class="panel-body table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ORDER</th>
-              <th>CUSTOMER</th>
-              <th>AMOUNT</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
-          <tbody id="recentOrders">
-            <tr><td colspan="4" class="empty-state">Waiting for database connection…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </article>
-
-    <article class="panel">
-      <div class="panel-header">
-        <div>
-          <h2>Product Highlights</h2>
-          <p>Products in your catalogue</p>
+      <section class="view" id="view-products">
+        <div class="section-title">
+          <div>
+            <h1>Product studio</h1>
+            <p>Manage your catalogue and product details.</p>
+          </div>
+          <button class="btn" id="addProductButton">＋ Add product</button>
         </div>
-        <button class="button light small" data-view="products">Manage</button>
-      </div>
 
-      <div class="panel-body table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>PRODUCT</th>
-              <th>PRICE</th>
-              <th>STOCK</th>
-            </tr>
-          </thead>
-          <tbody id="topProducts">
-            <tr><td colspan="3" class="empty-state">Waiting for products…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </article>
+        <div class="mini-grid">
+          <div class="mini-stat"><small>Total products</small><strong id="productTotalMini">—</strong></div>
+          <div class="mini-stat"><small>Available stock</small><strong id="stockTotalMini">—</strong></div>
+          <div class="mini-stat"><small>Low-stock products</small><strong id="lowStockMini">—</strong></div>
+        </div>
 
-  </div>
+        <div class="toolbar">
+          <input class="field search-field" id="productSearch" placeholder="Search product name…" type="search">
+          <select class="field" id="productFilter">
+            <option value="all">All products</option>
+            <option value="in">In stock</option>
+            <option value="low">Low stock</option>
+            <option value="out">Out of stock</option>
+          </select>
+          <button class="btn soft" id="exportProductsButton">Export CSV</button>
+        </div>
 
-</section>
+        <section class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>PRODUCT</th>
+                  <th>PRICE</th>
+                  <th>STOCK</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="productsTable">
+                <tr><td colspan="5" class="empty">Loading products…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-foot">
+            <span id="productsFoot">Catalogue</span>
+            <button class="btn soft sm" id="reloadProductsButton">↻ Refresh</button>
+          </div>
+        </section>
+      </section>
 
-<!-- PRODUCTS -->
+      <section class="view" id="view-orders">
+        <div class="section-title">
+          <div>
+            <h1>Order desk</h1>
+            <p>Review customer orders and update their status.</p>
+          </div>
+          <button class="btn soft" id="exportOrdersButton">Export orders CSV</button>
+        </div>
 
-<section class="view" id="view-products">
+        <div class="mini-grid">
+          <div class="mini-stat"><small>All orders</small><strong id="ordersTotalMini">—</strong></div>
+          <div class="mini-stat"><small>Awaiting processing</small><strong id="ordersPendingMini">—</strong></div>
+          <div class="mini-stat"><small>Completed</small><strong id="ordersCompletedMini">—</strong></div>
+        </div>
 
-  <div class="page-heading">
-    <div>
-      <h1>Product Studio</h1>
-      <p>Build and manage your product catalogue.</p>
+        <div class="toolbar">
+          <input class="field search-field" id="orderSearch" type="search" placeholder="Search order or customer…">
+          <select class="field" id="orderFilter">
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="paid">Paid</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <button class="btn soft" id="reloadOrdersButton">↻ Refresh</button>
+        </div>
+
+        <section class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ORDER ID</th>
+                  <th>CUSTOMER</th>
+                  <th>DATE</th>
+                  <th>AMOUNT</th>
+                  <th>STATUS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTable">
+                <tr><td colspan="6" class="empty">Loading orders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-foot">
+            <span id="ordersFoot">Order management</span>
+          </div>
+        </section>
+      </section>
+      <section class="view" id="view-customers">
+        <div class="section-title">
+          <div>
+            <h1>Customer directory</h1>
+            <p>Review customer profiles and contact information.</p>
+          </div>
+          <button class="btn soft" id="reloadCustomersButton">↻ Refresh</button>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <small>Customer records</small>
+            <strong id="customerTotalMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Registered emails</small>
+            <strong id="customerEmailMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Customer orders</small>
+            <strong id="customerOrdersMini">—</strong>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input
+            class="field search-field"
+            id="customerSearch"
+            type="search"
+            placeholder="Search customers…"
+          >
+        </div>
+
+        <section class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>CUSTOMER</th>
+                  <th>EMAIL</th>
+                  <th>PHONE</th>
+                  <th>JOINED</th>
+                </tr>
+              </thead>
+              <tbody id="customersTable">
+                <tr>
+                  <td colspan="4" class="empty">
+                    Loading customer records…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-foot">
+            <span id="customersFoot">Customer directory</span>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-audience">
+        <div class="section-title">
+          <div>
+            <h1>Signups &amp; waitlist</h1>
+            <p>Review newsletter subscriptions and people waiting for updates.</p>
+          </div>
+          <button class="btn soft" id="reloadAudienceButton">
+            ↻ Refresh
+          </button>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <small>Total signups</small>
+            <strong id="audienceTotalMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Available emails</small>
+            <strong id="audienceEmailMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Waitlist records</small>
+            <strong id="waitlistTotalMini">—</strong>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input
+            class="field search-field"
+            id="audienceSearch"
+            type="search"
+            placeholder="Search signup records…"
+          >
+          <button class="btn soft" id="exportAudienceButton">
+            Export CSV
+          </button>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Signup directory</h2>
+              <p>Records found in your connected signup tables.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>NAME</th>
+                  <th>EMAIL</th>
+                  <th>PHONE</th>
+                  <th>DATE</th>
+                  <th>SOURCE</th>
+                </tr>
+              </thead>
+              <tbody id="audienceTable">
+                <tr>
+                  <td colspan="5" class="empty">
+                    Loading signup records…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-foot">
+            <span id="audienceFoot">Signup management</span>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-inventory">
+        <div class="section-title">
+          <div>
+            <h1>Inventory watch</h1>
+            <p>Monitor stock levels and identify products that need restocking.</p>
+          </div>
+          <button class="btn soft" id="reloadInventoryButton">
+            ↻ Refresh
+          </button>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <small>Total units in stock</small>
+            <strong id="inventoryUnitsMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Low-stock products</small>
+            <strong id="inventoryLowMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Out-of-stock products</small>
+            <strong id="inventoryOutMini">—</strong>
+          </div>
+        </div>
+
+        <div class="note">
+          Stock alerts depend on the stock quantity stored in your products
+          table. Confirm that your existing schema uses the expected stock
+          column before updating inventory.
+        </div>
+
+        <div class="toolbar">
+          <input
+            class="field search-field"
+            id="inventorySearch"
+            type="search"
+            placeholder="Search inventory…"
+          >
+          <select class="field" id="inventoryFilter">
+            <option value="all">All stock levels</option>
+            <option value="low">Low stock</option>
+            <option value="out">Out of stock</option>
+            <option value="available">Available</option>
+          </select>
+        </div>
+
+        <section class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>PRODUCT</th>
+                  <th>PRICE</th>
+                  <th>QUANTITY</th>
+                  <th>STOCK STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTable">
+                <tr>
+                  <td colspan="5" class="empty">
+                    Loading inventory…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-foot">
+            <span id="inventoryTableFoot">Inventory management</span>
+          </div>
+        </section>
+      </section>
+      <section class="view" id="view-refunds">
+        <div class="section-title">
+          <div>
+            <h1>Refund centre</h1>
+            <p>Review refund requests and track their status.</p>
+          </div>
+          <button class="btn soft" id="reloadRefundsButton">
+            ↻ Refresh
+          </button>
+        </div>
+
+        <div class="note">
+          This section displays refund requests only if your Supabase
+          project has a compatible refund_requests table. It does not
+          automatically issue refunds through Paystack.
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <small>Total requests</small>
+            <strong id="refundTotalMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Pending review</small>
+            <strong id="refundPendingMini">—</strong>
+          </div>
+          <div class="mini-stat">
+            <small>Processed requests</small>
+            <strong id="refundProcessedMini">—</strong>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input
+            class="field search-field"
+            id="refundSearch"
+            type="search"
+            placeholder="Search refund requests…"
+          >
+          <select class="field" id="refundFilter">
+            <option value="all">All requests</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="processed">Processed</option>
+          </select>
+        </div>
+
+        <section class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>REQUEST</th>
+                  <th>ORDER</th>
+                  <th>AMOUNT</th>
+                  <th>REASON</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="refundsTable">
+                <tr>
+                  <td colspan="6" class="empty">
+                    Loading refund requests…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-foot">
+            <span id="refundsFoot">Refund request management</span>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-insights">
+        <div class="section-title">
+          <div>
+            <h1>Store insights</h1>
+            <p>Understand order activity and catalogue performance.</p>
+          </div>
+          <button class="btn soft" id="reloadInsightsButton">
+            ↻ Refresh
+          </button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-head">
+              <span>Total recorded orders</span>
+              <span class="stat-icon">↗</span>
+            </div>
+            <div class="stat-val" id="insightOrders">—</div>
+            <div class="stat-foot">All retrieved orders</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-head">
+              <span>Recorded sales</span>
+              <span class="stat-icon mint">₦</span>
+            </div>
+            <div class="stat-val" id="insightSales">—</div>
+            <div class="stat-foot">Based on available order amounts</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-head">
+              <span>Average order value</span>
+              <span class="stat-icon gold">◷</span>
+            </div>
+            <div class="stat-val" id="insightAverage">—</div>
+            <div class="stat-foot">Average amount per order</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-head">
+              <span>Catalogue size</span>
+              <span class="stat-icon rose">▦</span>
+            </div>
+            <div class="stat-val" id="insightProducts">—</div>
+            <div class="stat-foot">Retrieved products</div>
+          </div>
+        </div>
+
+        <div class="grid-main">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Sales trend</h2>
+                <p>Daily order value from available records</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart">
+                <canvas id="insightsSalesChart"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Order status distribution</h2>
+                <p>How your retrieved orders are classified</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart donut">
+                <canvas id="insightsStatusChart"></canvas>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>How to interpret these figures</h2>
+              <p>Important limitations of dashboard analytics</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <p class="muted">
+              These figures depend on the orders and products your current
+              Supabase permissions allow the dashboard to read. They are
+              not independently verified payment totals. For accurate
+              financial reporting, payment status should be confirmed
+              server-side through your payment provider.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-account">
+        <div class="section-title">
+          <div>
+            <h1>Admin &amp; security</h1>
+            <p>Review your connection settings and administrative access.</p>
+          </div>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Current session</h2>
+              <p>Authenticated administrator information</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Signed-in email</label>
+                <input id="accountEmail" readonly value="Checking session…">
+              </div>
+
+              <div class="form-group">
+                <label>Authentication status</label>
+                <input id="accountAuthStatus" readonly value="Checking…">
+              </div>
+
+              <div class="form-group full">
+                <label>Administrator user ID</label>
+                <input id="accountUserId" readonly value="Not available">
+              </div>
+            </div>
+
+            <div class="config-box">
+              <h3>Access protection</h3>
+              <p>
+                The dashboard should only be accessible to authorized
+                administrators. Protect your database with Supabase Row
+                Level Security (RLS) policies and server-side authorization.
+                Hiding this page or checking a user ID in browser JavaScript
+                alone does not secure your database.
+              </p>
+              <button class="btn red" id="signOutButton">
+                Sign out
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel mt">
+          <div class="panel-head">
+            <div>
+              <h2>Supabase connection</h2>
+              <p>Connection information used by this dashboard</p>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>Project URL</label>
+                <input id="projectUrlDisplay" readonly value="Not configured">
+              </div>
+              <div class="form-group full">
+                <label>Public anon/publishable key status</label>
+                <input id="publicKeyDisplay" readonly value="Checking configuration…">
+              </div>
+            </div>
+
+            <div class="note mt">
+              Never put a Supabase service_role key, Paystack secret key,
+              or other private server credentials in this HTML file.
+            </div>
+          </div>
+        </section>
+      </section>
     </div>
-    <button class="button gold" data-action="add-product">＋ New Product</button>
-  </div>
-
-  <div class="metrics">
-    <article class="metric">
-      <div class="metric-top">All Products <span class="metric-icon">◇</span></div>
-      <div class="metric-value" id="productCount">0</div>
-      <div class="metric-bottom">Catalogue size</div>
-    </article>
-    <article class="metric">
-      <div class="metric-top">Active Products <span class="metric-icon">✓</span></div>
-      <div class="metric-value" id="activeProductCount">0</div>
-      <div class="metric-bottom">Visible products</div>
-    </article>
-    <article class="metric">
-      <div class="metric-top">Low Stock <span class="metric-icon">!</span></div>
-      <div class="metric-value" id="lowStockCount">0</div>
-      <div class="metric-bottom">Five or fewer remaining</div>
-    </article>
-    <article class="metric">
-      <div class="metric-top">Out of Stock <span class="metric-icon">×</span></div>
-      <div class="metric-value" id="outOfStockCount">0</div>
-      <div class="metric-bottom">Items requiring replenishment</div>
-    </article>
-  </div>
-
-  <article class="panel">
-    <div class="section-toolbar">
-      <input id="productSearch" placeholder="Search product name or category...">
-      <select id="categoryFilter">
-        <option value="">All categories</option>
-      </select>
-      <button class="button light" id="reloadProducts">Refresh</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>PRODUCT</th>
-            <th>CATEGORY</th>
-            <th>PRICE</th>
-            <th>STOCK</th>
-            <th>VISIBILITY</th>
-            <th>ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody id="productsTableBody">
-          <tr><td colspan="6" class="empty-state">Loading products…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </article>
-
-</section>
-
-<!-- ORDERS -->
-
-<section class="view" id="view-orders">
-
-  <div class="page-heading">
-    <div>
-      <h1>Order Management</h1>
-      <p>Track customer orders and payment references.</p>
-    </div>
-    <button class="button light" id="reloadOrders">↻ Refresh Orders</button>
-  </div>
-
-  <article class="panel">
-    <div class="section-toolbar">
-      <input id="orderSearch" placeholder="Search order, customer or reference...">
-      <select id="orderStatusFilter">
-        <option value="all">All statuses</option>
-        <option value="success">Successful</option>
-        <option value="pending">Pending</option>
-        <option value="failed">Failed</option>
-      </select>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>ORDER</th>
-            <th>CUSTOMER</th>
-            <th>AMOUNT</th>
-            <th>PAYMENT</th>
-            <th>REFERENCE</th>
-            <th>DATE</th>
-            <th>ACTION</th>
-          </tr>
-        </thead>
-        <tbody id="ordersTableBody">
-          <tr><td colspan="7" class="empty-state">Loading orders…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </article>
-
-</section>
-
-<!-- INVENTORY -->
-
-<section class="view" id="view-inventory">
-
-  <div class="page-heading">
-    <div>
-      <h1>Inventory Intelligence</h1>
-      <p>Find products that need replenishment.</p>
-    </div>
-    <button class="button light" data-view="products">Manage Products</button>
-  </div>
-
-  <article class="panel">
-    <div class="panel-header">
-      <div>
-        <h2>Stock Monitoring</h2>
-        <p>Current quantities from your products table</p>
-      </div>
-    </div>
-    <div class="panel-body table-wrap">
-      <table>
-        <thead>
-          <tr><th>PRODUCT</th><th>STOCK</th><th>CONDITION</th><th>ACTION</th></tr>
-        </thead>
-        <tbody id="inventoryTableBody">
-          <tr><td colspan="4" class="empty-state">Loading inventory…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </article>
-
-</section>
-
-<!-- CUSTOMERS -->
-
-<section class="view" id="view-customers">
-
-  <div class="page-heading">
-    <div>
-      <h1>Customer Intelligence</h1>
-      <p>Customer records derived from your orders.</p>
-    </div>
-  </div>
-
-  <article class="panel">
-    <div class="section-toolbar">
-      <input id="customerSearch" placeholder="Search customers...">
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>CUSTOMER</th><th>EMAIL</th><th>PHONE</th><th>ORDERS</th><th>TOTAL SPEND</th></tr>
-        </thead>
-        <tbody id="customersTableBody">
-          <tr><td colspan="5" class="empty-state">Loading customers…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </article>
-
-</section>
-
-<!-- REFUNDS -->
-
-<section class="view" id="view-refunds">
-
-  <div class="page-heading">
-    <div>
-      <h1>Refund Centre</h1>
-      <p>Review refund requests recorded in your database.</p>
-    </div>
-    <button class="button light" id="reloadRefunds">Refresh</button>
-  </div>
-
-  <article class="panel">
-    <div class="section-toolbar">
-      <input id="refundSearch" placeholder="Search refund requests...">
-      <select id="refundStatusFilter">
-        <option value="all">All statuses</option>
-        <option value="pending">Pending</option>
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
-        <option value="completed">Completed</option>
-      </select>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>REQUEST</th><th>ORDER</th><th>CUSTOMER</th><th>AMOUNT</th><th>REASON</th><th>STATUS</th><th>DATE</th></tr>
-        </thead>
-        <tbody id="refundsTableBody">
-          <tr><td colspan="7" class="empty-state">Checking refund data…</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="panel-body">
-      <p class="notice">Refund records appear only if the corresponding table exists and your administrator has permission to read it.</p>
-    </div>
-  </article>
-
-</section>
-
-<!-- ANALYTICS -->
-
-<section class="view" id="view-analytics">
-
-  <div class="page-heading">
-    <div>
-      <h1>Sales Analytics</h1>
-      <p>Explore the sales figures available in your order records.</p>
-    </div>
-  </div>
-
-  <div class="analytics-grid">
-    <article class="panel">
-      <div class="panel-header"><div><h2>Monthly Revenue</h2><p>Order value by month</p></div></div>
-      <div class="panel-body"><div class="chart-container"><canvas id="analyticsSalesChart"></canvas></div></div>
-    </article>
-    <article class="panel">
-      <div class="panel-header"><div><h2>Payment Distribution</h2><p>Orders grouped by payment status</p></div></div>
-      <div class="panel-body"><div class="chart-container donut"><canvas id="analyticsStatusChart"></canvas></div></div>
-    </article>
-  </div>
-
-  <article class="panel">
-    <div class="panel-header"><div><h2>Data Quality</h2><p>Know which figures are available</p></div></div>
-    <div class="panel-body">
-      <p id="analyticsDataStatus" class="notice">Analytics will update after the database loads.</p>
-    </div>
-  </article>
-
-</section>
-
-<!-- INSIGHTS -->
-
-<section class="view" id="view-insights">
-
-  <div class="page-heading">
-    <div>
-      <h1>Store Insights</h1>
-      <p>Operational signals based on available catalogue and order data.</p>
-    </div>
-  </div>
-
-  <div class="metrics">
-    <article class="metric">
-      <div class="metric-top">Catalogue Value <span class="metric-icon">₦</span></div>
-      <div class="metric-value" id="catalogueValue">₦0</div>
-      <div class="metric-bottom">Price multiplied by recorded stock</div>
-    </article>
-    <article class="metric">
-      <div class="metric-top">Completed Orders <span class="metric-icon">✓</span></div>
-      <div class="metric-value" id="completedOrders">0</div>
-      <div class="metric-bottom">Based on payment status</div>
-    </article>
-    <article class="metric">
-      <div class="metric-top">Pending Payments <span class="metric-icon">◷</span></div>
-      <div class="metric-value" id="pendingOrders">0</div>
-      <div class="metric-bottom">Orders awaiting confirmation</div>
-    </article>
-    <article class="metric">
-      <div class="metric-top">Customer Records <span class="metric-icon">♙</span></div>
-      <div class="metric-value" id="customerCount">0</div>
-      <div class="metric-bottom">Unique customer identities in orders</div>
-    </article>
-  </div>
-
-  <article class="panel">
-    <div class="panel-header"><div><h2>Inventory Alerts</h2><p>Products needing attention</p></div></div>
-    <div class="panel-body table-wrap">
-      <table>
-        <thead><tr><th>PRODUCT</th><th>STOCK</th><th>RECOMMENDATION</th></tr></thead>
-        <tbody id="insightsInventoryBody">
-          <tr><td colspan="3" class="empty-state">Waiting for inventory data…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </article>
-
-</section>
-
-<!-- ACCOUNT -->
-
-<section class="view" id="view-account">
-
-  <div class="page-heading">
-    <div>
-      <h1>Admin & Security</h1>
-      <p>Review your current administrator session.</p>
-    </div>
-  </div>
-
-  <article class="panel">
-    <div class="panel-header"><div><h2>Administrator Session</h2><p>Authentication is handled by Supabase Auth.</p></div></div>
-    <div class="panel-body">
-      <div class="form-field">
-        <label>Administrator email</label>
-        <input id="adminEmail" readonly>
-      </div>
-      <div class="form-field" style="margin-top:15px">
-        <label>Administrator UID</label>
-        <input value="2631d680-907b-4336-9133-cd03ff87fb4a" readonly>
-      </div>
-      <div class="form-field" style="margin-top:15px">
-        <label>Authentication status</label>
-        <input id="authStatus" value="Checking…" readonly>
-      </div>
-      <div class="form-field" style="margin-top:15px">
-        <label>Database connection</label>
-        <input id="connectionStatus" value="Checking…" readonly>
-      </div>
-      <div class="form-actions">
-        <button class="button danger" id="signOutButton">Sign Out Securely</button>
-      </div>
-      <p class="notice">Never put a Supabase service-role key or Paystack secret key in this browser-side dashboard.</p>
-    </div>
-  </article>
-
-</section>
-
+  </main>
 </div>
-</main>
-</div>
-
-<!-- PRODUCT FORM -->
-
-<div class="modal" id="productModal">
+<!-- PRODUCT EDITOR MODAL -->
+<div class="modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
   <div class="modal-card">
-    <h2 id="productModalTitle">Create Product</h2>
+    <div class="modal-head">
+      <h2 id="productModalTitle">Add new product</h2>
+      <button class="icon-btn" type="button" data-close-modal="productModal" aria-label="Close">✕</button>
+    </div>
 
     <form id="productForm">
-      <input type="hidden" id="productId">
+      <div class="modal-body">
+        <input type="hidden" id="productId">
 
-      <div class="form-grid">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="productName">Product name *</label>
+            <input id="productName" required maxlength="200" placeholder="Enter product name">
+          </div>
 
-        <div class="form-field full">
-          <label for="productName">Product name *</label>
-          <input id="productName" required maxlength="150">
+          <div class="form-group">
+            <label for="productPrice">Price (₦) *</label>
+            <input id="productPrice" type="number" min="0" step="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label for="productStock">Stock quantity</label>
+            <input id="productStock" type="number" min="0" step="1" value="0">
+          </div>
+
+          <div class="form-group full">
+            <label for="productImage">Product image URL</label>
+            <input id="productImage" type="url" placeholder="https://example.com/image.jpg">
+          </div>
+
+          <div class="form-group full">
+            <label for="productCategory">Category</label>
+            <input id="productCategory" maxlength="100" placeholder="Product category">
+          </div>
+
+          <div class="form-group full">
+            <label for="productDescription">Description</label>
+            <textarea id="productDescription" maxlength="5000" placeholder="Describe this product"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label class="check-row">
+              <input id="productAvailable" type="checkbox" checked>
+              Product is available for purchase
+            </label>
+          </div>
         </div>
 
-        <div class="form-field">
-          <label for="productPrice">Price (₦) *</label>
-          <input id="productPrice" type="number" min="0" step="0.01" required>
-        </div>
-
-        <div class="form-field">
-          <label for="productStock">Stock quantity *</label>
-          <input id="productStock" type="number" min="0" step="1" required>
-        </div>
-
-        <div class="form-field">
-          <label for="productCategory">Category</label>
-          <input id="productCategory" maxlength="100">
-        </div>
-
-        <div class="form-field">
-          <label for="productImage">Product image URL</label>
-          <input id="productImage" type="url" placeholder="https://...">
-        </div>
-
-        <div class="form-field full">
-          <label for="productDescription">Description</label>
-          <textarea id="productDescription"></textarea>
-        </div>
-
-        <div class="form-field full">
-          <label>
-            <input id="productActive" type="checkbox" checked style="width:auto">
-            Active — visible in the catalogue
-          </label>
-        </div>
-
+        <p class="muted" style="font-size:10px">
+          The field names must match your existing Supabase products table.
+        </p>
       </div>
 
-      <div class="form-actions">
-        <button type="button" class="button light" id="cancelProduct">Cancel</button>
-        <button type="submit" class="button gold" id="saveProductButton">Save Product</button>
+      <div class="modal-foot">
+        <button class="btn soft" type="button" data-close-modal="productModal">Cancel</button>
+        <button class="btn" id="saveProductButton" type="submit">Save product</button>
       </div>
-
     </form>
   </div>
 </div>
-<script>
 
-<!-- ORDER DETAILS -->
-
-<div class="modal" id="orderModal">
+<!-- ORDER DETAILS MODAL -->
+<div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
   <div class="modal-card">
-    <h2>Order Details</h2>
-    <div id="orderDetails"></div>
-    <div class="form-actions">
-      <button class="button light" id="closeOrderModal">Close</button>
+    <div class="modal-head">
+      <h2 id="orderModalTitle">Order details</h2>
+      <button class="icon-btn" type="button" data-close-modal="orderModal" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div id="orderDetailsContent">
+        <p class="muted">Select an order to view its details.</p>
+      </div>
+
+      <div class="form-group mt">
+        <label for="orderStatusSelect">Update order status</label>
+        <select id="orderStatusSelect">
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="paid">Paid</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <p class="muted" style="font-size:10px">
+        Changing an order status here does not itself verify or initiate a payment.
+      </p>
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn soft" type="button" data-close-modal="orderModal">Close</button>
+      <button class="btn" type="button" id="saveOrderStatusButton">Update status</button>
     </div>
   </div>
 </div>
 
-<!-- NOTIFICATIONS -->
+<!-- REFUND REVIEW MODAL -->
+<div class="modal" id="refundModal" role="dialog" aria-modal="true" aria-labelledby="refundModalTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="refundModalTitle">Review refund request</h2>
+      <button class="icon-btn" type="button" data-close-modal="refundModal" aria-label="Close">✕</button>
+    </div>
 
+    <div class="modal-body">
+      <input type="hidden" id="refundId">
+
+      <div id="refundDetailsContent">
+        <p class="muted">Select a refund request to review it.</p>
+      </div>
+
+      <div class="form-group mt">
+        <label for="refundStatusSelect">Review decision</label>
+        <select id="refundStatusSelect">
+          <option value="pending">Pending review</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="processed">Processed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn soft" type="button" data-close-modal="refundModal">Cancel</button>
+      <button class="btn" type="button" id="saveRefundButton">Save decision</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="logo">
+      <div class="logo-mark">JH</div>
+      <div class="logo-name" style="color:#17192e">
+        JIDDERHS HEAVEN
+        <small>ADMIN COMMAND CENTRE</small>
+      </div>
+    </div>
+
+    <h1>Welcome back.</h1>
+    <p>Sign in with your authorized Supabase administrator account to access your store dashboard.</p>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail">Email address</label>
+        <input id="loginEmail" type="email" autocomplete="username" required placeholder="admin@example.com">
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password">
+      </div>
+
+      <button class="btn" id="loginButton" type="submit">Sign in securely</button>
+      <div class="login-message" id="loginMessage" role="alert"></div>
+    </form>
+
+    <div class="login-note">
+      Access is restricted to authorized administrators. A successful sign-in alone must not grant database access unless the required authorization policies are also configured.
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!--
-  IMPORTANT:
-  The next section contains the JavaScript that connects these
-  controls to Supabase. Do not remove the existing supabase.js
-  connection or change database table names without checking
-  the schema first.
--->
+<!-- SUPABASE CLIENT LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script type="module">
-import { supabase } from './assets/javascript/supabase.js';
+<script>
+"use strict";
 
-/* =========================================
-   JIDDAHS HEAVEN ADMIN DASHBOARD
-   SUPABASE CONNECTION
-========================================= */
+/*
+ * JIDDERHS HEAVEN ADMIN DASHBOARD
+ *
+ * IMPORTANT:
+ * 1. Configure your existing Supabase project URL and public anon/
+ *    publishable key in the next part.
+ * 2. Never put a service_role key or Paystack secret key here.
+ * 3. The dashboard must use your actual table and column names.
+ * 4. Protect database operations with Supabase RLS policies.
+ */
 
-const ADMIN_UID = '2631d680-907b-4336-9133-cd03ff87fb4a';
+const ADMIN_CONFIG = {
+  SUPABASE_URL: "",
+  SUPABASE_ANON_KEY: "",
 
-const $ = (selector) => document.querySelector(selector);
+  // Replace with your actual authorized administrator UID.
+  ADMIN_USER_IDS: [],
 
-const money = (value) =>
-  new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
+  // Adjust these names to match your existing database.
+  TABLES: {
+    products: "products",
+    orders: "orders",
+    adminUsers: "admin_users",
+    profiles: "profiles",
+    waitlist: "waitlist",
+    refunds: "refund_requests"
+  },
+
+  LOW_STOCK_THRESHOLD: 5
+};
+
+let supabaseClient = null;
+let currentAdmin = null;
+let activeOrderId = null;
+
+let productsData = [];
+let ordersData = [];
+let customersData = [];
+let audienceData = [];
+let refundsData = [];
+
+let salesChartInstance = null;
+let statusChartInstance = null;
+let insightsSalesChartInstance = null;
+let insightsStatusChartInstance = null;
+
+let toastTimer = null;
+
+function $(selector) {
+  return document.querySelector(selector);
+}
+
+function $all(selector) {
+  return Array.from(document.querySelectorAll(selector));
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function(character) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[character];
+  });
+}
+
+function formatNaira(value) {
+  const amount = Number(value);
+
+  if (!Number.isFinite(amount)) {
+    return "₦0.00";
+  }
+
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
     maximumFractionDigits: 2
-  }).format(Number(value) || 0);
+  }).format(amount);
+}
 
-const escapeHtml = (value) =>
-  String(value ?? '').replace(/[&<>"']/g, (character) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[character]);
-
-const formatDate = (value) => {
-  if (!value) return '—';
+function formatDate(value) {
+  if (!value) return "—";
 
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime())
-    ? '—'
-    : date.toLocaleDateString('en-NG', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-};
-
-let products = [];
-let orders = [];
-let refunds = [];
-let currentAdmin = null;
-let salesChart = null;
-let statusChart = null;
-let analyticsSalesChart = null;
-let analyticsStatusChart = null;
-
-/* =========================================
-   NOTIFICATIONS
-========================================= */
-
-function showToast(message) {
-  const toast = $('#toast');
-
-  if (!toast) {
-    alert(message);
-    return;
+  if (Number.isNaN(date.getTime())) {
+    return "—";
   }
 
+  return date.toLocaleDateString("en-NG", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+function showToast(message) {
+  const toast = $("#toast");
+
+  if (!toast) return;
+
   toast.textContent = message;
-  toast.classList.add('show');
+  toast.classList.add("show");
 
-  clearTimeout(showToast.timer);
+  clearTimeout(toastTimer);
 
-  showToast.timer = setTimeout(() => {
-    toast.classList.remove('show');
+  toastTimer = setTimeout(function() {
+    toast.classList.remove("show");
   }, 3500);
 }
 
-/* =========================================
-   CONNECTION STATUS
-========================================= */
+function setConnectionStatus(connected, message) {
+  const text = $("#connectionText");
+  const pulse = $("#connectionPulse");
 
-function setConnectionStatus(message) {
-  const element = $('#connectionStatus');
+  if (text) {
+    text.textContent = message;
+  }
 
-  if (element) {
-    element.textContent = message;
+  if (pulse) {
+    pulse.style.background = connected ? "#5ee3ac" : "#ff7e9b";
+    pulse.style.boxShadow = connected
+      ? "0 0 0 4px #5ee3ac20"
+      : "0 0 0 4px #ff7e9b20";
   }
 }
 
-/* =========================================
-   ADMIN LOGIN SCREEN
-========================================= */
+function openModal(id) {
+  const modal = document.getElementById(id);
 
-function showLogin(message = '') {
-  let gate = $('#adminLoginGate');
-
-  if (!gate) {
-    gate = document.createElement('div');
-
-    gate.id = 'adminLoginGate';
-
-    gate.style.cssText = `
-      position:fixed;
-      inset:0;
-      z-index:99999;
-      background:#0b1020;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      font-family:Arial,sans-serif;
-    `;
-
-    gate.innerHTML = `
-      <form id="adminLoginForm"
-        style="
-          width:100%;
-          max-width:400px;
-          background:#151c30;
-          border:1px solid #303b56;
-          border-radius:18px;
-          padding:28px;
-          color:white;
-          box-sizing:border-box;
-        ">
-
-        <h2 style="margin-top:0;color:#e4c477">
-          Jiddahs Heaven
-        </h2>
-
-        <p style="color:#c0c8d8">
-          Administrator Sign In
-        </p>
-
-        <label for="adminLoginEmail">Email address</label>
-
-        <input
-          id="adminLoginEmail"
-          type="email"
-          autocomplete="username"
-          required
-          style="
-            width:100%;
-            box-sizing:border-box;
-            margin:8px 0 18px;
-            padding:13px;
-            border-radius:8px;
-            border:1px solid #46516b;
-            background:#0b1020;
-            color:white;
-          "
-        >
-
-        <label for="adminLoginPassword">Password</label>
-
-        <input
-          id="adminLoginPassword"
-          type="password"
-          autocomplete="current-password"
-          required
-          style="
-            width:100%;
-            box-sizing:border-box;
-            margin:8px 0 18px;
-            padding:13px;
-            border-radius:8px;
-            border:1px solid #46516b;
-            background:#0b1020;
-            color:white;
-          "
-        >
-
-        <p id="adminLoginMessage"
-          role="alert"
-          style="color:#ff9b9b;line-height:1.5">
-          ${escapeHtml(message)}
-        </p>
-
-        <button
-          id="adminLoginSubmit"
-          type="submit"
-          style="
-            width:100%;
-            padding:14px;
-            border:0;
-            border-radius:8px;
-            background:#e4c477;
-            color:#151c30;
-            font-weight:bold;
-            cursor:pointer;
-          ">
-          Sign In
-        </button>
-
-      </form>
-    `;
-
-    document.body.appendChild(gate);
-
-    $('#adminLoginForm').addEventListener('submit', handleLogin);
-  }
-
-  gate.style.display = 'flex';
-
-  const messageElement = $('#adminLoginMessage');
-
-  if (messageElement) {
-    messageElement.textContent = message;
+  if (modal) {
+    modal.classList.add("open");
   }
 }
 
-function hideLogin() {
-  const gate = $('#adminLoginGate');
+function closeModal(id) {
+  const modal = document.getElementById(id);
 
-  if (gate) {
-    gate.style.display = 'none';
+  if (modal) {
+    modal.classList.remove("open");
   }
 }
 
-/* =========================================
-   LOGIN
-========================================= */
+$all("[data-close-modal]").forEach(function(button) {
+  button.addEventListener("click", function() {
+    closeModal(button.dataset.closeModal);
+  });
+});
 
-async function handleLogin(event) {
-  event.preventDefault();
+$all(".modal").forEach(function(modal) {
+  modal.addEventListener("click", function(event) {
+    if (event.target === modal) {
+      modal.classList.remove("open");
+    }
+  });
+});
 
-  const email = $('#adminLoginEmail').value.trim();
-  const password = $('#adminLoginPassword').value;
-  const button = $('#adminLoginSubmit');
-  const message = $('#adminLoginMessage');
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    $all(".modal.open").forEach(function(modal) {
+      modal.classList.remove("open");
+    });
+  }
+});
+</script>
+<script>
+/* ==========================================
+   SUPABASE CONNECTION
+========================================== */
 
-  button.disabled = true;
-  button.textContent = 'Signing in...';
-  message.textContent = '';
+function initializeSupabase() {
+  if (!window.supabase || !window.supabase.createClient) {
+    setConnectionStatus(false, "Supabase library unavailable");
+    showToast("Unable to load the Supabase library.");
+    return false;
+  }
+
+  if (
+    !ADMIN_CONFIG.SUPABASE_URL ||
+    !ADMIN_CONFIG.SUPABASE_ANON_KEY
+  ) {
+    setConnectionStatus(false, "Supabase configuration required");
+
+    $("#projectUrlDisplay").value = "Not configured";
+    $("#publicKeyDisplay").value = "Public key required";
+
+    $("#loginScreen").style.display = "flex";
+
+    $("#loginMessage").textContent =
+      "Configure your Supabase project URL and public anon/publishable key before signing in.";
+
+    return false;
+  }
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    supabaseClient = window.supabase.createClient(
+      ADMIN_CONFIG.SUPABASE_URL,
+      ADMIN_CONFIG.SUPABASE_ANON_KEY
+    );
+
+    $("#projectUrlDisplay").value =
+      ADMIN_CONFIG.SUPABASE_URL;
+
+    $("#publicKeyDisplay").value =
+      "Public key configured";
+
+    setConnectionStatus(true, "Supabase client initialized");
+
+    return true;
+  } catch (error) {
+    console.error("Supabase initialization failed:", error);
+
+    setConnectionStatus(false, "Connection initialization failed");
+
+    return false;
+  }
+}
+
+
+/* ==========================================
+   AUTHENTICATION
+========================================== */
+
+async function checkAdminSession() {
+  if (!supabaseClient) return false;
+
+  try {
+    const {
+      data: { session },
+      error
+    } = await supabaseClient.auth.getSession();
+
+    if (error) throw error;
+
+    if (!session) {
+      showLoginScreen();
+      return false;
+    }
+
+    const user = session.user;
+
+    /*
+     * This browser-side check is an additional safeguard,
+     * not a replacement for database RLS policies.
+     */
+    const permitted =
+      ADMIN_CONFIG.ADMIN_USER_IDS.includes(user.id);
+
+    if (!permitted) {
+      await supabaseClient.auth.signOut();
+
+      showLoginScreen();
+
+      $("#loginMessage").textContent =
+        "This account is not authorized for the admin dashboard.";
+
+      return false;
+    }
+
+    currentAdmin = user;
+
+    $("#loginScreen").style.display = "none";
+
+    $("#adminEmailShort").textContent =
+      user.email || "Administrator";
+
+    $("#accountEmail").value =
+      user.email || "No email available";
+
+    $("#accountUserId").value = user.id;
+
+    $("#accountAuthStatus").value =
+      "Authenticated administrator";
+
+    await loadDashboardData();
+
+    return true;
+  } catch (error) {
+    console.error("Session verification failed:", error);
+
+    showLoginScreen();
+
+    return false;
+  }
+}
+
+
+function showLoginScreen() {
+  $("#loginScreen").style.display = "flex";
+
+  $("#accountAuthStatus").value = "Not authenticated";
+
+  setConnectionStatus(
+    Boolean(supabaseClient),
+    supabaseClient
+      ? "Waiting for administrator sign-in"
+      : "Supabase not configured"
+  );
+}
+
+
+$("#loginForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  if (!supabaseClient) {
+    showToast("Configure Supabase before signing in.");
+    return;
+  }
+
+  const email = $("#loginEmail").value.trim();
+  const password = $("#loginPassword").value;
+
+  const button = $("#loginButton");
+
+  button.disabled = true;
+  button.textContent = "Signing in…";
+
+  $("#loginMessage").textContent = "";
+
+  try {
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password
     });
 
     if (error) throw error;
 
-    if (!data.user || data.user.id !== ADMIN_UID) {
-      await supabase.auth.signOut();
-
-      throw new Error(
-        'This account is not authorized to access the administrator dashboard.'
-      );
-    }
-
-    await verifyAdmin(data.user);
-
-    hideLogin();
-
-    await initializeDashboard();
-
+    await checkAdminSession();
   } catch (error) {
-    message.textContent =
-      error.message || 'Sign in failed. Please try again.';
+    console.error("Admin sign-in failed:", error);
+
+    $("#loginMessage").textContent =
+      "Sign-in failed. Check your credentials and administrator authorization.";
+
   } finally {
     button.disabled = false;
-    button.textContent = 'Sign In';
+    button.textContent = "Sign in securely";
   }
-}
+});
 
-/* =========================================
-   VERIFY ADMIN ACCOUNT
-========================================= */
 
-async function verifyAdmin(user) {
-  if (!user || user.id !== ADMIN_UID) {
-    throw new Error('Administrator access denied.');
-  }
+$("#signOutButton").addEventListener("click", async function() {
+  if (!supabaseClient) return;
 
-  const { data, error } = await supabase
-    .from('admin_users')
-    .select('user_id')
-    .eq('user_id', user.id)
-    .maybeSingle();
+  const { error } = await supabaseClient.auth.signOut();
 
   if (error) {
-    throw new Error(
-      'Unable to verify admin_users access. Check the table, its user_id column, and its RLS policies. Details: ' +
+    showToast("Unable to sign out. Please try again.");
+    return;
+  }
+
+  currentAdmin = null;
+
+  showLoginScreen();
+
+  showToast("You have signed out.");
+});
+
+
+/* ==========================================
+   SAFE DATABASE ACCESS
+========================================== */
+
+async function fetchTable(tableName) {
+  if (!supabaseClient) {
+    throw new Error("Supabase is not configured.");
+  }
+
+  const { data, error } = await supabaseClient
+    .from(tableName)
+    .select("*")
+    .limit(500);
+
+  if (error) {
+    console.error(
+      "Failed to read table:",
+      tableName,
       error.message
     );
+
+    throw error;
   }
 
-  if (!data) {
-    throw new Error(
-      'Your account is not registered in admin_users.'
+  return data || [];
+}
+
+
+function getProductName(product) {
+  return product.name ||
+    product.product_name ||
+    product.title ||
+    "Unnamed product";
+}
+
+
+function getProductPrice(product) {
+  return Number(
+    product.price ??
+    product.amount ??
+    0
+  );
+}
+
+
+function getProductStock(product) {
+  return Number(
+    product.stock_quantity ??
+    product.quantity ??
+    product.stock ??
+    0
+  );
+}
+
+
+function getOrderAmount(order) {
+  return Number(
+    order.total_amount ??
+    order.total ??
+    order.amount ??
+    order.total_price ??
+    0
+  );
+}
+
+
+function getOrderStatus(order) {
+  return String(
+    order.status ||
+    order.order_status ||
+    "pending"
+  ).toLowerCase();
+}
+
+
+function getCustomerName(order) {
+  return order.customer_name ||
+    order.full_name ||
+    order.name ||
+    "Customer";
+}
+
+
+function getCustomerEmail(order) {
+  return order.customer_email ||
+    order.email ||
+    "";
+}
+
+
+/* ==========================================
+   LOAD DASHBOARD DATA
+========================================== */
+
+async function loadDashboardData() {
+  if (!supabaseClient || !currentAdmin) return;
+
+  setConnectionStatus(true, "Loading store data…");
+
+  const results = await Promise.allSettled([
+    fetchTable(ADMIN_CONFIG.TABLES.products),
+    fetchTable(ADMIN_CONFIG.TABLES.orders)
+  ]);
+
+  if (results[0].status === "fulfilled") {
+    productsData = results[0].value;
+  } else {
+    productsData = [];
+
+    console.error(
+      "Products could not be loaded. Check table permissions and schema."
     );
   }
 
-  currentAdmin = user;
+  if (results[1].status === "fulfilled") {
+    ordersData = results[1].value;
+  } else {
+    ordersData = [];
 
-  const email = user.email || 'Administrator';
-
-  if ($('#adminEmail')) {
-    $('#adminEmail').textContent = email;
+    console.error(
+      "Orders could not be loaded. Check table permissions and schema."
+    );
   }
 
-  if ($('#sidebarAdminEmail')) {
-    $('#sidebarAdminEmail').textContent = email;
-  }
+  renderDashboard();
+  renderProducts();
+  renderOrders();
+  renderInventory();
+  renderInsights();
 
-  if ($('#authStatus')) {
-    $('#authStatus').textContent = 'Authenticated';
-  }
-
-  setConnectionStatus('Connected to Supabase');
+  setConnectionStatus(
+    results.some(result => result.status === "fulfilled"),
+    "Dashboard data loading finished"
+  );
 }
 
-/* =========================================
-   SAFE TABLE LOADER
-========================================= */
 
-async function loadTable(tableName, columns) {
-  const { data, error } = await supabase
-    .from(tableName)
-    .select(columns);
+/* ==========================================
+   DASHBOARD OVERVIEW
+========================================== */
 
-  if (error) {
-    console.error(`Failed to load ${tableName}:`, error);
-    return {
-      data: [],
-      error
-    };
-  }
+function renderDashboard() {
+  const totalProducts = productsData.length;
+  const totalOrders = ordersData.length;
 
-  return {
-    data: data || [],
-    error: null
-  };
-}
+  const pendingCount = ordersData.filter(order =>
+    ["pending", "processing"].includes(getOrderStatus(order))
+  ).length;
 
-/* =========================================
-   LOAD PRODUCTS
-========================================= */
-
-async function loadProducts() {
-  const result = await loadTable(
-    'products',
-    'id,name,description,category,price,image_url,stock,is_active,created_at'
+  const sales = ordersData.reduce(
+    (sum, order) => sum + getOrderAmount(order),
+    0
   );
 
-  if (result.error) {
-    showToast('Could not load products: ' + result.error.message);
-    return;
-  }
+  const average = totalOrders ? sales / totalOrders : 0;
 
-  products = result.data;
+  $("#totalProducts").textContent = totalProducts;
+  $("#activeCount").textContent = totalProducts;
 
-  renderProducts();
-  renderInventory();
-  renderProductSummary();
-  renderTopProducts();
-  renderDashboardStats();
+  $("#totalOrders").textContent = totalOrders;
+  $("#pendingOrders").textContent = pendingCount + " pending";
+
+  $("#totalSales").textContent = formatNaira(sales);
+  $("#averageOrder").textContent = formatNaira(average);
+
+  $("#ordersTotalMini").textContent = totalOrders;
+  $("#ordersPendingMini").textContent = pendingCount;
+
+  $("#ordersCompletedMini").textContent =
+    ordersData.filter(order =>
+      ["delivered", "completed"].includes(getOrderStatus(order))
+    ).length;
+
+  renderRecentOrders();
+  renderInventoryWatch();
+  renderCharts();
 }
 
-/* =========================================
-   PRODUCT SUMMARY
-========================================= */
 
-function renderProductSummary() {
-  const active = products.filter(
-    product => product.is_active === true
-  ).length;
+function renderRecentOrders() {
+  const tbody = $("#recentOrders");
 
-  const lowStock = products.filter(
-    product => Number(product.stock) > 0 &&
-               Number(product.stock) <= 5
-  ).length;
-
-  const outOfStock = products.filter(
-    product => Number(product.stock) <= 0
-  ).length;
-
-  if ($('#productCount')) {
-    $('#productCount').textContent = products.length;
-  }
-
-  if ($('#activeProductCount')) {
-    $('#activeProductCount').textContent = active;
-  }
-
-  if ($('#lowStockCount')) {
-    $('#lowStockCount').textContent = lowStock;
-  }
-
-  if ($('#outOfStockCount')) {
-    $('#outOfStockCount').textContent = outOfStock;
-  }
-
-  if ($('#totalProducts')) {
-    $('#totalProducts').textContent = products.length;
-  }
-}
-
-/* =========================================
-   RENDER PRODUCTS TABLE
-========================================= */
-
-function renderProducts() {
-  const body = $('#productsTableBody');
-
-  if (!body) return;
-
-  const search = (
-    $('#productSearch')?.value || ''
-  ).toLowerCase();
-
-  const category = $('#categoryFilter')?.value || '';
-
-  const filtered = products.filter(product => {
-    const matchesSearch =
-      String(product.name || '').toLowerCase().includes(search) ||
-      String(product.category || '').toLowerCase().includes(search);
-
-    const matchesCategory =
-      !category || product.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const categories = [
-    ...new Set(
-      products
-        .map(product => product.category)
-        .filter(Boolean)
+  const recent = [...ordersData]
+    .sort((a, b) =>
+      new Date(b.created_at || 0) -
+      new Date(a.created_at || 0)
     )
-  ];
+    .slice(0, 6);
 
-  const categoryFilter = $('#categoryFilter');
-
-  if (categoryFilter && !categoryFilter.dataset.initialized) {
-    categoryFilter.innerHTML =
-      '<option value="">All categories</option>' +
-      categories.map(categoryName =>
-        `<option value="${escapeHtml(categoryName)}">${escapeHtml(categoryName)}</option>`
-      ).join('');
-
-    categoryFilter.dataset.initialized = 'true';
-  }
-
-  if (!filtered.length) {
-    body.innerHTML = `
-      <tr>
-        <td colspan="6">No products found.</td>
-      </tr>
-    `;
+  if (!recent.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="4" class="empty">No orders found.</td></tr>';
 
     return;
   }
 
-  body.innerHTML = filtered.map(product => `
+  tbody.innerHTML = recent.map(order => `
     <tr>
+      <td>${escapeHTML(String(order.id || "—").slice(0, 12))}</td>
+      <td>${escapeHTML(getCustomerName(order))}</td>
+      <td>${escapeHTML(formatNaira(getOrderAmount(order)))}</td>
       <td>
-        <div style="display:flex;align-items:center;gap:10px">
-          <img
-            src="${escapeHtml(product.image_url || '')}"
-            alt=""
-            loading="lazy"
-            onerror="this.style.display='none'"
-            style="
-              width:42px;
-              height:42px;
-              object-fit:cover;
-              border-radius:8px;
-            "
-          >
-
-          <div>
-            <strong>${escapeHtml(product.name)}</strong>
-            <div style="font-size:12px;opacity:.65">
-              ID: ${escapeHtml(product.id)}
-            </div>
-          </div>
-        </div>
-      </td>
-
-      <td>${escapeHtml(product.category || 'Uncategorized')}</td>
-
-      <td>${money(product.price)}</td>
-
-      <td>${Number(product.stock) || 0}</td>
-
-      <td>
-        ${product.is_active
-          ? '<span class="status-badge success">Active</span>'
-          : '<span class="status-badge">Inactive</span>'}
-      </td>
-
-      <td>
-        <button type="button" data-edit-product="${escapeHtml(product.id)}">
-          Edit
-        </button>
-
-        <button type="button" data-delete-product="${escapeHtml(product.id)}">
-          Delete
-        </button>
+        <span class="status ${escapeHTML(getOrderStatus(order))}">
+          ${escapeHTML(getOrderStatus(order))}
+        </span>
       </td>
     </tr>
-  `).join('');
+  `).join("");
 }
 
-/* =========================================
-   CREATE / EDIT PRODUCT MODAL
-========================================= */
 
-function openProductModal(product = null) {
-  const modal = $('#productModal');
-  const form = $('#productForm');
+function renderInventoryWatch() {
+  const tbody = $("#inventoryWatch");
 
-  if (!modal || !form) {
-    showToast('Product modal or form is missing from admin.html.');
-    return;
-  }
+  const attention = productsData
+    .filter(product =>
+      getProductStock(product) <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD
+    )
+    .slice(0, 6);
 
-  form.reset();
-
-  $('#productId').value = product?.id ?? '';
-  $('#productName').value = product?.name ?? '';
-  $('#productPrice').value = product?.price ?? '';
-  $('#productStock').value = product?.stock ?? 0;
-  $('#productCategory').value = product?.category ?? '';
-  $('#productImage').value = product?.image_url ?? '';
-  $('#productDescription').value = product?.description ?? '';
-  $('#productActive').checked = product
-    ? product.is_active === true
-    : true;
-
-  if ($('#productModalTitle')) {
-    $('#productModalTitle').textContent =
-      product ? 'Edit Product' : 'Add Product';
-  }
-
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
-}
-
-function closeProductModal() {
-  const modal = $('#productModal');
-
-  if (!modal) return;
-
-  modal.classList.remove('open');
-  modal.setAttribute('aria-hidden', 'true');
-}
-
-/* =========================================
-   SAVE PRODUCT
-========================================= */
-
-async function saveProduct(event) {
-  event.preventDefault();
-
-  if (!currentAdmin) {
-    showToast('Please sign in first.');
-    return;
-  }
-
-  const button = $('#saveProductButton');
-
-  const id = $('#productId').value;
-
-  const name = $('#productName').value.trim();
-  const price = Number($('#productPrice').value);
-  const stock = Number($('#productStock').value);
-
-  if (!name || !Number.isFinite(price) || price < 0) {
-    showToast('Enter a valid product name and price.');
-    return;
-  }
-
-  if (!Number.isInteger(stock) || stock < 0) {
-    showToast('Stock must be a whole number of zero or more.');
-    return;
-  }
-
-  const product = {
-    name,
-    price,
-    stock,
-    category: $('#productCategory').value.trim() || null,
-    image_url: $('#productImage').value.trim() || null,
-    description: $('#productDescription').value.trim() || null,
-    is_active: $('#productActive').checked
-  };
-
-  button.disabled = true;
-  button.textContent = 'Saving...';
-
-  try {
-    let result;
-
-    if (id) {
-      result = await supabase
-        .from('products')
-        .update(product)
-        .eq('id', id)
-        .select();
-    } else {
-      result = await supabase
-        .from('products')
-        .insert(product)
-        .select();
-    }
-
-    if (result.error) throw result.error;
-
-    closeProductModal();
-
-    await loadProducts();
-
-    showToast(id ? 'Product updated.' : 'Product added.');
-
-  } catch (error) {
-    console.error('Save product failed:', error);
-
-    showToast(
-      'Could not save product. Check your products RLS policies and database columns. ' +
-      error.message
-    );
-  } finally {
-    button.disabled = false;
-    button.textContent = 'Save Product';
-  }
-}
-
-/* =========================================
-   DELETE PRODUCT
-========================================= */
-
-async function deleteProduct(id) {
-  const product = products.find(
-    item => String(item.id) === String(id)
-  );
-
-  if (!product) return;
-
-  if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) {
-    return;
-  }
-
-  const { error } = await supabase
-    .from('products')
-    .delete()
-    .eq('id', id);
-
-  if (error) {
-    showToast('Could not delete product: ' + error.message);
-    return;
-  }
-
-  await loadProducts();
-
-  showToast('Product deleted.');
-}
-
-/* =========================================
-   INVENTORY
-========================================= */
-
-function renderInventory() {
-  const body = $('#inventoryTableBody');
-
-  if (!body) return;
-
-  if (!products.length) {
-    body.innerHTML = `
-      <tr>
-        <td colspan="4">No inventory records available.</td>
-      </tr>
-    `;
+  if (!attention.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="3" class="empty">No low-stock products detected.</td></tr>';
 
     return;
   }
 
-  body.innerHTML = products.map(product => {
-    const stock = Number(product.stock) || 0;
-
-    const status = stock <= 0
-      ? 'Out of stock'
-      : stock <= 5
-        ? 'Low stock'
-        : 'In stock';
+  tbody.innerHTML = attention.map(product => {
+    const stock = getProductStock(product);
 
     return `
       <tr>
-        <td>${escapeHtml(product.name)}</td>
+        <td>${escapeHTML(getProductName(product))}</td>
         <td>${stock}</td>
-        <td>${status}</td>
         <td>
-          <button type="button" data-edit-product="${escapeHtml(product.id)}">
+          <span class="status ${stock === 0 ? "failed" : "pending"}">
+            ${stock === 0 ? "Out of stock" : "Low stock"}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+
+/* ==========================================
+   PRODUCT CATALOGUE
+========================================== */
+
+function renderProducts() {
+  const tbody = $("#productsTable");
+
+  const search = ($("#productSearch")?.value || "")
+    .trim()
+    .toLowerCase();
+
+  const filter = $("#productFilter")?.value || "all";
+
+  let list = productsData.filter(product => {
+    const name = getProductName(product).toLowerCase();
+    const stock = getProductStock(product);
+
+    const matchesSearch = name.includes(search);
+
+    let matchesFilter = true;
+
+    if (filter === "out") matchesFilter = stock === 0;
+
+    if (filter === "low") {
+      matchesFilter =
+        stock > 0 &&
+        stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD;
+    }
+
+    if (filter === "in") matchesFilter = stock > 0;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  $("#productTotalMini").textContent = productsData.length;
+
+  $("#stockTotalMini").textContent = productsData.reduce(
+    (sum, product) => sum + getProductStock(product),
+    0
+  );
+
+  $("#lowStockMini").textContent = productsData.filter(product =>
+    getProductStock(product) <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD
+  ).length;
+
+  $("#productsFoot").textContent =
+    list.length + " products displayed";
+
+  if (!list.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="5" class="empty">No matching products found.</td></tr>';
+
+    return;
+  }
+
+  tbody.innerHTML = list.map(product => {
+    const stock = getProductStock(product);
+    const id = String(product.id ?? "");
+
+    return `
+      <tr>
+        <td>
+          <div class="item-name">
+            <div class="thumb">▦</div>
+            <div>
+              <strong>${escapeHTML(getProductName(product))}</strong>
+              <small>${escapeHTML(product.category || "Uncategorised")}</small>
+            </div>
+          </div>
+        </td>
+        <td>${escapeHTML(formatNaira(getProductPrice(product)))}</td>
+        <td>${stock}</td>
+        <td>
+          <span class="status ${
+            stock === 0 ? "failed" :
+            stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD ? "pending" : ""
+          }">
+            ${
+              stock === 0 ? "Out of stock" :
+              stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD ? "Low stock" :
+              "In stock"
+            }
+          </span>
+        </td>
+        <td>
+          <button class="btn soft sm" data-edit-product="${escapeHTML(id)}">
             Edit
           </button>
         </td>
       </tr>
     `;
-  }).join('');
+  }).join("");
 }
 
-/* =========================================
-   LOAD ORDERS
-========================================= */
 
-async function loadOrders() {
-  const result = await loadTable(
-    'orders',
-    'id,customer_name,customer_email,customer_phone,delivery_address,total_amount,payment_status,payment_reference,items,created_at'
-  );
-
-  if (result.error) {
-    orders = [];
-
-    renderOrders();
-    renderDashboardStats();
-    renderCustomers();
-    renderCharts();
-
-    showToast(
-      'Orders could not be loaded. Check the orders table and its column names.'
-    );
-
-    return;
-  }
-
-  orders = result.data;
-
-  renderOrders();
-  renderDashboardStats();
-  renderCustomers();
-  renderCharts();
-  renderTopProducts();
-}
-
-/* =========================================
-   ORDER STATUS
-========================================= */
-
-function normalizedStatus(order) {
-  return String(
-    order.payment_status || 'pending'
-  ).toLowerCase();
-}
-
-function isPaid(order) {
-  return [
-    'paid',
-    'success',
-    'successful',
-    'completed'
-  ].includes(normalizedStatus(order));
-}
-
-/* =========================================
-   ORDERS TABLE
-========================================= */
+/* ==========================================
+   ORDERS
+========================================== */
 
 function renderOrders() {
-  const body = $('#ordersTableBody');
+  const tbody = $("#ordersTable");
 
-  if (!body) return;
+  const search = ($("#orderSearch")?.value || "")
+    .trim()
+    .toLowerCase();
 
-  const search = (
-    $('#orderSearch')?.value || ''
-  ).toLowerCase();
+  const filter = $("#orderFilter")?.value || "all";
 
-  const status = (
-    $('#orderStatusFilter')?.value || ''
-  ).toLowerCase();
+  const list = ordersData.filter(order => {
+    const text = [
+      order.id,
+      getCustomerName(order),
+      getCustomerEmail(order)
+    ].join(" ").toLowerCase();
 
-  const filtered = orders.filter(order => {
-    const matchesSearch =
-      String(order.customer_name || '').toLowerCase().includes(search) ||
-      String(order.customer_email || '').toLowerCase().includes(search) ||
-      String(order.id || '').toLowerCase().includes(search);
+    const matchesSearch = text.includes(search);
 
-    const matchesStatus =
-      !status || normalizedStatus(order) === status;
+    const matchesFilter =
+      filter === "all" || getOrderStatus(order) === filter;
 
-    return matchesSearch && matchesStatus;
+    return matchesSearch && matchesFilter;
   });
 
-  if (!filtered.length) {
-    body.innerHTML = `
-      <tr>
-        <td colspan="6">No orders found.</td>
-      </tr>
-    `;
+  $("#ordersFoot").textContent =
+    list.length + " orders displayed";
+
+  if (!list.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="6" class="empty">No matching orders found.</td></tr>';
 
     return;
   }
 
-  body.innerHTML = filtered.map(order => `
-    <tr>
-      <td>#${escapeHtml(order.id)}</td>
-      <td>${escapeHtml(order.customer_name || 'Customer')}</td>
-      <td>${money(order.total_amount)}</td>
-      <td>${escapeHtml(order.payment_status || 'Pending')}</td>
-      <td>${formatDate(order.created_at)}</td>
-      <td>
-        <button type="button" data-view-order="${escapeHtml(order.id)}">
-          View
-        </button>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = list.map(order => {
+    const id = String(order.id ?? "");
+
+    return `
+      <tr>
+        <td>${escapeHTML(id.slice(0, 15))}</td>
+        <td>${escapeHTML(getCustomerName(order))}</td>
+        <td>${escapeHTML(formatDate(order.created_at))}</td>
+        <td>${escapeHTML(formatNaira(getOrderAmount(order)))}</td>
+        <td>
+          <span class="status ${escapeHTML(getOrderStatus(order))}">
+            ${escapeHTML(getOrderStatus(order))}
+          </span>
+        </td>
+        <td>
+          <button class="btn soft sm" data-view-order="${escapeHTML(id)}">
+            Details
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
-/* =========================================
-   ORDER DETAILS
-========================================= */
 
-function openOrderDetails(id) {
-  const order = orders.find(
-    item => String(item.id) === String(id)
+/* ==========================================
+   INVENTORY
+========================================== */
+
+function renderInventory() {
+  const tbody = $("#inventoryTable");
+
+  const search = ($("#inventorySearch")?.value || "")
+    .trim()
+    .toLowerCase();
+
+  const filter = $("#inventoryFilter")?.value || "all";
+
+  const totalUnits = productsData.reduce(
+    (sum, product) => sum + getProductStock(product),
+    0
   );
 
-  if (!order) return;
+  const lowCount = productsData.filter(product => {
+    const stock = getProductStock(product);
 
-  const modal = $('#orderModal');
-  const details = $('#orderDetails');
+    return stock > 0 &&
+      stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD;
+  }).length;
 
-  if (!modal || !details) return;
+  const outCount = productsData.filter(product =>
+    getProductStock(product) === 0
+  ).length;
 
-  let items = order.items;
+  $("#inventoryUnitsMini").textContent = totalUnits;
+  $("#inventoryLowMini").textContent = lowCount;
+  $("#inventoryOutMini").textContent = outCount;
 
-  if (typeof items === 'string') {
-    try {
-      items = JSON.parse(items);
-    } catch {
-      items = [];
+  const list = productsData.filter(product => {
+    const stock = getProductStock(product);
+
+    const matchesSearch =
+      getProductName(product).toLowerCase().includes(search);
+
+    let matchesFilter = true;
+
+    if (filter === "low") {
+      matchesFilter =
+        stock > 0 &&
+        stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD;
     }
+
+    if (filter === "out") matchesFilter = stock === 0;
+    if (filter === "available") matchesFilter = stock > 0;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  $("#inventoryTableFoot").textContent =
+    list.length + " products displayed";
+
+  if (!list.length) {
+    tbody.innerHTML =
+      '<tr><td colspan="5" class="empty">No matching inventory found.</td></tr>';
+
+    return;
   }
 
-  let itemHtml = '';
+  tbody.innerHTML = list.map(product => {
+    const stock = getProductStock(product);
 
-  if (Array.isArray(items)) {
-    itemHtml = items.map(item => `
-      <li>
-        ${escapeHtml(item.name || item.product_name || 'Product')}
-        — Quantity: ${escapeHtml(item.quantity ?? 1)}
-      </li>
-    `).join('');
-  }
-
-  details.innerHTML = `
-    <p><strong>Order:</strong> #${escapeHtml(order.id)}</p>
-    <p><strong>Customer:</strong> ${escapeHtml(order.customer_name)}</p>
-    <p><strong>Email:</strong> ${escapeHtml(order.customer_email)}</p>
-    <p><strong>Phone:</strong> ${escapeHtml(order.customer_phone)}</p>
-    <p><strong>Delivery address:</strong> ${escapeHtml(order.delivery_address)}</p>
-    <p><strong>Total:</strong> ${money(order.total_amount)}</p>
-    <p><strong>Payment status:</strong> ${escapeHtml(order.payment_status)}</p>
-    <p><strong>Reference:</strong> ${escapeHtml(order.payment_reference)}</p>
-    <p><strong>Date:</strong> ${formatDate(order.created_at)}</p>
-    <h4>Items</h4>
-    <ul>${itemHtml || '<li>Item details unavailable.</li>'}</ul>
-  `;
-
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
+    return `
+      <tr>
+        <td>${escapeHTML(getProductName(product))}</td>
+        <td>${escapeHTML(formatNaira(getProductPrice(product)))}</td>
+        <td>${stock}</td>
+        <td>
+          <span class="status ${
+            stock === 0 ? "failed" :
+            stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD ? "pending" : ""
+          }">
+            ${
+              stock === 0 ? "Out of stock" :
+              stock <= ADMIN_CONFIG.LOW_STOCK_THRESHOLD ? "Low stock" :
+              "Available"
+            }
+          </span>
+        </td>
+        <td>
+          <button class="btn soft sm" data-edit-product="${escapeHTML(String(product.id ?? ""))}">
+            Edit
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
+
+/* ==========================================
+   STORE INSIGHTS
+========================================== */
+
+function renderInsights() {
+  const sales = ordersData.reduce(
+    (sum, order) => sum + getOrderAmount(order),
+    0
+  );
+
+  $("#insightOrders").textContent = ordersData.length;
+  $("#insightSales").textContent = formatNaira(sales);
+
+  $("#insightAverage").textContent = formatNaira(
+    ordersData.length ? sales / ordersData.length : 0
+  );
+
+  $("#insightProducts").textContent = productsData.length;
+}
+
+
+/* ==========================================
+   CHARTS
+========================================== */
+
+function renderCharts() {
+  if (!window.Chart) return;
+
+  const salesCanvas = $("#salesChart");
+  const statusCanvas = $("#statusChart");
+
+  if (salesChartInstance) salesChartInstance.destroy();
+  if (statusChartInstance) statusChartInstance.destroy();
+
+  const days = Number($("#salesPeriod")?.value || 30);
+  const labels = [];
+  const values = [];
+
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date();
+
+    date.setDate(date.getDate() - i);
+
+    labels.push(date.toLocaleDateString("en-NG", {
+      day: "numeric",
+      month: "short"
+    }));
+
+    const dateKey = date.toDateString();
+
+    const amount = ordersData
+      .filter(order => {
+        const created = order.created_at
+          ? new Date(order.created_at)
+          : null;
+
+        return created &&
+          !Number.isNaN(created.getTime()) &&
+          created.toDateString() === dateKey;
+      })
+      .reduce((sum, order) => sum + getOrderAmount(order), 0);
+
+    values.push(amount);
+  }
+
+  salesChartInstance = new Chart(salesCanvas, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Recorded sales",
+        data: values,
+        borderColor: "#6558f5",
+        backgroundColor: "#6558f51c",
+        fill: true,
+        tension: 0.35,
+        borderWidth: 2,
+        pointRadius: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: value => "₦" + value
+          }
+        }
+      }
+    }
+  });
+
+  const statuses = {};
+
+  ordersData.forEach(order => {
+    const status = getOrderStatus(order);
+
+    statuses[status] = (statuses[status] || 0) + 1;
+  });
+
+  statusChartInstance = new Chart(statusCanvas, {
+    type: "doughnut",
+    data: {
+      labels: Object.keys(statuses),
+      datasets: [{
+        data: Object.values(statuses),
+        backgroundColor: [
+          "#6558f5",
+          "#b8f3d7",
+          "#edc982",
+          "#ffbfc9",
+          "#9e9bf9",
+          "#a7b7ce"
+        ],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom"
+        }
+      }
+    }
+  });
+}
+</script>
+<script>
 /* =========================================
-   DASHBOARD TOTALS
+   JIDDERHS HEAVEN ADMIN — PART 8
+   FINAL EVENT HANDLERS AND INITIALIZATION
 ========================================= */
 
-function renderDashboardStats() {
-  const totalValue = orders.reduce(
-    (sum, order) => sum
+/* ---------- NAVIGATION ---------- */
+
+document.querySelectorAll("[data-view]").forEach(button => {
+  button.addEventListener("click", () => {
+    const viewName = button.dataset.view;
+
+    document.querySelectorAll("[data-view]").forEach(item => {
+      item.classList.toggle("active", item === button);
+    });
+
+    document.querySelectorAll(".view").forEach(view => {
+      view.classList.toggle(
+        "active",
+        view.id === "view-" + viewName
+      );
+    });
+
+    const title = $("#pageTitle");
+
+    if (title) {
+      title.textContent =
+        button.dataset.title ||
+        button.textContent.trim() ||
+        "Dashboard";
+    }
+  });
+});
+
+
+/* ---------- REFRESH BUTTON ---------- */
+
+const refreshButton = $("#refreshButton");
+
+if (refreshButton) {
+  refreshButton.addEventListener("click", async () => {
+    try {
+      refreshButton.disabled = true;
+
+      await renderDashboard();
+
+      if (typeof renderProducts === "function") {
+        await renderProducts();
+      }
+
+      if (typeof renderOrders === "function") {
+        await renderOrders();
+      }
+
+      showToast("Dashboard refreshed.");
+    } catch (error) {
+      console.error("Refresh error:", error);
+      showToast("Refresh failed. Check the console.");
+    } finally {
+      refreshButton.disabled = false;
+    }
+  });
+}
+
+
+/* ---------- PRODUCT SEARCH ---------- */
+
+const productSearch = $("#productSearch");
+
+if (productSearch) {
+  productSearch.addEventListener("input", () => {
+    const query = productSearch.value
+      .trim()
+      .toLowerCase();
+
+    document.querySelectorAll("#productsTable tbody tr")
+      .forEach(row => {
+        row.hidden = !row.textContent
+          .toLowerCase()
+          .includes(query);
+      });
+  });
+}
+
+
+/* ---------- ORDER SEARCH ---------- */
+
+const orderSearch = $("#orderSearch");
+
+if (orderSearch) {
+  orderSearch.addEventListener("input", () => {
+    const query = orderSearch.value
+      .trim()
+      .toLowerCase();
+
+    document.querySelectorAll("#ordersTable tbody tr")
+      .forEach(row => {
+        row.hidden = !row.textContent
+          .toLowerCase()
+          .includes(query);
+      });
+  });
+}
+
+
+/* ---------- PRODUCT MODAL ---------- */
+
+const addProductButton = $("#addProductButton");
+
+if (addProductButton) {
+  addProductButton.addEventListener("click", () => {
+    const form = $("#productForm");
+
+    if (form) form.reset();
+
+    const productId = $("#productId");
+
+    if (productId) productId.value = "";
+
+    const modalTitle = $("#productModalTitle");
+
+    if (modalTitle) {
+      modalTitle.textContent = "Add product";
+    }
+
+    openModal("productModal");
+  });
+}
+
+
+/* ---------- EDIT PRODUCT ---------- */
+
+document.addEventListener("click", async event => {
+  const button = event.target.closest("[data-edit-product]");
+
+  if (!button) return;
+
+  const productId = button.dataset.editProduct;
+
+  if (!productId || !supabaseClient) {
+    showToast("Product information is unavailable.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("*")
+      .eq("id", productId)
+      .single();
+
+    if (error) throw error;
+
+    $("#productId").value = data.id;
+    $("#productName").value = data.name || "";
+    $("#productPrice").value = data.price ?? "";
+    $("#productStock").value = data.stock ?? "";
+    $("#productDescription").value =
+      data.description || "";
+
+    $("#productModalTitle").textContent = "Edit product";
+
+    openModal("productModal");
+  } catch (error) {
+    console.error("Edit product error:", error);
+    showToast("Could not load product.");
+  }
+});
+
+
+/* ---------- SAVE PRODUCT ---------- */
+
+const productForm = $("#productForm");
+
+if (productForm) {
+  productForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const productId = $("#productId").value;
+
+    const product = {
+      name: $("#productName").value.trim(),
+      price: Number($("#productPrice").value),
+      stock: Number($("#productStock").value),
+      description: $("#productDescription").value.trim()
+    };
+
+    if (!product.name || product.price < 0 ||
+        product.stock < 0) {
+      showToast("Enter valid product details.");
+      return;
+    }
+
+    const saveButton =
+      productForm.querySelector('[type="submit"]');
+
+    if (saveButton) saveButton.disabled = true;
+
+    try {
+      let result;
+
+      if (productId) {
+        result = await supabaseClient
+          .from("products")
+          .update(product)
+          .eq("id", productId);
+      } else {
+        result = await supabaseClient
+          .from("products")
+          .insert(product);
+      }
+
+      if (result.error) throw result.error;
+
+      closeModal("productModal");
+
+      showToast(
+        productId
+          ? "Product updated."
+          : "Product added."
+      );
+
+      if (typeof renderProducts === "function") {
+        await renderProducts();
+      }
+
+      await renderDashboard();
+    } catch (error) {
+      console.error("Save product error:", error);
+      showToast(
+        "Could not save product. Check your table columns and permissions."
+      );
+    } finally {
+      if (saveButton) saveButton.disabled = false;
+    }
+  });
+}
+
+
+/* ---------- ORDER STATUS UPDATE ---------- */
+
+document.addEventListener("change", async event => {
+  const select = event.target.closest("[data-order-status]");
+
+  if (!select) return;
+
+  const orderId = select.dataset.orderStatus;
+  const status = select.value;
+
+  if (!orderId || !status) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from("orders")
+      .update({ status })
+      .eq("id", orderId);
+
+    if (error) throw error;
+
+    showToast("Order status updated.");
+
+    if (typeof renderOrders === "function") {
+      await renderOrders();
+    }
+
+    await renderDashboard();
+  } catch (error) {
+    console.error("Order status error:", error);
+    showToast("Could not update order status.");
+  }
+});
+
+
+/* ---------- CSV EXPORT ---------- */
+
+function exportTableToCSV(tableId, filename) {
+  const table = document.getElementById(tableId);
+
+  if (!table) {
+    showToast("Table not found.");
+    return;
+  }
+
+  const rows = [...table.querySelectorAll("tr")];
+
+  const csv = rows.map(row => {
+    return [...row.querySelectorAll("th, td")]
+      .map(cell => {
+        const value = cell.innerText
+          .replace(/\s+/g, " ")
+          .trim()
+          .replace(/"/g, '""');
+
+        return '"' + value + '"';
+      })
+      .join(",");
+  }).join("\n");
+
+  const blob = new Blob(
+    ["\uFEFF" + csv],
+    { type: "text/csv;charset=utf-8;" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
+
+const exportProductsButton = $("#exportProductsButton");
+
+if (exportProductsButton) {
+  exportProductsButton.addEventListener("click", () => {
+    exportTableToCSV(
+      "productsTable",
+      "jidderhs-heaven-products.csv"
+    );
+  });
+}
+
+const exportOrdersButton = $("#exportOrdersButton");
+
+if (exportOrdersButton) {
+  exportOrdersButton.addEventListener("click", () => {
+    exportTableToCSV(
+      "ordersTable",
+      "jidderhs-heaven-orders.csv"
+    );
+  });
+}
+
+
+/* ---------- SIGN OUT ---------- */
+
+const logoutButton = $("#logoutButton");
+
+if (logoutButton) {
+  logoutButton.addEventListener("click", async () => {
+    try {
+      const { error } =
+        await supabaseClient.auth.signOut();
+
+      if (error) throw error;
+
+      location.reload();
+    } catch (error) {
+      console.error("Sign-out error:", error);
+      showToast("Could not sign out.");
+    }
+  });
+}
+
+
+/* ---------- INITIALIZE DASHBOARD ---------- */
+
+(async function initializeAdminDashboard() {
+  try {
+    if (!supabaseClient) {
+      console.error("Supabase client is not initialized.");
+      showToast("Supabase configuration is missing.");
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient.auth.getSession();
+
+    if (error) throw error;
+
+    if (!data.session) {
+      const loginScreen = $("#loginScreen");
+
+      if (loginScreen) {
+        loginScreen.style.display = "flex";
+      }
+
+      return;
+    }
+
+    await renderDashboard();
+
+    if (typeof renderProducts === "function") {
+      await renderProducts();
+    }
+
+    if (typeof renderOrders === "function") {
+      await renderOrders();
+    }
+
+    console.log("Jidderhs Heaven Admin initialized.");
+  } catch (error) {
+    console.error("Admin initialization error:", error);
+    showToast("Dashboard initialization failed.");
+  }
+})();
 </script>
+
 </body>
 </html>
