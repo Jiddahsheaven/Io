@@ -1,29 +1,1513 @@
-n class="status status-${safe(pay(o))}">${safe(pay(o))}</span></td><td>${date(o.created_at)}</td></tr>`).join('')}
-function renderOrders(){const body=$('#ordersTableBody'),q=$('#orderSearch').value.trim().toLowerCase(),f=$('#orderStatusFilter').value,list=state.orders.filter(o=>[o.id,o.customer_name,o.customer_email,o.payment_reference].some(v=>String(v||'').toLowerCase().includes(q))&&(f==='all'||pay(o)===f));if(!state.ordersAvailable||!list.length){body.innerHTML=`<tr><td colspan="7" class="empty-state">${state.ordersAvailable?'No matching orders found.':'Orders table not connected yet.'}</td></tr>`;return}body.innerHTML=list.map(o=>`<tr><td>${safe(o.id)}</td><td>${safe(o.customer_name||'—')}</td><td>${money(o.total_amount)}</td><td><span class="status status-${safe(pay(o))}">${safe(pay(o))}</span></td><td>${safe(o.payment_reference||'—')}</td><td>${date(o.created_at)}</td><td><button class="btn btn-outline btn-small" data-view-order="${safe(o.id)}">View</button></td></tr>`).join('')}
-$('#orderSearch').addEventListener('input',renderOrders);$('#orderStatusFilter').addEventListener('change',renderOrders);
-$('#ordersTableBody').addEventListener('click',e=>{const b=e.target.closest('[data-view-order]');if(!b)return;const o=state.orders.find(x=>String(x.id)===b.dataset.viewOrder);if(!o)return;$('#orderDetails').innerHTML=`<h4>Order ${safe(o.id)}</h4><div class="detail-row"><span>Customer</span><strong>${safe(o.customer_name||'—')}</strong></div><div class="detail-row"><span>Email</span><strong>${safe(o.customer_email||'—')}</strong></div><div class="detail-row"><span>Phone</span><strong>${safe(o.customer_phone||'—')}</strong></div><div class="detail-row"><span>Delivery address</span><strong>${safe(o.delivery_address||'—')}</strong></div><div class="detail-row"><span>Total</span><strong>${money(o.total_amount)}</strong></div><div class="detail-row"><span>Payment status</span><strong>${safe(pay(o))}</strong></div><div class="detail-row"><span>Reference</span><strong>${safe(o.payment_reference||'—')}</strong></div><h4 style="margin-top:16px">Items</h4><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:10px">${safe(JSON.stringify(o.items||[],null,2))}</pre>`});
-function renderRefunds(){const body=$('#refundsTableBody'),q=$('#refundSearch').value.trim().toLowerCase(),f=$('#refundStatusFilter').value,list=state.refunds.filter(r=>[r.id,r.order_id,r.customer_name,r.reason].some(v=>String(v||'').toLowerCase().includes(q))&&(f==='all'||String(r.status||'pending').toLowerCase()===f));if(!state.refundsAvailable||!list.length){body.innerHTML=`<tr><td colspan="7" class="empty-state">${state.refundsAvailable?'No matching refund requests.':'Refund table not connected yet.'}</td></tr>`;return}body.innerHTML=list.map(r=>`<tr><td>${safe(r.id)}</td><td>${safe(r.order_id||'—')}</td><td>${safe(r.customer_name||'—')}</td><td>${money(r.amount)}</td><td>${safe(r.reason||'—')}</td><td><span class="status status-${safe(String(r.status||'pending').toLowerCase())}">${safe(r.status||'pending')}</span></td><td>${date(r.created_at)}</td></tr>`).join('')}
-$('#refundSearch').addEventListener('input',renderRefunds);$('#refundStatusFilter').addEventListener('change',renderRefunds);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* SECTION 06 — DATABASE LOADING */
-async function loadProducts(){text('productConnectionStatus','Loading…');const {data,error}=await supabase.from('products').select('id,name,description,category,price,image_url,stock,is_active,created_at').order('created_at',{ascending:false});if(error)throw error;state.products=data||[];text('productConnectionStatus',`${state.products.length} products loaded`);renderProducts();updateStats()}
-async function loadOrders(){text('orderConnectionStatus','Checking orders table…');const {data,error}=await supabase.from('orders').select('id,customer_name,customer_email,customer_phone,delivery_address,total_amount,payment_status,payment_reference,items,created_at').order('created_at',{ascending:false}).limit(500);if(error){state.orders=[];state.ordersAvailable=false;text('orderConnectionStatus','Not connected — check schema/RLS');console.warn('Orders query failed:',error.message)}else{state.orders=data||[];state.ordersAvailable=true;text('orderConnectionStatus',`${state.orders.length} orders loaded`)}renderOrders();renderRecent();updateStats()}
-async function loadRefunds(){text('refundConnectionStatus','Checking refund table…');const {data,error}=await supabase.from('refund_requests').select('id,order_id,customer_name,amount,reason,status,created_at').order('created_at',{ascending:false}).limit(500);if(error){state.refunds=[];state.refundsAvailable=false;text('refundConnectionStatus','Not connected — table/RLS needed');console.info('Refund query unavailable:',error.message)}else{state.refunds=data||[];state.refundsAvailable=true;text('refundConnectionStatus',`${state.refunds.length} requests loaded`)}renderRefunds()}
-async function refreshDashboard(){const b=$('#refreshButton');b.disabled=true;b.textContent='Refreshing…';try{await loadProducts();await Promise.allSettled([loadOrders(),loadRefunds()]);connection(true,'Connected');notice('Dashboard refreshed. Sections show only data successfully returned by Supabase.','success')}catch(err){console.error('Dashboard refresh failed:',err);connection(false,'Connection issue');notice('Could not load products: '+(err.message||'Check Supabase configuration and RLS policies.'),'error');text('productConnectionStatus','Connection failed')}finally{b.disabled=false;b.textContent='↻ Refresh data'}}
-$('#refreshButton').addEventListener('click',refreshDashboard);
+<title>Jiddahs Heaven | Executive Command Centre</title>
 
-/* SECTION 07 — SECURE ADMIN AUTHENTICATION */
-const loginStyle=document.createElement('style');loginStyle.textContent='#adminLoginGate{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:#f7f4ee}#adminLoginCard{width:100%;max-width:410px;padding:30px 24px;background:white;border:1px solid #e8e2d8;border-radius:18px;box-shadow:0 15px 45px #0002}#adminLoginCard h2{margin:0 0 8px;font:600 27px "Playfair Display",serif}#adminLoginCard p{color:#77796f;font-size:12px;line-height:1.5}#adminLoginCard label{display:block;margin:17px 0 7px;font-size:12px;font-weight:700}#adminLoginCard input{box-sizing:border-box;width:100%;padding:13px;border:1px solid #e8e2d8;border-radius:9px;font-size:16px}#adminLoginCard button{width:100%;margin-top:20px;padding:13px;border:0;border-radius:9px;background:#b89552;color:white;font-weight:700}#adminLoginMessage{color:#a32626!important;overflow-wrap:anywhere}';document.head.appendChild(loginStyle);
-const gate=document.createElement('div');gate.id='adminLoginGate';gate.innerHTML='<div id="adminLoginCard"><h2>Jiddahs Heaven</h2><p>Secure administrator sign in</p><form id="adminLoginForm"><label for="adminLoginEmail">Email address</label><input id="adminLoginEmail" type="email" autocomplete="username" required><label for="adminLoginPassword">Password</label><input id="adminLoginPassword" type="password" autocomplete="current-password" required><button id="adminLoginButton" type="submit">Sign in securely</button><p id="adminLoginMessage" role="alert" aria-live="polite"></p></form></div>';document.body.appendChild(gate);
-async function verifyAdmin(session){if(!session?.user)throw new Error('No authenticated session was found.');if(session.user.id!==ADMIN_UID){await supabase.auth.signOut();throw new Error('This account is not authorized as an administrator.')}const {data,error}=await supabase.from('admin_users').select('user_id').eq('user_id',session.user.id).maybeSingle();if(error)throw new Error('Could not verify administrator permissions: '+error.message);if(!data||data.user_id!==ADMIN_UID){await supabase.auth.signOut();throw new Error('Administrator verification failed. Check the admin_users record and its SELECT policy.')}return true}
-async function initialize(){gate.style.display='none';text('authStatus','Connected');text('adminStatus','Verified');notice('Administrator verified. Loading store data…');await refreshDashboard()}
-async function signOut(){const b=$('#signOutButton'),s=$('#sidebarSignOut');if(b){b.disabled=true;b.textContent='Signing out…'}s.disabled=true;try{const {error}=await supabase.auth.signOut();if(error)throw error;location.reload()}catch(err){notice('Sign out failed: '+err.message,'error');if(b){b.disabled=false;b.textContent='Sign out securely'}s.disabled=false}}
-$('#signOutButton').addEventListener('click',signOut);$('#sidebarSignOut').addEventListener('click',signOut);
-$('#adminLoginForm').addEventListener('submit',async e=>{e.preventDefault();const b=$('#adminLoginButton'),m=$('#adminLoginMessage');b.disabled=true;b.textContent='Verifying…';m.textContent='';try{const {data,error}=await supabase.auth.signInWithPassword({email:$('#adminLoginEmail').value.trim(),password:$('#adminLoginPassword').value});if(error)throw error;await verifyAdmin(data.session);await initialize()}catch(err){console.error('Admin sign-in failed:',err);m.textContent=err.message||'Sign-in failed. Try again.';gate.style.display='flex';b.disabled=false;b.textContent='Sign in securely'}});
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-/* SECTION 08 — STARTUP */
-async function start(){if(window.Chart)initCharts();else text('chartDataStatus','Chart library unavailable');renderProducts();renderOrders();renderRefunds();renderRecent();updateStats();try{const {data,error}=await supabase.auth.getSession();if(error)throw error;if(!data.session){text('authStatus','Signed out');text('adminStatus','Not verified');gate.style.display='flex';return}await verifyAdmin(data.session);await initialize()}catch(err){console.error('Dashboard startup failed:',err);text('authStatus','Verification needed');text('adminStatus','Not verified');gate.style.display='flex';$('#adminLoginMessage').textContent=err.message||'Could not verify administrator access.';connection(false,'Sign-in required');notice('Administrator access could not be verified. Sign in with the authorized account.','error')}}
-start();
-</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+  --bg: #f7f7fb;
+  --surface: #ffffff;
+  --navy: #15172b;
+  --navy-light: #202440;
+  --gold: #d5b477;
+  --gold-light: #f5ebd7;
+  --purple: #6257e8;
+  --text: #202238;
+  --muted: #8b8da3;
+  --border: #ececf3;
+  --green: #19a875;
+  --red: #e45b69;
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  min-height: 100vh;
+  padding: 16px;
+  gap: 0;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 20px 0 0 20px;
+  padding: 27px 17px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 32px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px;
+  margin-bottom: 37px;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #e6ce9c, #b38b48);
+  color: #18192c;
+  display: grid;
+  place-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.brand-name small {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.nav-label {
+  color: #8588a7;
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  margin: 20px 10px 10px;
+}
+
+.nav {
+  display: grid;
+  gap: 5px;
+}
+
+.nav button {
+  border: 0;
+  background: transparent;
+  color: #b8bbd0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 12px;
+  transition: .2s;
+}
+
+.nav button:hover,
+.nav button.active {
+  background: linear-gradient(100deg, #33345c, #272a49);
+  color: #fff;
+}
+
+.nav button.active {
+  box-shadow: inset 3px 0 var(--gold);
+}
+
+.nav-icon {
+  font-size: 17px;
+  width: 22px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid #30324a;
+  padding-top: 18px;
+}
+
+.admin-profile {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 9px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #514b83;
+  font-weight: 700;
+}
+
+.admin-profile strong {
+  display: block;
+  font-size: 11px;
+}
+
+.admin-profile small {
+  display: block;
+  font-size: 9px;
+  color: #a9abc1;
+  margin-top: 4px;
+}
+
+/* MAIN */
+
+.main {
+  background: var(--surface);
+  border-radius: 0 20px 20px 0;
+  min-width: 0;
+  border: 1px solid var(--border);
+}
+
+.topbar {
+  min-height: 76px;
+  padding: 15px 26px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+.breadcrumb {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.breadcrumb strong {
+  display: block;
+  color: var(--text);
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.top-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  width: 235px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 12px 11px 34px;
+  outline: none;
+  background: #fafaff;
+  font-size: 11px;
+}
+
+.search-box span {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  color: var(--muted);
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 10px;
+  color: var(--text);
+}
+
+.content {
+  padding: 26px;
+}
+
+.view {
+  display: none;
+  animation: fadeIn .22s ease;
+}
+
+.view.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* HEADINGS */
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 23px;
+}
+
+.page-heading h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -.5px;
+}
+
+.page-heading p {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 7px;
+}
+
+.button {
+  border: 0;
+  border-radius: 9px;
+  background: var(--navy);
+  color: #fff;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 11px;
+  transition: .2s;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button.gold {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.button.light {
+  background: #f0efff;
+  color: var(--purple);
+}
+
+.button.danger {
+  background: #fff0f1;
+  color: var(--red);
+}
+
+.button.small {
+  padding: 7px 10px;
+  font-size: 10px;
+}
+
+/* METRIC CARDS */
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 19px;
+}
+
+.metric {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: #fff;
+  min-width: 0;
+  transition: .2s;
+}
+
+.metric:hover {
+  box-shadow: 0 9px 30px #20223808;
+  transform: translateY(-2px);
+}
+
+.metric-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.metric-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: var(--gold-light);
+  color: #a5813f;
+  font-size: 17px;
+}
+
+.metric-value {
+  font-size: clamp(19px, 2vw, 27px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin: 17px 0 9px;
+  overflow-wrap: anywhere;
+}
+
+.metric-bottom {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.metric-bottom strong {
+  color: var(--green);
+}
+
+/* PANELS */
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 19px 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.panel-header h2 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.panel-header p {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.panel-body {
+  padding: 18px 20px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr);
+  gap: 17px;
+  margin-bottom: 18px;
+}
+
+.chart-container {
+  position: relative;
+  height: 260px;
+}
+
+.chart-container.donut {
+  height: 225px;
+}
+
+.chart-summary {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.chart-summary span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--purple);
+}
+
+/* LOWER DASHBOARD */
+
+.lower-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 17px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+th {
+  padding: 13px 12px;
+  background: #fafaff;
+  text-align: left;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .5px;
+}
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0f0f6;
+  font-size: 10px;
+}
+
+tbody tr:hover {
+  background: #fafaff;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 30px;
+  color: var(--muted);
+  white-space: normal;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  background: #e6f8ef;
+  color: #16865b;
+}
+
+.status-pending,
+.status-processing {
+  background: #fff4df;
+  color: #b57b25;
+}
+
+.status-failed,
+.status-cancelled {
+  background: #fff0f1;
+  color: #d94d5a;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.product-image {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #f1efff;
+  object-fit: cover;
+}
+
+/* MANAGEMENT SECTIONS */
+
+.section-toolbar {
+  padding: 17px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-toolbar input,
+.section-toolbar select,
+.form-field input,
+.form-field textarea,
+.form-field select {
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #fff;
+  outline: none;
+  min-width: 0;
+}
+
+.section-toolbar input {
+  flex: 1;
+  min-width: 160px;
+}
+
+.section-toolbar select {
+  font-size: 11px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+}
+
+.form-field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-field.full {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.notice {
+  padding: 13px 15px;
+  background: #f6f5ff;
+  border-radius: 10px;
+  color: #67619a;
+  font-size: 10px;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #111426a8;
+  z-index: 100;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 19px;
+  padding: 25px;
+}
+
+.modal-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 23px;
+  margin-bottom: 22px;
+}
+
+/* TOAST */
+
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  max-width: calc(100vw - 40px);
+  padding: 14px 18px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 11px;
+  box-shadow: 0 8px 30px #0002;
+  display: none;
+}
+
+.toast.show {
+  display: block;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    padding: 10px;
+  }
+
+  .sidebar {
+    min-height: calc(100vh - 20px);
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .content {
+    padding: 19px;
+  }
+
+  .search-box input {
+    width: 175px;
+  }
+}
+
+@media (max-width: 760px) {
+  .layout {
+    display: block;
+    padding: 8px;
+  }
+
+  .sidebar {
+    display: none;
+    position: fixed;
+    z-index: 300;
+    top: 8px;
+    bottom: 8px;
+    left: 8px;
+    width: 265px;
+    min-height: 0;
+    overflow-y: auto;
+    border-radius: 17px;
+    box-shadow: 0 15px 50px #0004;
+  }
+
+  .sidebar.open {
+    display: flex;
+  }
+
+  .main {
+    border-radius: 17px;
+  }
+
+  .mobile-menu {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .topbar {
+    padding: 13px;
+    gap: 9px;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .top-actions {
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .analytics-grid,
+  .lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-heading h1 {
+    font-size: 23px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .panel-header {
+    padding: 16px 15px 0;
+  }
+
+  .panel-body {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 440px) {
+  .metrics {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .metric {
+    padding: 13px;
+    border-radius: 13px;
+  }
+
+  .metric-value {
+    font-size: 20px;
+    margin: 13px 0 7px;
+  }
+
+  .metric-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .metric-top {
+    font-size: 9px;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-heading h1 {
+    font-size: 22px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb {
+    flex: 1;
+  }
+
+  .top-actions {
+    width: 100%;
+    margin: 0;
+  }
+
+  .search-box {
+    flex: 1;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .chart-container {
+    height: 220px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field.full {
+    grid-column: auto;
+  }
+
+  .modal-card {
+    padding: 19px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">JH</div>
+    <div class="brand-name">
+      Jiddahs Heaven
+      <small>EXECUTIVE COMMERCE</small>
+    </div>
+  </div>
+
+  <div class="nav-label">WORKSPACE</div>
+
+  <nav class="nav">
+    <button class="active" data-view="overview">
+      <span class="nav-icon">⌂</span> Overview
+    </button>
+    <button data-view="orders">
+      <span class="nav-icon">▤</span> Order Management
+    </button>
+    <button data-view="products">
+      <span class="nav-icon">◇</span> Product Studio
+    </button>
+    <button data-view="inventory">
+      <span class="nav-icon">▦</span> Inventory Intelligence
+    </button>
+    <button data-view="customers">
+      <span class="nav-icon">♙</span> Customer Intelligence
+    </button>
+    <button data-view="refunds">
+      <span class="nav-icon">↶</span> Refund Centre
+    </button>
+  </nav>
+
+  <div class="nav-label">BUSINESS INTELLIGENCE</div>
+
+  <nav class="nav">
+    <button data-view="analytics">
+      <span class="nav-icon">⌁</span> Sales Analytics
+    </button>
+    <button data-view="insights">
+      <span class="nav-icon">✧</span> Store Insights
+    </button>
+  </nav>
+
+  <div class="nav-label">SYSTEM</div>
+
+  <nav class="nav">
+    <button data-view="account">
+      <span class="nav-icon">⚙</span> Admin & Security
+    </button>
+    <button id="sidebarSignOut">
+      <span class="nav-icon">⇥</span> Sign Out
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-profile">
+      <div class="avatar">JH</div>
+      <div>
+        <strong>Store Administrator</strong>
+        <small id="sidebarAdminEmail">Secure session</small>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+  <button class="icon-button mobile-menu" id="menuButton" aria-label="Open navigation">
+    ☰
+  </button>
+
+  <div class="breadcrumb">
+    Jiddahs Heaven / Workspace
+    <strong id="pageTitle">Executive Overview</strong>
+  </div>
+
+  <div class="top-actions">
+    <div class="search-box">
+      <span>⌕</span>
+      <input id="globalSearch" placeholder="Search your store..." aria-label="Search store">
+    </div>
+    <button class="icon-button" id="refreshButton" title="Refresh dashboard">↻</button>
+    <button class="icon-button" id="notificationButton" title="Notifications">♧</button>
+  </div>
+
+</header>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+
+<section class="view active" id="view-overview">
+
+  <div class="page-heading">
+    <div>
+      <h1>Your business, at a glance.</h1>
+      <p>Welcome to your Jiddahs Heaven executive command centre.</p>
+    </div>
+    <button class="button gold" data-action="add-product">＋ Create Product</button>
+  </div>
+
+  <div class="metrics">
+
+    <article class="metric">
+      <div class="metric-top">
+        Gross Order Value
+        <span class="metric-icon">₦</span>
+      </div>
+      <div class="metric-value" id="totalRevenue">₦0</div>
+      <div class="metric-bottom">Calculated from available order records</div>
+    </article>
+
+    <article class="metric">
+      <div class="metric-top">
+        Total Orders
+        <span class="metric-icon">▤</span>
+      </div>
+      <div class="metric-value" id="totalOrders">0</div>
+      <div class="metric-bottom">Orders recorded in your database</div>
+    </article>
+
+    <article class="metric">
+      <div class="metric-top">
+        Average Order Value
+        <span class="metric-icon">↗</span>
+      </div>
+      <div class="metric-value" id="averageOrderValue">₦0</div>
+      <div class="metric-bottom">Gross order value divided by orders</div>
+    </article>
+
+    <article class="metric">
+      <div class="metric-top">
+        Products in Store
+        <span class="metric-icon">◇</span>
+      </div>
+      <div class="metric-value" id="totalProducts">0</div>
+      <div class="metric-bottom">Products in your catalogue</div>
+    </article>
+
+  </div>
+
+  <div class="analytics-grid">
+
+    <article class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Revenue Performance</h2>
+          <p>Monthly order value over time</p>
+        </div>
+        <select class="section-toolbar" id="salesPeriod" aria-label="Chart period" style="padding:8px;border:1px solid var(--border);border-radius:8px;background:white">
+          <option value="6">6 months</option>
+          <option value="12">12 months</option>
+        </select>
+      </div>
+      <div class="panel-body">
+        <div class="chart-container">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Order Intelligence</h2>
+          <p>Breakdown by current payment status</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="chart-container donut">
+          <canvas id="statusChart"></canvas>
+        </div>
+        <div class="chart-summary">
+          <span><i class="legend-dot"></i> Completed</span>
+          <span><i class="legend-dot" style="background:#e4bc76"></i> Pending</span>
+          <span><i class="legend-dot" style="background:#e9a5b3"></i> Other</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="lower-grid">
+
+    <article class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Recent Transactions</h2>
+          <p>Your latest customer orders</p>
+        </div>
+        <button class="button light small" data-view="orders">View Orders</button>
+      </div>
+
+      <div class="panel-body table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ORDER</th>
+              <th>CUSTOMER</th>
+              <th>AMOUNT</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="recentOrders">
+            <tr><td colspan="4" class="empty-state">Waiting for database connection…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Product Highlights</h2>
+          <p>Products in your catalogue</p>
+        </div>
+        <button class="button light small" data-view="products">Manage</button>
+      </div>
+
+      <div class="panel-body table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>PRODUCT</th>
+              <th>PRICE</th>
+              <th>STOCK</th>
+            </tr>
+          </thead>
+          <tbody id="topProducts">
+            <tr><td colspan="3" class="empty-state">Waiting for products…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+  </div>
+
+</section>
+
+<!-- PRODUCTS -->
+
+<section class="view" id="view-products">
+
+  <div class="page-heading">
+    <div>
+      <h1>Product Studio</h1>
+      <p>Build and manage your product catalogue.</p>
+    </div>
+    <button class="button gold" data-action="add-product">＋ New Product</button>
+  </div>
+
+  <div class="metrics">
+    <article class="metric">
+      <div class="metric-top">All Products <span class="metric-icon">◇</span></div>
+      <div class="metric-value" id="productCount">0</div>
+      <div class="metric-bottom">Catalogue size</div>
+    </article>
+    <article class="metric">
+      <div class="metric-top">Active Products <span class="metric-icon">✓</span></div>
+      <div class="metric-value" id="activeProductCount">0</div>
+      <div class="metric-bottom">Visible products</div>
+    </article>
+    <article class="metric">
+      <div class="metric-top">Low Stock <span class="metric-icon">!</span></div>
+      <div class="metric-value" id="lowStockCount">0</div>
+      <div class="metric-bottom">Five or fewer remaining</div>
+    </article>
+    <article class="metric">
+      <div class="metric-top">Out of Stock <span class="metric-icon">×</span></div>
+      <div class="metric-value" id="outOfStockCount">0</div>
+      <div class="metric-bottom">Items requiring replenishment</div>
+    </article>
+  </div>
+
+  <article class="panel">
+    <div class="section-toolbar">
+      <input id="productSearch" placeholder="Search product name or category...">
+      <select id="categoryFilter">
+        <option value="">All categories</option>
+      </select>
+      <button class="button light" id="reloadProducts">Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>PRODUCT</th>
+            <th>CATEGORY</th>
+            <th>PRICE</th>
+            <th>STOCK</th>
+            <th>VISIBILITY</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="productsTableBody">
+          <tr><td colspan="6" class="empty-state">Loading products…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+</section>
+
+<!-- ORDERS -->
+
+<section class="view" id="view-orders">
+
+  <div class="page-heading">
+    <div>
+      <h1>Order Management</h1>
+      <p>Track customer orders and payment references.</p>
+    </div>
+    <button class="button light" id="reloadOrders">↻ Refresh Orders</button>
+  </div>
+
+  <article class="panel">
+    <div class="section-toolbar">
+      <input id="orderSearch" placeholder="Search order, customer or reference...">
+      <select id="orderStatusFilter">
+        <option value="all">All statuses</option>
+        <option value="success">Successful</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ORDER</th>
+            <th>CUSTOMER</th>
+            <th>AMOUNT</th>
+            <th>PAYMENT</th>
+            <th>REFERENCE</th>
+            <th>DATE</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+          <tr><td colspan="7" class="empty-state">Loading orders…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+</section>
+
+<!-- INVENTORY -->
+
+<section class="view" id="view-inventory">
+
+  <div class="page-heading">
+    <div>
+      <h1>Inventory Intelligence</h1>
+      <p>Find products that need replenishment.</p>
+    </div>
+    <button class="button light" data-view="products">Manage Products</button>
+  </div>
+
+  <article class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Stock Monitoring</h2>
+        <p>Current quantities from your products table</p>
+      </div>
+    </div>
+    <div class="panel-body table-wrap">
+      <table>
+        <thead>
+          <tr><th>PRODUCT</th><th>STOCK</th><th>CONDITION</th><th>ACTION</th></tr>
+        </thead>
+        <tbody id="inventoryTableBody">
+          <tr><td colspan="4" class="empty-state">Loading inventory…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+</section>
+
+<!-- CUSTOMERS -->
+
+<section class="view" id="view-customers">
+
+  <div class="page-heading">
+    <div>
+      <h1>Customer Intelligence</h1>
+      <p>Customer records derived from your orders.</p>
+    </div>
+  </div>
+
+  <article class="panel">
+    <div class="section-toolbar">
+      <input id="customerSearch" placeholder="Search customers...">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>CUSTOMER</th><th>EMAIL</th><th>PHONE</th><th>ORDERS</th><th>TOTAL SPEND</th></tr>
+        </thead>
+        <tbody id="customersTableBody">
+          <tr><td colspan="5" class="empty-state">Loading customers…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+</section>
+
+<!-- REFUNDS -->
+
+<section class="view" id="view-refunds">
+
+  <div class="page-heading">
+    <div>
+      <h1>Refund Centre</h1>
+      <p>Review refund requests recorded in your database.</p>
+    </div>
+    <button class="button light" id="reloadRefunds">Refresh</button>
+  </div>
+
+  <article class="panel">
+    <div class="section-toolbar">
+      <input id="refundSearch" placeholder="Search refund requests...">
+      <select id="refundStatusFilter">
+        <option value="all">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>REQUEST</th><th>ORDER</th><th>CUSTOMER</th><th>AMOUNT</th><th>REASON</th><th>STATUS</th><th>DATE</th></tr>
+        </thead>
+        <tbody id="refundsTableBody">
+          <tr><td colspan="7" class="empty-state">Checking refund data…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-body">
+      <p class="notice">Refund records appear only if the corresponding table exists and your administrator has permission to read it.</p>
+    </div>
+  </article>
+
+</section>
+
+<!-- ANALYTICS -->
+
+<section class="view" id="view-analytics">
+
+  <div class="page-heading">
+    <div>
+      <h1>Sales Analytics</h1>
+      <p>Explore the sales figures available in your order records.</p>
+    </div>
+  </div>
+
+  <div class="analytics-grid">
+    <article class="panel">
+      <div class="panel-header"><div><h2>Monthly Revenue</h2><p>Order value by month</p></div></div>
+      <div class="panel-body"><div class="chart-container"><canvas id="analyticsSalesChart"></canvas></div></div>
+    </article>
+    <article class="panel">
+      <div class="panel-header"><div><h2>Payment Distribution</h2><p>Orders grouped by payment status</p></div></div>
+      <div class="panel-body"><div class="chart-container donut"><canvas id="analyticsStatusChart"></canvas></div></div>
+    </article>
+  </div>
+
+  <article class="panel">
+    <div class="panel-header"><div><h2>Data Quality</h2><p>Know which figures are available</p></div></div>
+    <div class="panel-body">
+      <p id="analyticsDataStatus" class="notice">Analytics will update after the database loads.</p>
+    </div>
+  </article>
+
+</section>
+
+<!-- INSIGHTS -->
+
+<section class="view" id="view-insights">
+
+  <div class="page-heading">
+    <div>
+      <h1>Store Insights</h1>
+      <p>Operational signals based on available catalogue and order data.</p>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <article class="metric">
+      <div class="metric-top">Catalogue Value <span class="metric-icon">₦</span></div>
+      <div class="metric-value" id="catalogueValue">₦0</div>
+      <div class="metric-bottom">Price multiplied by recorded stock</div>
+    </article>
+    <article class="metric">
+      <div class="metric-top">Completed Orders <span class="metric-icon">✓</span></div>
+      <div class="metric-value" id="completedOrders">0</div>
+      <div class="metric-bottom">Based on payment status</div>
+    </article>
+    <article class="metric">
+      <div class="metric-top">Pending Payments <span class="metric-icon">◷</span></div>
+      <div class="metric-value" id="pendingOrders">0</div>
+      <div class="metric-bottom">Orders awaiting confirmation</div>
+    </article>
+    <article class="metric">
+      <div class="metric-top">Customer Records <span class="metric-icon">♙</span></div>
+      <div class="metric-value" id="customerCount">0</div>
+      <div class="metric-bottom">Unique customer identities in orders</div>
+    </article>
+  </div>
+
+  <article class="panel">
+    <div class="panel-header"><div><h2>Inventory Alerts</h2><p>Products needing attention</p></div></div>
+    <div class="panel-body table-wrap">
+      <table>
+        <thead><tr><th>PRODUCT</th><th>STOCK</th><th>RECOMMENDATION</th></tr></thead>
+        <tbody id="insightsInventoryBody">
+          <tr><td colspan="3" class="empty-state">Waiting for inventory data…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+</section>
+
+<!-- ACCOUNT -->
+
+<section class="view" id="view-account">
+
+  <div class="page-heading">
+    <div>
+      <h1>Admin & Security</h1>
+      <p>Review your current administrator session.</p>
+    </div>
+  </div>
+
+  <article class="panel">
+    <div class="panel-header"><div><h2>Administrator Session</h2><p>Authentication is handled by Supabase Auth.</p></div></div>
+    <div class="panel-body">
+      <div class="form-field">
+        <label>Administrator email</label>
+        <input id="adminEmail" readonly>
+      </div>
+      <div class="form-field" style="margin-top:15px">
+        <label>Administrator UID</label>
+        <input value="2631d680-907b-4336-9133-cd03ff87fb4a" readonly>
+      </div>
+      <div class="form-field" style="margin-top:15px">
+        <label>Authentication status</label>
+        <input id="authStatus" value="Checking…" readonly>
+      </div>
+      <div class="form-field" style="margin-top:15px">
+        <label>Database connection</label>
+        <input id="connectionStatus" value="Checking…" readonly>
+      </div>
+      <div class="form-actions">
+        <button class="button danger" id="signOutButton">Sign Out Securely</button>
+      </div>
+      <p class="notice">Never put a Supabase service-role key or Paystack secret key in this browser-side dashboard.</p>
+    </div>
+  </article>
+
+</section>
+
+</div>
+</main>
+</div>
+
+<!-- PRODUCT FORM -->
+
+<div class="modal" id="productModal">
+  <div class="modal-card">
+    <h2 id="productModalTitle">Create Product</h2>
+
+    <form id="productForm">
+      <input type="hidden" id="productId">
+
+      <div class="form-grid">
+
+        <div class="form-field full">
+          <label for="productName">Product name *</label>
+          <input id="productName" required maxlength="150">
+        </div>
+
+        <div class="form-field">
+          <label for="productPrice">Price (₦) *</label>
+          <input id="productPrice" type="number" min="0" step="0.01" required>
+        </div>
+
+        <div class="form-field">
+          <label for="productStock">Stock quantity *</label>
+          <input id="productStock" type="number" min="0" step="1" required>
+        </div>
+
+        <div class="form-field">
+          <label for="productCategory">Category</label>
+          <input id="productCategory" maxlength="100">
+        </div>
+
+        <div class="form-field">
+          <label for="productImage">Product image URL</label>
+          <input id="productImage" type="url" placeholder="https://...">
+        </div>
+
+        <div class="form-field full">
+          <label for="productDescription">Description</label>
+          <textarea id="productDescription"></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label>
+            <input id="productActive" type="checkbox" checked style="width:auto">
+            Active — visible in the catalogue
+          </label>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="button light" id="cancelProduct">Cancel</button>
+        <button type="submit" class="button gold" id="saveProductButton">Save Product</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- ORDER DETAILS -->
+
+<div class="modal" id="orderModal">
+  <div class="modal-card">
+    <h2>Order Details</h2>
+    <div id="orderDetails"></div>
+    <div class="form-actions">
+      <button class="button light" id="closeOrderModal">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS -->
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!--
+  IMPORTANT:
+  The next section contains the JavaScript that connects these
+  controls to Supabase. Do not remove the existing supabase.js
+  connection or change database table names without checking
+  the schema first.
+-->
+
 </body>
 </html>
