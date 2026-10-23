@@ -2354,7 +2354,7 @@ adminLoginStyle.textContent = `
     position: fixed;
     inset: 0;
     z-index: 99999;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -2509,11 +2509,13 @@ async function checkExistingAdminSession() {
 } else {
   setText("authStatus", "Signed out");
   setText("adminStatus", "Not verified");
+
+  adminLoginGate.style.display = "flex";
 }
 
   } catch (error) {
-    message.textContent = error.message;
-  }
+  message.textContent = error.message;
+  adminLoginGate.style.display = "flex";
 }
 
 document
@@ -2563,13 +2565,14 @@ document
       adminLoginGate.remove();
 
     } catch (error) {
-      console.error("Administrator login failed:", error);
+  console.error("Administrator login failed:", error);
 
-      message.textContent = error.message;
+  message.textContent = error.message;
+  adminLoginGate.style.display = "flex";
 
-      button.disabled = false;
-      button.textContent = "Sign in securely";
-    }
+  button.disabled = false;
+  button.textContent = "Sign in securely";
+}
   });
 
 checkExistingAdminSession();
