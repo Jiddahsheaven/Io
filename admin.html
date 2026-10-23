@@ -1509,5 +1509,874 @@ tbody tr:hover {
   the schema first.
 -->
 
+<script type="module">
+import { supabase } from './assets/javascript/supabase.js';
+
+/* =========================================
+   JIDDAHS HEAVEN ADMIN DASHBOARD
+   SUPABASE CONNECTION
+========================================= */
+
+const ADMIN_UID = '2631d680-907b-4336-9133-cd03ff87fb4a';
+
+const $ = (selector) => document.querySelector(selector);
+
+const money = (value) =>
+  new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: 'NGN',
+    maximumFractionDigits: 2
+  }).format(Number(value) || 0);
+
+const escapeHtml = (value) =>
+  String(value ?? '').replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[character]);
+
+const formatDate = (value) => {
+  if (!value) return '—';
+
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime())
+    ? '—'
+    : date.toLocaleDateString('en-NG', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+};
+
+let products = [];
+let orders = [];
+let refunds = [];
+let currentAdmin = null;
+let salesChart = null;
+let statusChart = null;
+let analyticsSalesChart = null;
+let analyticsStatusChart = null;
+
+/* =========================================
+   NOTIFICATIONS
+========================================= */
+
+function showToast(message) {
+  const toast = $('#toast');
+
+  if (!toast) {
+    alert(message);
+    return;
+  }
+
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+/* =========================================
+   CONNECTION STATUS
+========================================= */
+
+function setConnectionStatus(message) {
+  const element = $('#connectionStatus');
+
+  if (element) {
+    element.textContent = message;
+  }
+}
+
+/* =========================================
+   ADMIN LOGIN SCREEN
+========================================= */
+
+function showLogin(message = '') {
+  let gate = $('#adminLoginGate');
+
+  if (!gate) {
+    gate = document.createElement('div');
+
+    gate.id = 'adminLoginGate';
+
+    gate.style.cssText = `
+      position:fixed;
+      inset:0;
+      z-index:99999;
+      background:#0b1020;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      font-family:Arial,sans-serif;
+    `;
+
+    gate.innerHTML = `
+      <form id="adminLoginForm"
+        style="
+          width:100%;
+          max-width:400px;
+          background:#151c30;
+          border:1px solid #303b56;
+          border-radius:18px;
+          padding:28px;
+          color:white;
+          box-sizing:border-box;
+        ">
+
+        <h2 style="margin-top:0;color:#e4c477">
+          Jiddahs Heaven
+        </h2>
+
+        <p style="color:#c0c8d8">
+          Administrator Sign In
+        </p>
+
+        <label for="adminLoginEmail">Email address</label>
+
+        <input
+          id="adminLoginEmail"
+          type="email"
+          autocomplete="username"
+          required
+          style="
+            width:100%;
+            box-sizing:border-box;
+            margin:8px 0 18px;
+            padding:13px;
+            border-radius:8px;
+            border:1px solid #46516b;
+            background:#0b1020;
+            color:white;
+          "
+        >
+
+        <label for="adminLoginPassword">Password</label>
+
+        <input
+          id="adminLoginPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+          style="
+            width:100%;
+            box-sizing:border-box;
+            margin:8px 0 18px;
+            padding:13px;
+            border-radius:8px;
+            border:1px solid #46516b;
+            background:#0b1020;
+            color:white;
+          "
+        >
+
+        <p id="adminLoginMessage"
+          role="alert"
+          style="color:#ff9b9b;line-height:1.5">
+          ${escapeHtml(message)}
+        </p>
+
+        <button
+          id="adminLoginSubmit"
+          type="submit"
+          style="
+            width:100%;
+            padding:14px;
+            border:0;
+            border-radius:8px;
+            background:#e4c477;
+            color:#151c30;
+            font-weight:bold;
+            cursor:pointer;
+          ">
+          Sign In
+        </button>
+
+      </form>
+    `;
+
+    document.body.appendChild(gate);
+
+    $('#adminLoginForm').addEventListener('submit', handleLogin);
+  }
+
+  gate.style.display = 'flex';
+
+  const messageElement = $('#adminLoginMessage');
+
+  if (messageElement) {
+    messageElement.textContent = message;
+  }
+}
+
+function hideLogin() {
+  const gate = $('#adminLoginGate');
+
+  if (gate) {
+    gate.style.display = 'none';
+  }
+}
+
+/* =========================================
+   LOGIN
+========================================= */
+
+async function handleLogin(event) {
+  event.preventDefault();
+
+  const email = $('#adminLoginEmail').value.trim();
+  const password = $('#adminLoginPassword').value;
+  const button = $('#adminLoginSubmit');
+  const message = $('#adminLoginMessage');
+
+  button.disabled = true;
+  button.textContent = 'Signing in...';
+  message.textContent = '';
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    if (!data.user || data.user.id !== ADMIN_UID) {
+      await supabase.auth.signOut();
+
+      throw new Error(
+        'This account is not authorized to access the administrator dashboard.'
+      );
+    }
+
+    await verifyAdmin(data.user);
+
+    hideLogin();
+
+    await initializeDashboard();
+
+  } catch (error) {
+    message.textContent =
+      error.message || 'Sign in failed. Please try again.';
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Sign In';
+  }
+}
+
+/* =========================================
+   VERIFY ADMIN ACCOUNT
+========================================= */
+
+async function verifyAdmin(user) {
+  if (!user || user.id !== ADMIN_UID) {
+    throw new Error('Administrator access denied.');
+  }
+
+  const { data, error } = await supabase
+    .from('admin_users')
+    .select('user_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(
+      'Unable to verify admin_users access. Check the table, its user_id column, and its RLS policies. Details: ' +
+      error.message
+    );
+  }
+
+  if (!data) {
+    throw new Error(
+      'Your account is not registered in admin_users.'
+    );
+  }
+
+  currentAdmin = user;
+
+  const email = user.email || 'Administrator';
+
+  if ($('#adminEmail')) {
+    $('#adminEmail').textContent = email;
+  }
+
+  if ($('#sidebarAdminEmail')) {
+    $('#sidebarAdminEmail').textContent = email;
+  }
+
+  if ($('#authStatus')) {
+    $('#authStatus').textContent = 'Authenticated';
+  }
+
+  setConnectionStatus('Connected to Supabase');
+}
+
+/* =========================================
+   SAFE TABLE LOADER
+========================================= */
+
+async function loadTable(tableName, columns) {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select(columns);
+
+  if (error) {
+    console.error(`Failed to load ${tableName}:`, error);
+    return {
+      data: [],
+      error
+    };
+  }
+
+  return {
+    data: data || [],
+    error: null
+  };
+}
+
+/* =========================================
+   LOAD PRODUCTS
+========================================= */
+
+async function loadProducts() {
+  const result = await loadTable(
+    'products',
+    'id,name,description,category,price,image_url,stock,is_active,created_at'
+  );
+
+  if (result.error) {
+    showToast('Could not load products: ' + result.error.message);
+    return;
+  }
+
+  products = result.data;
+
+  renderProducts();
+  renderInventory();
+  renderProductSummary();
+  renderTopProducts();
+  renderDashboardStats();
+}
+
+/* =========================================
+   PRODUCT SUMMARY
+========================================= */
+
+function renderProductSummary() {
+  const active = products.filter(
+    product => product.is_active === true
+  ).length;
+
+  const lowStock = products.filter(
+    product => Number(product.stock) > 0 &&
+               Number(product.stock) <= 5
+  ).length;
+
+  const outOfStock = products.filter(
+    product => Number(product.stock) <= 0
+  ).length;
+
+  if ($('#productCount')) {
+    $('#productCount').textContent = products.length;
+  }
+
+  if ($('#activeProductCount')) {
+    $('#activeProductCount').textContent = active;
+  }
+
+  if ($('#lowStockCount')) {
+    $('#lowStockCount').textContent = lowStock;
+  }
+
+  if ($('#outOfStockCount')) {
+    $('#outOfStockCount').textContent = outOfStock;
+  }
+
+  if ($('#totalProducts')) {
+    $('#totalProducts').textContent = products.length;
+  }
+}
+
+/* =========================================
+   RENDER PRODUCTS TABLE
+========================================= */
+
+function renderProducts() {
+  const body = $('#productsTableBody');
+
+  if (!body) return;
+
+  const search = (
+    $('#productSearch')?.value || ''
+  ).toLowerCase();
+
+  const category = $('#categoryFilter')?.value || '';
+
+  const filtered = products.filter(product => {
+    const matchesSearch =
+      String(product.name || '').toLowerCase().includes(search) ||
+      String(product.category || '').toLowerCase().includes(search);
+
+    const matchesCategory =
+      !category || product.category === category;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const categories = [
+    ...new Set(
+      products
+        .map(product => product.category)
+        .filter(Boolean)
+    )
+  ];
+
+  const categoryFilter = $('#categoryFilter');
+
+  if (categoryFilter && !categoryFilter.dataset.initialized) {
+    categoryFilter.innerHTML =
+      '<option value="">All categories</option>' +
+      categories.map(categoryName =>
+        `<option value="${escapeHtml(categoryName)}">${escapeHtml(categoryName)}</option>`
+      ).join('');
+
+    categoryFilter.dataset.initialized = 'true';
+  }
+
+  if (!filtered.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="6">No products found.</td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  body.innerHTML = filtered.map(product => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <img
+            src="${escapeHtml(product.image_url || '')}"
+            alt=""
+            loading="lazy"
+            onerror="this.style.display='none'"
+            style="
+              width:42px;
+              height:42px;
+              object-fit:cover;
+              border-radius:8px;
+            "
+          >
+
+          <div>
+            <strong>${escapeHtml(product.name)}</strong>
+            <div style="font-size:12px;opacity:.65">
+              ID: ${escapeHtml(product.id)}
+            </div>
+          </div>
+        </div>
+      </td>
+
+      <td>${escapeHtml(product.category || 'Uncategorized')}</td>
+
+      <td>${money(product.price)}</td>
+
+      <td>${Number(product.stock) || 0}</td>
+
+      <td>
+        ${product.is_active
+          ? '<span class="status-badge success">Active</span>'
+          : '<span class="status-badge">Inactive</span>'}
+      </td>
+
+      <td>
+        <button type="button" data-edit-product="${escapeHtml(product.id)}">
+          Edit
+        </button>
+
+        <button type="button" data-delete-product="${escapeHtml(product.id)}">
+          Delete
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/* =========================================
+   CREATE / EDIT PRODUCT MODAL
+========================================= */
+
+function openProductModal(product = null) {
+  const modal = $('#productModal');
+  const form = $('#productForm');
+
+  if (!modal || !form) {
+    showToast('Product modal or form is missing from admin.html.');
+    return;
+  }
+
+  form.reset();
+
+  $('#productId').value = product?.id ?? '';
+  $('#productName').value = product?.name ?? '';
+  $('#productPrice').value = product?.price ?? '';
+  $('#productStock').value = product?.stock ?? 0;
+  $('#productCategory').value = product?.category ?? '';
+  $('#productImage').value = product?.image_url ?? '';
+  $('#productDescription').value = product?.description ?? '';
+  $('#productActive').checked = product
+    ? product.is_active === true
+    : true;
+
+  if ($('#productModalTitle')) {
+    $('#productModalTitle').textContent =
+      product ? 'Edit Product' : 'Add Product';
+  }
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeProductModal() {
+  const modal = $('#productModal');
+
+  if (!modal) return;
+
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+/* =========================================
+   SAVE PRODUCT
+========================================= */
+
+async function saveProduct(event) {
+  event.preventDefault();
+
+  if (!currentAdmin) {
+    showToast('Please sign in first.');
+    return;
+  }
+
+  const button = $('#saveProductButton');
+
+  const id = $('#productId').value;
+
+  const name = $('#productName').value.trim();
+  const price = Number($('#productPrice').value);
+  const stock = Number($('#productStock').value);
+
+  if (!name || !Number.isFinite(price) || price < 0) {
+    showToast('Enter a valid product name and price.');
+    return;
+  }
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    showToast('Stock must be a whole number of zero or more.');
+    return;
+  }
+
+  const product = {
+    name,
+    price,
+    stock,
+    category: $('#productCategory').value.trim() || null,
+    image_url: $('#productImage').value.trim() || null,
+    description: $('#productDescription').value.trim() || null,
+    is_active: $('#productActive').checked
+  };
+
+  button.disabled = true;
+  button.textContent = 'Saving...';
+
+  try {
+    let result;
+
+    if (id) {
+      result = await supabase
+        .from('products')
+        .update(product)
+        .eq('id', id)
+        .select();
+    } else {
+      result = await supabase
+        .from('products')
+        .insert(product)
+        .select();
+    }
+
+    if (result.error) throw result.error;
+
+    closeProductModal();
+
+    await loadProducts();
+
+    showToast(id ? 'Product updated.' : 'Product added.');
+
+  } catch (error) {
+    console.error('Save product failed:', error);
+
+    showToast(
+      'Could not save product. Check your products RLS policies and database columns. ' +
+      error.message
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Save Product';
+  }
+}
+
+/* =========================================
+   DELETE PRODUCT
+========================================= */
+
+async function deleteProduct(id) {
+  const product = products.find(
+    item => String(item.id) === String(id)
+  );
+
+  if (!product) return;
+
+  if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) {
+    return;
+  }
+
+  const { error } = await supabase
+    .from('products')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    showToast('Could not delete product: ' + error.message);
+    return;
+  }
+
+  await loadProducts();
+
+  showToast('Product deleted.');
+}
+
+/* =========================================
+   INVENTORY
+========================================= */
+
+function renderInventory() {
+  const body = $('#inventoryTableBody');
+
+  if (!body) return;
+
+  if (!products.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="4">No inventory records available.</td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  body.innerHTML = products.map(product => {
+    const stock = Number(product.stock) || 0;
+
+    const status = stock <= 0
+      ? 'Out of stock'
+      : stock <= 5
+        ? 'Low stock'
+        : 'In stock';
+
+    return `
+      <tr>
+        <td>${escapeHtml(product.name)}</td>
+        <td>${stock}</td>
+        <td>${status}</td>
+        <td>
+          <button type="button" data-edit-product="${escapeHtml(product.id)}">
+            Edit
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+/* =========================================
+   LOAD ORDERS
+========================================= */
+
+async function loadOrders() {
+  const result = await loadTable(
+    'orders',
+    'id,customer_name,customer_email,customer_phone,delivery_address,total_amount,payment_status,payment_reference,items,created_at'
+  );
+
+  if (result.error) {
+    orders = [];
+
+    renderOrders();
+    renderDashboardStats();
+    renderCustomers();
+    renderCharts();
+
+    showToast(
+      'Orders could not be loaded. Check the orders table and its column names.'
+    );
+
+    return;
+  }
+
+  orders = result.data;
+
+  renderOrders();
+  renderDashboardStats();
+  renderCustomers();
+  renderCharts();
+  renderTopProducts();
+}
+
+/* =========================================
+   ORDER STATUS
+========================================= */
+
+function normalizedStatus(order) {
+  return String(
+    order.payment_status || 'pending'
+  ).toLowerCase();
+}
+
+function isPaid(order) {
+  return [
+    'paid',
+    'success',
+    'successful',
+    'completed'
+  ].includes(normalizedStatus(order));
+}
+
+/* =========================================
+   ORDERS TABLE
+========================================= */
+
+function renderOrders() {
+  const body = $('#ordersTableBody');
+
+  if (!body) return;
+
+  const search = (
+    $('#orderSearch')?.value || ''
+  ).toLowerCase();
+
+  const status = (
+    $('#orderStatusFilter')?.value || ''
+  ).toLowerCase();
+
+  const filtered = orders.filter(order => {
+    const matchesSearch =
+      String(order.customer_name || '').toLowerCase().includes(search) ||
+      String(order.customer_email || '').toLowerCase().includes(search) ||
+      String(order.id || '').toLowerCase().includes(search);
+
+    const matchesStatus =
+      !status || normalizedStatus(order) === status;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  if (!filtered.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="6">No orders found.</td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  body.innerHTML = filtered.map(order => `
+    <tr>
+      <td>#${escapeHtml(order.id)}</td>
+      <td>${escapeHtml(order.customer_name || 'Customer')}</td>
+      <td>${money(order.total_amount)}</td>
+      <td>${escapeHtml(order.payment_status || 'Pending')}</td>
+      <td>${formatDate(order.created_at)}</td>
+      <td>
+        <button type="button" data-view-order="${escapeHtml(order.id)}">
+          View
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/* =========================================
+   ORDER DETAILS
+========================================= */
+
+function openOrderDetails(id) {
+  const order = orders.find(
+    item => String(item.id) === String(id)
+  );
+
+  if (!order) return;
+
+  const modal = $('#orderModal');
+  const details = $('#orderDetails');
+
+  if (!modal || !details) return;
+
+  let items = order.items;
+
+  if (typeof items === 'string') {
+    try {
+      items = JSON.parse(items);
+    } catch {
+      items = [];
+    }
+  }
+
+  let itemHtml = '';
+
+  if (Array.isArray(items)) {
+    itemHtml = items.map(item => `
+      <li>
+        ${escapeHtml(item.name || item.product_name || 'Product')}
+        — Quantity: ${escapeHtml(item.quantity ?? 1)}
+      </li>
+    `).join('');
+  }
+
+  details.innerHTML = `
+    <p><strong>Order:</strong> #${escapeHtml(order.id)}</p>
+    <p><strong>Customer:</strong> ${escapeHtml(order.customer_name)}</p>
+    <p><strong>Email:</strong> ${escapeHtml(order.customer_email)}</p>
+    <p><strong>Phone:</strong> ${escapeHtml(order.customer_phone)}</p>
+    <p><strong>Delivery address:</strong> ${escapeHtml(order.delivery_address)}</p>
+    <p><strong>Total:</strong> ${money(order.total_amount)}</p>
+    <p><strong>Payment status:</strong> ${escapeHtml(order.payment_status)}</p>
+    <p><strong>Reference:</strong> ${escapeHtml(order.payment_reference)}</p>
+    <p><strong>Date:</strong> ${formatDate(order.created_at)}</p>
+    <h4>Items</h4>
+    <ul>${itemHtml || '<li>Item details unavailable.</li>'}</ul>
+  `;
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+/* =========================================
+   DASHBOARD TOTALS
+========================================= */
+
+function renderDashboardStats() {
+  const totalValue = orders.reduce(
+    (sum, order) => sum
 </body>
 </html>
