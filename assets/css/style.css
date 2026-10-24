@@ -1988,3 +1988,38 @@ h2 em {
     letter-spacing: 3px;
   }
 }
+/* SHOW MENU BUTTON ON DESKTOP AND MOBILE */
+
+.site-header .menu-toggle {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Hamburger lines */
+.site-header .menu-toggle span {
+  display: block;
+  width: 23px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+/* Keep desktop navigation visible on desktop */
+@media (min-width: 1101px) {
+  .site-header .desktop-nav {
+    display: flex !important;
+  }
+}
+
+/* Keep the hamburger visible on tablets and phones */
+@media (max-width: 1100px) {
+  .site-header .menu-toggle {
+    display: inline-flex !important;
+  }
+}
