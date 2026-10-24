@@ -45,14 +45,65 @@
         <a href="#contact">Contact</a>
       </nav>
 
-      <div class="nav-actions">
-        <button class="icon-button" id="searchToggle" aria-label="Open search" aria-expanded="false">⌕</button>
-        <button class="icon-button bag-button" id="bagToggle" aria-label="Open shopping bag" aria-expanded="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+            <div class="nav-actions">
+
+        <!-- Search -->
+        <button
+          class="icon-button"
+          id="searchToggle"
+          aria-label="Open search"
+          aria-expanded="false"
+        >⌕</button>
+
+        <!-- Shopping Bag -->
+        <button
+          class="icon-button bag-button"
+          id="bagToggle"
+          aria-label="Open shopping bag"
+          aria-expanded="false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M5 8h14l1 13H4L5 8Z"/>
+            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+          </svg>
           <span class="bag-count" id="bagCount">0</span>
         </button>
+
+        <!-- Customer Account / Profile -->
+        <div class="account-menu" id="accountMenu">
+
+          <button
+            class="account-icon"
+            id="accountIcon"
+            type="button"
+            aria-label="My Account"
+            aria-expanded="false"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+            </svg>
+          </button>
+
+          <div class="account-dropdown" id="accountDropdown" hidden>
+            <a href="login.html" id="accountLogin">Log In</a>
+            <a href="signup.html" id="accountSignup">Sign Up</a>
+            <a href="profile.html" id="accountProfile" hidden>My Profile</a>
+          </div>
+
+        </div>
+
       </div>
-    </div>
 
     <!-- Mobile navigation -->
     <div class="mobile-nav" id="mobileNav">
@@ -391,39 +442,6 @@
       <button class="button button-dark button-full" id="checkoutButton">Proceed to checkout</button>
     </div>
   </aside>
-<!-- Customer Account -->
-<div class="account-menu" id="accountMenu">
-
-  <button
-    class="account-icon"
-    id="accountIcon"
-    type="button"
-    aria-label="My Account"
-    aria-expanded="false"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="23"
-      height="23"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <circle cx="12" cy="8" r="4"></circle>
-      <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
-    </svg>
-  </button>
-
-  <div class="account-dropdown" id="accountDropdown" hidden>
-    <a href="login.html" id="accountLogin">Log In</a>
-    <a href="signup.html" id="accountSignup">Sign Up</a>
-    <a href="profile.html" id="accountProfile" hidden>My Profile</a>
-  </div>
-
-</div>
 
   <script type="module" src="./assets/javascript/index.js"></script>
 </body>
