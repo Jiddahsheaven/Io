@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Customer Login | Jidderhs Heaven</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --text: #25231f;
+      --muted: #77736c;
+      --accent: #8b6b48;
+      --accent-dark: #705338;
+      --border: #e9e3da;
+      --success: #236b47;
+      --error: #b42318;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand a {
+      color: var(--text);
+      text-decoration: none;
+      font-family: "Playfair Display", serif;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .brand p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .auth-card {
+      padding: 32px 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(35, 30, 20, 0.06);
+    }
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 29px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(139, 107, 72, 0.12);
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: -7px;
+      margin-bottom: 20px;
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .forgot-password a,
+    .auth-footer a {
+      color: var(--accent-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary-button:hover {
+      background: var(--accent-dark);
+    }
+
+    .primary-button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 17px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.success {
+      display: block;
+      background: #eaf6ee;
+      color: var(--success);
+    }
+
+    .message.error {
+      display: block;
+      background: #fff0ee;
+      color: var(--error);
+    }
+
+    .auth-footer {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    @media (max-width: 400px) {
+      .auth-card {
+        padding: 27px 20px;
+      }
+
+      .brand a {
+        font-size: 27px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="auth-container">
+
+    <div class="brand">
+      <a href="index.html">Jidderhs Heaven</a>
+      <p>Your everyday essentials</p>
+    </div>
+
+    <section class="auth-card">
+      <h1>Welcome back</h1>
+
+      <p class="subtitle">
+        Log in to your Jidderhs Heaven account.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="field">
+          <label for="email">Email address</label>
+          <input
+            type="email"
+            id="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            autocomplete="current-password"
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+
+        <div class="forgot-password">
+          <a href="reset-password.html">Forgot password?</a>
+        </div>
+
+        <button
+          type="submit"
+          id="loginButton"
+          class="primary-button"
+        >
+          Log In
+        </button>
+
+        <div
+          id="loginMessage"
+          class="message"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account?
+        <a href="signup.html">Create one</a>
+      </div>
+    </section>
+
+    <a href="index.html" class="back-link">
+      ← Back to shopping
+    </a>
+
+  </main>
+
+  <script type="module">
+    import { supabase } from "./assets/javascript/supabase.js";
+
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const loginMessage = document.getElementById("loginMessage");
+
+    function showMessage(message, type) {
+      loginMessage.textContent = message;
+      loginMessage.className = "message " + type;
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document
+        .getElementById("email")
+        .value.trim();
+
+      const password = document
+        .getElementById("password")
+        .value;
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Signing in...";
+
+      loginMessage.className = "message";
+      loginMessage.textContent = "";
+
+      try {
+        const { data, error } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        if (!data.user) {
+          throw new Error("We couldn't verify your account. Please try again.");
+        }
+
+        showMessage(
+          "Login successful! Opening your account...",
+          "success"
+        );
+
+        window.location.href = "profile.html";
+
+      } catch (error) {
+        console.error("Customer login error:", error);
+
+        showMessage(
+          error.message || "Login failed. Check your details and try again.",
+          "error"
+        );
+
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Log In";
+      }
+    });
+  </script>
+
+</body>
+</html>
