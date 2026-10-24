@@ -1430,49 +1430,104 @@ window.addEventListener("load", () => {
   }
 });
 // =====================================
-// CUSTOMER ACCOUNT MENU
-// =====================================
+// ========================================
+// JIDDERHS HEAVEN — CUSTOMER ACCOUNT MENU
+// ========================================
 
+(() => {
+  "use strict";
 
-const accountIcon = document.getElementById("accountIcon");
-const accountDropdown = document.getElementById("accountDropdown");
+  const accountMenu = document.getElementById("accountMenu");
+  const accountIcon = document.getElementById("accountIcon");
+  const accountDropdown = document.getElementById("accountDropdown");
 
-const accountLogin = document.getElementById("accountLogin");
-const accountSignup = document.getElementById("accountSignup");
-const accountProfile = document.getElementById("accountProfile");
+  const accountLogin = document.getElementById("accountLogin");
+  const accountSignup = document.getElementById("accountSignup");
+  const accountProfile = document.getElementById("accountProfile");
 
-if (accountIcon && accountDropdown) {
-  // Open or close the account menu.
+  // Check that the account HTML exists on this page.
+  if (
+    !accountMenu ||
+    !accountIcon ||
+    !accountDropdown ||
+    !accountLogin ||
+    !accountSignup ||
+    !accountProfile
+  ) {
+    console.warn(
+      "Customer account menu not initialized: check the account HTML."
+    );
+    return;
+  }
+
+  // Open and close the dropdown.
   accountIcon.addEventListener("click", () => {
-    const isOpen = !accountDropdown.hidden;
+    const opening = accountDropdown.hidden;
 
-    accountDropdown.hidden = isOpen;
-    accountIcon.setAttribute("aria-expanded", String(!isOpen));
+    accountDropdown.hidden = !opening;
+
+    accountIcon.setAttribute(
+      "aria-expanded",
+      String(opening)
+    );
   });
 
-  // Close when clicking elsewhere.
+  // Close the menu when clicking outside it.
   document.addEventListener("click", (event) => {
-    if (!event.target.closest("#accountMenu")) {
+    if (!accountMenu.contains(event.target)) {
       accountDropdown.hidden = true;
-      accountIcon.setAttribute("aria-expanded", "false");
+
+      accountIcon.setAttribute(
+        "aria-expanded",
+        "false"
+      );
     }
   });
 
-  // Show the correct links for the current login state.
-  async function updateAccountMenu() {
-    const { data, error } = await supabase.auth.getUser();
+  // Close the dropdown using Escape.
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      accountDropdown.hidden = true;
 
-    const loggedIn = !error && Boolean(data.user);
+      accountIcon.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+    }
+  });
+
+  // Show links according to the current login state.
+  function updateAccountMenu(user) {
+    const loggedIn = Boolean(user);
 
     accountLogin.hidden = loggedIn;
     accountSignup.hidden = loggedIn;
     accountProfile.hidden = !loggedIn;
+
+    accountIcon.setAttribute(
+      "aria-label",
+      loggedIn ? "My Profile" : "Log In or Sign Up"
+    );
   }
 
-  updateAccountMenu();
+  // Check the existing Supabase session.
+  supabase.auth.getSession().then(({ data, error }) => {
+    if (error) {
+      console.error(
+        "Could not check customer login:",
+        error.message
+      );
 
-  // Update the menu when authentication changes.
-  supabase.auth.onAuthStateChange(() => {
-    updateAccountMenu();
+      updateAccountMenu(null);
+      return;
+    }
+
+    updateAccountMenu(data.session?.user ?? null);
   });
-}
+
+  // Update the menu when login status changes.
+  supabase.auth.onAuthStateChange((_event, session) => {
+    updateAccountMenu(session?.user ?? null);
+  });
+
+})();
