@@ -1499,3 +1499,78 @@ h2 em {
   }
 
 }
+/* ========================================
+   CUSTOMER ACCOUNT MENU — HEADER LEFT
+======================================== */
+
+.account-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.account-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--ink, #211a17);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.account-icon:hover {
+  color: var(--gold, #bd9653);
+}
+
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  z-index: 1000;
+
+  width: 180px;
+  padding: 8px;
+
+  background: #faf7f1;
+  border: 1px solid #e9e1d6;
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(33, 26, 23, 0.14);
+}
+
+.account-dropdown a,
+.account-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+
+  color: #211a17;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account-dropdown a:hover,
+.account-dropdown button:hover {
+  background: #ead9b7;
+}
+
+.account-dropdown [hidden] {
+  display: none !important;
+}
+
+/* Prevent the dropdown from being clipped by the header. */
+.site-header,
+.nav-wrap {
+  overflow: visible;
+}
