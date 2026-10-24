@@ -380,7 +380,7 @@
             data: {
               full_name: fullName
             },
-            emailRedirectTo: window.location.origin + "/login.html"
+            emailRedirectTo: new URL("login.html", window.location.href).href
           }
         });
 
