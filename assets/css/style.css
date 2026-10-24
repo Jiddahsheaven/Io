@@ -1442,3 +1442,60 @@ h2 em {
 .cart-item-details h4 {
   overflow-wrap: anywhere;
 }
+/* ========================================
+   MOBILE HEADER — CENTERED BRAND LOGO
+======================================== */
+
+@media (max-width: 820px) {
+
+  .nav-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 76px;
+    gap: 8px;
+  }
+
+  /* Keep the menu on the left */
+  .menu-toggle {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  /* Center the logo independently of the side icons */
+  .nav-wrap > .brand {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Keep search, bag and account icons on the right */
+  .nav-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* Prevent the logo from overlapping the side controls */
+  .brand {
+    max-width: 48%;
+  }
+
+  .brand img {
+    display: block;
+    margin: 0 auto;
+  }
+
+}
