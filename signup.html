@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Customer Login | Jidderhs Heaven</title>
+  <title>Create Account | Jidderhs Heaven</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,7 +89,7 @@
     }
 
     .field {
-      margin-bottom: 18px;
+      margin-bottom: 17px;
     }
 
     label {
@@ -109,6 +109,7 @@
       font: inherit;
       font-size: 14px;
       outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus {
@@ -116,24 +117,16 @@
       box-shadow: 0 0 0 3px rgba(139, 107, 72, 0.12);
     }
 
-    .forgot-password {
-      display: block;
-      margin-top: -7px;
-      margin-bottom: 20px;
-      text-align: right;
+    .password-hint {
+      margin-top: 6px;
+      color: var(--muted);
       font-size: 12px;
-    }
-
-    .forgot-password a,
-    .auth-footer a {
-      color: var(--accent-dark);
-      font-weight: 700;
-      text-decoration: none;
     }
 
     .primary-button {
       width: 100%;
       padding: 14px;
+      margin-top: 5px;
       border: none;
       border-radius: 9px;
       background: var(--accent);
@@ -142,10 +135,15 @@
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
     }
 
     .primary-button:hover {
       background: var(--accent-dark);
+    }
+
+    .primary-button:active {
+      transform: scale(0.99);
     }
 
     .primary-button:disabled {
@@ -183,6 +181,16 @@
       line-height: 1.8;
     }
 
+    .auth-footer a {
+      color: var(--accent-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
     .back-link {
       display: block;
       margin-top: 20px;
@@ -217,21 +225,36 @@
     </div>
 
     <section class="auth-card">
-      <h1>Welcome back</h1>
+      <h1>Create your account</h1>
 
       <p class="subtitle">
-        Log in to your Jidderhs Heaven account.
+        Join Jidderhs Heaven for a simpler shopping experience.
       </p>
 
-      <form id="loginForm">
+      <form id="signupForm">
+
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Enter your full name"
+            autocomplete="name"
+            maxlength="100"
+            required
+          >
+        </div>
 
         <div class="field">
           <label for="email">Email address</label>
           <input
             type="email"
             id="email"
-            autocomplete="email"
+            name="email"
             placeholder="you@example.com"
+            autocomplete="email"
+            maxlength="254"
             required
           >
         </div>
@@ -241,26 +264,40 @@
           <input
             type="password"
             id="password"
-            autocomplete="current-password"
-            placeholder="Enter your password"
+            name="password"
+            placeholder="Create a strong password"
+            autocomplete="new-password"
+            minlength="8"
+            required
+          >
+          <p class="password-hint">
+            Use at least 8 characters.
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirm password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Enter your password again"
+            autocomplete="new-password"
+            minlength="8"
             required
           >
         </div>
 
-        <div class="forgot-password">
-          <a href="reset-password.html">Forgot password?</a>
-        </div>
-
         <button
           type="submit"
-          id="loginButton"
           class="primary-button"
+          id="signupButton"
         >
-          Log In
+          Create Account
         </button>
 
         <div
-          id="loginMessage"
+          id="signupMessage"
           class="message"
           role="status"
           aria-live="polite"
@@ -269,8 +306,8 @@
       </form>
 
       <div class="auth-footer">
-        Don't have an account?
-        <a href="signup.html">Create one</a>
+        Already have an account?
+        <a href="login.html">Log in</a>
       </div>
     </section>
 
@@ -283,17 +320,21 @@
   <script type="module">
     import { supabase } from "./assets/javascript/supabase.js";
 
-    const loginForm = document.getElementById("loginForm");
-    const loginButton = document.getElementById("loginButton");
-    const loginMessage = document.getElementById("loginMessage");
+    const signupForm = document.getElementById("signupForm");
+    const signupButton = document.getElementById("signupButton");
+    const signupMessage = document.getElementById("signupMessage");
 
     function showMessage(message, type) {
-      loginMessage.textContent = message;
-      loginMessage.className = "message " + type;
+      signupMessage.textContent = message;
+      signupMessage.className = "message " + type;
     }
 
-    loginForm.addEventListener("submit", async (event) => {
+    signupForm.addEventListener("submit", async (event) => {
       event.preventDefault();
+
+      const fullName = document
+        .getElementById("fullName")
+        .value.trim();
 
       const email = document
         .getElementById("email")
@@ -303,45 +344,75 @@
         .getElementById("password")
         .value;
 
-      loginButton.disabled = true;
-      loginButton.textContent = "Signing in...";
+      const confirmPassword = document
+        .getElementById("confirmPassword")
+        .value;
 
-      loginMessage.className = "message";
-      loginMessage.textContent = "";
+      if (!fullName) {
+        showMessage("Please enter your full name.", "error");
+        return;
+      }
+
+      if (password.length < 8) {
+        showMessage(
+          "Your password must contain at least 8 characters.",
+          "error"
+        );
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("Your passwords do not match.", "error");
+        return;
+      }
+
+      signupButton.disabled = true;
+      signupButton.textContent = "Creating account...";
+
+      signupMessage.className = "message";
+      signupMessage.textContent = "";
 
       try {
-        const { data, error } =
-          await supabase.auth.signInWithPassword({
-            email,
-            password
-          });
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName
+            },
+            emailRedirectTo: window.location.origin + "/login.html"
+          }
+        });
 
         if (error) {
           throw error;
         }
 
-        if (!data.user) {
-          throw new Error("We couldn't verify your account. Please try again.");
+        if (data.session) {
+          showMessage(
+            "Your account has been created successfully. You can now log in.",
+            "success"
+          );
+        } else {
+          showMessage(
+            "Registration received! Check your email for a verification link. Verify your email before logging in.",
+            "success"
+          );
         }
 
-        showMessage(
-          "Login successful! Opening your account...",
-          "success"
-        );
-
-        window.location.href = "profile.html";
+        signupForm.reset();
 
       } catch (error) {
-        console.error("Customer login error:", error);
+        console.error("Customer registration error:", error);
 
         showMessage(
-          error.message || "Login failed. Check your details and try again.",
+          error.message || "Registration failed. Please try again.",
           "error"
         );
 
       } finally {
-        loginButton.disabled = false;
-        loginButton.textContent = "Log In";
+        signupButton.disabled = false;
+        signupButton.textContent = "Create Account";
       }
     });
   </script>
