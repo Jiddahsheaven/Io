@@ -28,6 +28,60 @@
   <!-- ==================== HEADER ==================== -->
   <header class="site-header" id="top">
     <div class="container nav-wrap">
+<!-- CUSTOMER ACCOUNT — LEFT SIDE OF HEADER -->
+<div class="account-menu" id="accountMenu">
+
+  <button
+    class="icon-button account-icon"
+    id="accountIcon"
+    type="button"
+    aria-label="Log in or view account"
+    aria-expanded="false"
+    aria-controls="accountDropdown"
+  >
+    <svg
+      width="23"
+      height="23"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="8" r="4"></circle>
+      <path d="M4 21a8 8 0 0 1 16 0"></path>
+    </svg>
+  </button>
+
+  <div
+    class="account-dropdown"
+    id="accountDropdown"
+    hidden
+  >
+    <a href="login.html" id="accountLogin">
+      Log In
+    </a>
+
+    <a href="signup.html" id="accountSignup">
+      Sign Up
+    </a>
+
+    <a href="profile.html" id="accountProfile" hidden>
+      My Profile
+    </a>
+
+    <button
+      type="button"
+      id="accountLogout"
+      hidden
+    >
+      Sign Out
+    </button>
+  </div>
+
+</div>
       <button class="icon-button menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
