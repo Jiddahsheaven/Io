@@ -533,7 +533,7 @@ function setFilter(
 
 /* ==========================================================
    ADD PRODUCT TO CART
-   ========================================================== */
+========================================================== */
 
 function addToCart(productId) {
   const product = products.find(
@@ -545,7 +545,12 @@ function addToCart(productId) {
     return;
   }
 
-  if (Number(product.stock) <= 0) {
+  // Enforce stock limits only when stock is known.
+  if (
+    product.stock !== undefined &&
+    product.stock !== null &&
+    Number(product.stock) <= 0
+  ) {
     showToast("Sorry, this product is out of stock.");
     return;
   }
@@ -553,6 +558,19 @@ function addToCart(productId) {
   const existingItem = cart.find(
     item => String(item.id) === String(productId)
   );
+
+  const stockKnown =
+    product.stock !== undefined &&
+    product.stock !== null;
+
+  if (
+    existingItem &&
+    stockKnown &&
+    existingItem.qty >= Number(product.stock)
+  ) {
+    showToast("You have reached the available stock.");
+    return;
+  }
 
   if (existingItem) {
     existingItem.qty += 1;
@@ -563,7 +581,6 @@ function addToCart(productId) {
   updateCartUI();
   showToast(`${product.name} added to your bag.`);
 }
-
 
 /* ==========================================================
    REMOVE PRODUCT FROM CART
@@ -1429,7 +1446,7 @@ window.addEventListener("load", () => {
     console.warn("Could not restore page position:", error);
   }
 });
-// =====================================
+
 // ========================================
 // JIDDERHS HEAVEN — CUSTOMER ACCOUNT MENU
 // ========================================
