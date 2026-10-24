@@ -1429,3 +1429,51 @@ window.addEventListener("load", () => {
     console.warn("Could not restore page position:", error);
   }
 });
+// =====================================
+// CUSTOMER ACCOUNT MENU
+// =====================================
+
+import { supabase } from "./supabase.js";
+
+const accountIcon = document.getElementById("accountIcon");
+const accountDropdown = document.getElementById("accountDropdown");
+
+const accountLogin = document.getElementById("accountLogin");
+const accountSignup = document.getElementById("accountSignup");
+const accountProfile = document.getElementById("accountProfile");
+
+if (accountIcon && accountDropdown) {
+  // Open or close the account menu.
+  accountIcon.addEventListener("click", () => {
+    const isOpen = !accountDropdown.hidden;
+
+    accountDropdown.hidden = isOpen;
+    accountIcon.setAttribute("aria-expanded", String(!isOpen));
+  });
+
+  // Close when clicking elsewhere.
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest("#accountMenu")) {
+      accountDropdown.hidden = true;
+      accountIcon.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Show the correct links for the current login state.
+  async function updateAccountMenu() {
+    const { data, error } = await supabase.auth.getUser();
+
+    const loggedIn = !error && Boolean(data.user);
+
+    accountLogin.hidden = loggedIn;
+    accountSignup.hidden = loggedIn;
+    accountProfile.hidden = !loggedIn;
+  }
+
+  updateAccountMenu();
+
+  // Update the menu when authentication changes.
+  supabase.auth.onAuthStateChange(() => {
+    updateAccountMenu();
+  });
+}
