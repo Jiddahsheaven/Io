@@ -533,7 +533,7 @@ function setFilter(
 
 /* ==========================================================
    ADD PRODUCT TO CART
-========================================================== */
+   ========================================================== */
 
 function addToCart(productId) {
   const product = products.find(
@@ -545,12 +545,7 @@ function addToCart(productId) {
     return;
   }
 
-  // Enforce stock limits only when stock is known.
-  if (
-    product.stock !== undefined &&
-    product.stock !== null &&
-    Number(product.stock) <= 0
-  ) {
+  if (Number(product.stock) <= 0) {
     showToast("Sorry, this product is out of stock.");
     return;
   }
@@ -558,19 +553,6 @@ function addToCart(productId) {
   const existingItem = cart.find(
     item => String(item.id) === String(productId)
   );
-
-  const stockKnown =
-    product.stock !== undefined &&
-    product.stock !== null;
-
-  if (
-    existingItem &&
-    stockKnown &&
-    existingItem.qty >= Number(product.stock)
-  ) {
-    showToast("You have reached the available stock.");
-    return;
-  }
 
   if (existingItem) {
     existingItem.qty += 1;
@@ -581,6 +563,7 @@ function addToCart(productId) {
   updateCartUI();
   showToast(`${product.name} added to your bag.`);
 }
+
 
 /* ==========================================================
    REMOVE PRODUCT FROM CART
@@ -1446,105 +1429,3 @@ window.addEventListener("load", () => {
     console.warn("Could not restore page position:", error);
   }
 });
-
-// ========================================
-// JIDDERHS HEAVEN — CUSTOMER ACCOUNT MENU
-// ========================================
-
-(() => {
-  "use strict";
-
-  const accountMenu = document.getElementById("accountMenu");
-  const accountIcon = document.getElementById("accountIcon");
-  const accountDropdown = document.getElementById("accountDropdown");
-
-  const accountLogin = document.getElementById("accountLogin");
-  const accountSignup = document.getElementById("accountSignup");
-  const accountProfile = document.getElementById("accountProfile");
-
-  // Check that the account HTML exists on this page.
-  if (
-    !accountMenu ||
-    !accountIcon ||
-    !accountDropdown ||
-    !accountLogin ||
-    !accountSignup ||
-    !accountProfile
-  ) {
-    console.warn(
-      "Customer account menu not initialized: check the account HTML."
-    );
-    return;
-  }
-
-  // Open and close the dropdown.
-  accountIcon.addEventListener("click", () => {
-    const opening = accountDropdown.hidden;
-
-    accountDropdown.hidden = !opening;
-
-    accountIcon.setAttribute(
-      "aria-expanded",
-      String(opening)
-    );
-  });
-
-  // Close the menu when clicking outside it.
-  document.addEventListener("click", (event) => {
-    if (!accountMenu.contains(event.target)) {
-      accountDropdown.hidden = true;
-
-      accountIcon.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-    }
-  });
-
-  // Close the dropdown using Escape.
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      accountDropdown.hidden = true;
-
-      accountIcon.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-    }
-  });
-
-  // Show links according to the current login state.
-  function updateAccountMenu(user) {
-    const loggedIn = Boolean(user);
-
-    accountLogin.hidden = loggedIn;
-    accountSignup.hidden = loggedIn;
-    accountProfile.hidden = !loggedIn;
-
-    accountIcon.setAttribute(
-      "aria-label",
-      loggedIn ? "My Profile" : "Log In or Sign Up"
-    );
-  }
-
-  // Check the existing Supabase session.
-  supabase.auth.getSession().then(({ data, error }) => {
-    if (error) {
-      console.error(
-        "Could not check customer login:",
-        error.message
-      );
-
-      updateAccountMenu(null);
-      return;
-    }
-
-    updateAccountMenu(data.session?.user ?? null);
-  });
-
-  // Update the menu when login status changes.
-  supabase.auth.onAuthStateChange((_event, session) => {
-    updateAccountMenu(session?.user ?? null);
-  });
-
-})();
