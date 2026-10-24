@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Jidderhs Heaven</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f5f1;
+      color: #29231f;
+    }
+
+    header {
+      background: #241a16;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    main {
+      width: 90%;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+
+    .profile-card {
+      background: white;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .detail {
+      margin: 20px 0;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #eee;
+      overflow-wrap: anywhere;
+    }
+
+    .label {
+      display: block;
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .value {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button,
+    .back-link {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 7px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button {
+      background: #7b4b32;
+      color: white;
+    }
+
+    .back-link {
+      background: #eee7e1;
+      color: #29231f;
+    }
+
+    #message {
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Jidderhs Heaven</h1>
+  </header>
+
+  <main>
+    <section class="profile-card">
+      <h2>My Profile</h2>
+      <p id="message">Loading your account...</p>
+
+      <div id="profileDetails" hidden>
+        <div class="detail">
+          <span class="label">Full Name</span>
+          <span class="value" id="fullName"></span>
+        </div>
+
+        <div class="detail">
+          <span class="label">Email Address</span>
+          <span class="value" id="email"></span>
+        </div>
+
+        <button id="logoutButton">Log Out</button>
+      </div>
+
+      <a class="back-link" href="index.html">Back to Store</a>
+    </section>
+  </main>
+
+  <script type="module">
+    import { supabase } from "./assets/javascript/supabase.js";
+
+    const message = document.getElementById("message");
+    const profileDetails = document.getElementById("profileDetails");
+    const fullName = document.getElementById("fullName");
+    const email = document.getElementById("email");
+    const logoutButton = document.getElementById("logoutButton");
+
+    async function loadProfile() {
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error || !data.user) {
+        message.textContent =
+          "You are not logged in. Please log in to view your profile.";
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000);
+
+        return;
+      }
+
+      const user = data.user;
+
+      fullName.textContent =
+        user.user_metadata?.full_name || "Customer";
+
+      email.textContent = user.email || "No email available";
+
+      message.textContent = "Your account details are below.";
+      profileDetails.hidden = false;
+    }
+
+    logoutButton.addEventListener("click", async () => {
+      logoutButton.disabled = true;
+      logoutButton.textContent = "Logging out...";
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        message.textContent = "Unable to log out. Please try again.";
+        logoutButton.disabled = false;
+        logoutButton.textContent = "Log Out";
+        return;
+      }
+
+      window.location.href = "login.html";
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>
