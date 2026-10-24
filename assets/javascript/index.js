@@ -1433,7 +1433,6 @@ window.addEventListener("load", () => {
 // CUSTOMER ACCOUNT MENU
 // =====================================
 
-import { supabase } from "./supabase.js";
 
 const accountIcon = document.getElementById("accountIcon");
 const accountDropdown = document.getElementById("accountDropdown");
