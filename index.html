@@ -459,6 +459,145 @@
 
 </nav>
 
+<!-- =====================================
+     JIDDERHS HEAVEN — ACCOUNT PANEL
+====================================== -->
+
+<div
+  class="account-overlay"
+  id="accountOverlay"
+  aria-hidden="true"
+></div>
+
+<section
+  class="account-panel"
+  id="accountPanel"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="accountTitle"
+  aria-hidden="true"
+>
+  <div class="account-panel-handle"></div>
+
+  <header class="account-panel-header">
+    <div>
+      <span class="account-eyebrow">JIDDERHS HEAVEN</span>
+
+      <h2 id="accountTitle">Your Account</h2>
+
+      <p>Your essentials, all in one place.</p>
+    </div>
+
+    <button
+      class="account-close"
+      id="accountClose"
+      type="button"
+      aria-label="Close account panel"
+    >
+      &times;
+    </button>
+  </header>
+
+  <!-- Guest account card -->
+  <div class="account-welcome">
+    <div class="account-avatar" aria-hidden="true">JH</div>
+
+    <div class="account-welcome-text">
+      <h3>Welcome to Jidderhs Heaven</h3>
+      <p>Sign in to access your personal account.</p>
+    </div>
+  </div>
+
+  <a class="account-signin" href="login.html">
+    <span>Sign in / Create account</span>
+    <span aria-hidden="true">↗</span>
+  </a>
+
+  <!-- Account options -->
+  <div class="account-menu-section">
+    <span class="account-section-label">YOUR ACCOUNT</span>
+
+    <a class="account-menu-item" href="profile.html">
+      <span class="account-menu-icon" aria-hidden="true">♙</span>
+
+      <span class="account-menu-copy">
+        <strong>My Profile</strong>
+        <small>Personal details and delivery address</small>
+      </span>
+
+      <span class="account-arrow" aria-hidden="true">›</span>
+    </a>
+
+    <button
+      class="account-menu-item"
+      type="button"
+      data-account-feature="orders"
+    >
+      <span class="account-menu-icon" aria-hidden="true">▤</span>
+
+      <span class="account-menu-copy">
+        <strong>My Orders</strong>
+        <small>Track purchases and order status</small>
+      </span>
+
+      <span class="account-arrow" aria-hidden="true">›</span>
+    </button>
+
+    <button
+      class="account-menu-item"
+      type="button"
+      data-account-feature="notifications"
+    >
+      <span class="account-menu-icon" aria-hidden="true">♧</span>
+
+      <span class="account-menu-copy">
+        <strong>Notifications</strong>
+        <small>Order updates and important alerts</small>
+      </span>
+
+      <span class="account-arrow" aria-hidden="true">›</span>
+    </button>
+  </div>
+
+  <div class="account-menu-section">
+    <span class="account-section-label">PREFERENCES & SUPPORT</span>
+
+    <button
+      class="account-menu-item"
+      type="button"
+      data-account-feature="settings"
+    >
+      <span class="account-menu-icon" aria-hidden="true">⚙</span>
+
+      <span class="account-menu-copy">
+        <strong>Settings & Security</strong>
+        <small>Manage your account preferences</small>
+      </span>
+
+      <span class="account-arrow" aria-hidden="true">›</span>
+    </button>
+
+    <button
+      class="account-menu-item"
+      type="button"
+      data-account-feature="support"
+    >
+      <span class="account-menu-icon" aria-hidden="true">♡</span>
+
+      <span class="account-menu-copy">
+        <strong>Help & Support</strong>
+        <small>We're here to help</small>
+      </span>
+
+      <span class="account-arrow" aria-hidden="true">›</span>
+    </button>
+  </div>
+
+  <footer class="account-panel-footer">
+    <span>Thoughtfully selected. Beautifully yours.</span>
+  </footer>
+</section>
+
   <script type="module" src="./assets/javascript/index.js"></script>
 </body>
 </html>
