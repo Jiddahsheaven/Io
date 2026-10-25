@@ -1429,3 +1429,300 @@ window.addEventListener("load", () => {
     console.warn("Could not restore page position:", error);
   }
 });
+
+/* =========================================
+   JIDDERHS HEAVEN — GLASS NAVIGATION LOGIC
+========================================= */
+
+(() => {
+  "use strict";
+
+  const nav = document.getElementById("jhGlassNav");
+  const overlay = document.getElementById("jhGlassOverlay");
+  const sheet = document.getElementById("jhAccountSheet");
+
+  const accountButton = document.getElementById("jhBottomAccount");
+  const closeButton = document.getElementById("jhAccountClose");
+  const bagButton = document.getElementById("jhBottomBag");
+
+  const guestActions = document.getElementById("jhGuestActions");
+  const customerActions = document.getElementById("jhCustomerActions");
+
+  const greeting = document.getElementById("jhAccountGreeting");
+  const subtitle = document.getElementById("jhAccountSubtitle");
+
+  const signOutButton = document.getElementById("jhSignOut");
+
+  const bottomBagCount = document.getElementById("jhBottomBagCount");
+
+  if (
+    !nav ||
+    !overlay ||
+    !sheet ||
+    !accountButton ||
+    !closeButton ||
+    !bagButton
+  ) {
+    console.warn(
+      "Jidderhs Heaven glass navigation: required HTML elements are missing."
+    );
+
+    return;
+  }
+
+  /* -----------------------------------------
+     OPEN AND CLOSE ACCOUNT PANEL
+  ----------------------------------------- */
+
+  function openAccountSheet() {
+    sheet.hidden = false;
+    overlay.hidden = false;
+
+    sheet.setAttribute("aria-hidden", "false");
+    accountButton.setAttribute("aria-expanded", "true");
+
+    document.body.classList.add("jh-glass-open");
+  }
+
+  function closeAccountSheet() {
+    sheet.hidden = true;
+    overlay.hidden = true;
+
+    sheet.setAttribute("aria-hidden", "true");
+    accountButton.setAttribute("aria-expanded", "false");
+
+    document.body.classList.remove("jh-glass-open");
+  }
+
+  accountButton.addEventListener("click", () => {
+    if (sheet.hidden) {
+      openAccountSheet();
+    } else {
+      closeAccountSheet();
+    }
+  });
+
+  closeButton.addEventListener("click", closeAccountSheet);
+
+  overlay.addEventListener("click", closeAccountSheet);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !sheet.hidden) {
+      closeAccountSheet();
+      accountButton.focus();
+    }
+  });
+
+  /* -----------------------------------------
+     ACTIVE NAVIGATION TAB
+  ----------------------------------------- */
+
+  function setActiveTab(tabName) {
+    nav.querySelectorAll("[data-jh-tab]").forEach((tab) => {
+      const isActive = tab.dataset.jhTab === tabName;
+
+      tab.classList.toggle("is-active", isActive);
+
+      if (isActive && tab.tagName === "A") {
+        tab.setAttribute("aria-current", "page");
+      } else {
+        tab.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  const homeTab = nav.querySelector('[data-jh-tab="home"]');
+  const shopTab = nav.querySelector('[data-jh-tab="shop"]');
+
+  if (homeTab) {
+    homeTab.addEventListener("click", () => {
+      setActiveTab("home");
+      closeAccountSheet();
+    });
+  }
+
+  if (shopTab) {
+    shopTab.addEventListener("click", () => {
+      setActiveTab("shop");
+      closeAccountSheet();
+    });
+  }
+
+  accountButton.addEventListener("click", () => {
+    setActiveTab("account");
+  });
+
+  /* -----------------------------------------
+     CONNECT TO THE EXISTING SHOPPING BAG
+  ----------------------------------------- */
+
+  bagButton.addEventListener("click", () => {
+    closeAccountSheet();
+
+    setActiveTab("bag");
+
+    const existingBagButton = document.getElementById("bagToggle");
+
+    if (existingBagButton) {
+      existingBagButton.click();
+    } else {
+      console.warn(
+        "Existing #bagToggle was not found. The original cart button must remain in index.html."
+      );
+    }
+  });
+
+  /* -----------------------------------------
+     KEEP THE BAG COUNT IN SYNC
+  ----------------------------------------- */
+
+  function updateBottomBagCount() {
+    if (!bottomBagCount) return;
+
+    const existingCount = document.getElementById("bagCount");
+
+    if (existingCount) {
+      bottomBagCount.textContent =
+        existingCount.textContent.trim() || "0";
+    }
+  }
+
+  updateBottomBagCount();
+
+  if (document.body) {
+    const bagObserver = new MutationObserver(updateBottomBagCount);
+
+    const existingCount = document.getElementById("bagCount");
+
+    if (existingCount) {
+      bagObserver.observe(existingCount, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+    }
+  }
+
+  /* -----------------------------------------
+     SUPABASE AUTHENTICATION
+  ----------------------------------------- */
+
+  function updateAccountUI(session) {
+    const user = session?.user;
+
+    if (user) {
+      if (guestActions) guestActions.hidden = true;
+
+      if (customerActions) customerActions.hidden = false;
+
+      if (signOutButton) signOutButton.hidden = false;
+
+      const displayName =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email?.split("@")[0] ||
+        "Customer";
+
+      if (greeting) {
+        greeting.textContent = `Hello, ${displayName}`;
+      }
+
+      if (subtitle) {
+        subtitle.textContent = user.email || "Welcome back";
+      }
+    } else {
+      if (guestActions) guestActions.hidden = false;
+
+      if (customerActions) customerActions.hidden = true;
+
+      if (signOutButton) signOutButton.hidden = true;
+
+      if (greeting) greeting.textContent = "Hello, Guest";
+
+      if (subtitle) {
+        subtitle.textContent = "Sign in to your account";
+      }
+    }
+  }
+
+  async function initializeGlassAccount() {
+    if (
+      typeof supabase === "undefined" ||
+      !supabase?.auth
+    ) {
+      console.warn(
+        "Glass account menu: existing Supabase client is unavailable."
+      );
+
+      updateAccountUI(null);
+
+      return;
+    }
+
+    try {
+      const {
+        data: { session },
+        error
+      } = await supabase.auth.getSession();
+
+      if (error) throw error;
+
+      updateAccountUI(session);
+    } catch (error) {
+      console.error(
+        "Could not load the current customer session:",
+        error
+      );
+
+      updateAccountUI(null);
+    }
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      updateAccountUI(session);
+    });
+  }
+
+  initializeGlassAccount();
+
+  /* -----------------------------------------
+     SIGN OUT
+  ----------------------------------------- */
+
+  if (signOutButton) {
+    signOutButton.addEventListener("click", async () => {
+      if (
+        typeof supabase === "undefined" ||
+        !supabase?.auth
+      ) {
+        console.error("Supabase authentication is unavailable.");
+        return;
+      }
+
+      signOutButton.disabled = true;
+
+      try {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) throw error;
+
+        updateAccountUI(null);
+        closeAccountSheet();
+
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Sign-out failed:", error);
+
+        alert(
+          "We could not sign you out. Please check your connection and try again."
+        );
+      } finally {
+        signOutButton.disabled = false;
+      }
+    });
+  }
+
+  console.log(
+    "Jidderhs Heaven Liquid Glass navigation initialized."
+  );
+
+})();
