@@ -3,9 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>My Profile | Jidderhs Heaven</title>
 
   <style>
+    :root {
+      --ink: #211a17;
+      --gold: #bd9653;
+      --gold-light: #ead9b7;
+      --cream: #faf7f1;
+      --white: #ffffff;
+      --muted: #756d66;
+      --border: #e9e1d7;
+      --success: #26734d;
+      --danger: #a83232;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -13,56 +26,173 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f8f5f1;
-      color: #29231f;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
     }
 
     header {
-      background: #241a16;
-      color: white;
+      background: var(--ink);
+      color: var(--white);
       padding: 20px;
       text-align: center;
+      border-bottom: 3px solid var(--gold);
     }
 
     header h1 {
       margin: 0;
-      font-size: 24px;
+      font-family: Georgia, serif;
+      font-size: 25px;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      margin: 4px 0 0;
+      color: var(--gold-light);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
     main {
-      width: 90%;
-      max-width: 600px;
-      margin: 40px auto;
+      width: 92%;
+      max-width: 650px;
+      margin: 35px auto;
     }
 
     .profile-card {
-      background: white;
+      background: var(--white);
       padding: 28px;
+      border: 1px solid var(--border);
       border-radius: 14px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 30px rgba(33, 26, 23, 0.06);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
     h2 {
-      margin-top: 0;
+      margin: 4px 0 8px;
+      font-family: Georgia, serif;
+      font-size: 29px;
     }
 
-    .detail {
-      margin: 20px 0;
-      padding-bottom: 14px;
-      border-bottom: 1px solid #eee;
+    .intro {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 24px;
+    }
+
+    #message {
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 7px;
+      background: #f5f0e8;
+      color: var(--ink);
+      font-size: 14px;
       overflow-wrap: anywhere;
     }
 
-    .label {
-      display: block;
-      color: #777;
-      font-size: 13px;
-      margin-bottom: 7px;
+    #message:empty {
+      display: none;
     }
 
-    .value {
-      font-size: 16px;
+    #message.success {
+      background: #e8f5ed;
+      color: var(--success);
+    }
+
+    #message.error {
+      background: #fbeaea;
+      color: var(--danger);
+    }
+
+    .field {
+      margin: 20px 0;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
       font-weight: bold;
+    }
+
+    .field input,
+    .field textarea {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: 2px solid var(--gold-light);
+      border-color: var(--gold);
+    }
+
+    .field input[readonly] {
+      background: #f6f3ef;
+      color: var(--muted);
+    }
+
+    .field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .helper {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .account-info {
+      margin-top: 28px;
+      padding: 17px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    .account-info h3 {
+      margin: 0 0 12px;
+      font-family: Georgia, serif;
+      font-size: 17px;
+    }
+
+    .date-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .date-row:last-child {
+      border-bottom: none;
+    }
+
+    .date-row span:first-child {
+      color: var(--muted);
+    }
+
+    .date-row span:last-child {
+      text-align: right;
+      overflow-wrap: anywhere;
     }
 
     button,
@@ -70,57 +200,180 @@
       display: block;
       width: 100%;
       padding: 13px;
-      margin-top: 15px;
+      margin-top: 14px;
       border: none;
       border-radius: 7px;
       text-align: center;
       text-decoration: none;
-      font-size: 15px;
+      font-size: 14px;
+      font-weight: bold;
       cursor: pointer;
+      transition: opacity 0.2s;
     }
 
-    button {
-      background: #7b4b32;
-      color: white;
+    button:hover,
+    .back-link:hover {
+      opacity: 0.88;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .save-button {
+      background: var(--gold);
+      color: var(--ink);
     }
 
     .back-link {
-      background: #eee7e1;
-      color: #29231f;
+      background: #f0e9df;
+      color: var(--ink);
     }
 
-    #message {
-      line-height: 1.5;
-      overflow-wrap: anywhere;
+    .logout-button {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 480px) {
+      main {
+        margin: 22px auto;
+      }
+
+      .profile-card {
+        padding: 21px;
+      }
+
+      h2 {
+        font-size: 25px;
+      }
+
+      .date-row {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .date-row span:last-child {
+        text-align: left;
+      }
     }
   </style>
 </head>
 
 <body>
+
   <header>
     <h1>Jidderhs Heaven</h1>
+    <p>Your account, your way</p>
   </header>
 
   <main>
     <section class="profile-card">
+
+      <div class="eyebrow">Customer Account</div>
+
       <h2>My Profile</h2>
-      <p id="message">Loading your account...</p>
 
-      <div id="profileDetails" hidden>
-        <div class="detail">
-          <span class="label">Full Name</span>
-          <span class="value" id="fullName"></span>
+      <p class="intro">
+        Manage your personal information and delivery details.
+      </p>
+
+      <p id="message" role="status" aria-live="polite">
+        Loading your account...
+      </p>
+
+      <form id="profileForm" hidden>
+
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            maxlength="100"
+            autocomplete="name"
+            required
+          >
         </div>
 
-        <div class="detail">
-          <span class="label">Email Address</span>
-          <span class="value" id="email"></span>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            readonly
+            autocomplete="email"
+          >
+          <span class="helper">
+            Your email is managed by your login account.
+          </span>
         </div>
 
-        <button id="logoutButton">Log Out</button>
-      </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            maxlength="30"
+            autocomplete="tel"
+            placeholder="Enter your phone number"
+          >
+        </div>
 
-      <a class="back-link" href="index.html">Back to Store</a>
+        <div class="field">
+          <label for="deliveryAddress">Delivery Address</label>
+          <textarea
+            id="deliveryAddress"
+            name="deliveryAddress"
+            maxlength="1000"
+            autocomplete="street-address"
+            placeholder="Enter your delivery address"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          id="saveButton"
+          class="save-button"
+        >
+          Save Changes
+        </button>
+
+        <div class="account-info">
+          <h3>Account Information</h3>
+
+          <div class="date-row">
+            <span>Account Created</span>
+            <span id="createdAt">Not available</span>
+          </div>
+
+          <div class="date-row">
+            <span>Last Updated</span>
+            <span id="updatedAt">Not available</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          id="logoutButton"
+          class="logout-button"
+        >
+          Log Out
+        </button>
+
+      </form>
+
+      <a class="back-link" href="index.html">
+        Back to Store
+      </a>
+
     </section>
   </main>
 
@@ -128,53 +381,205 @@
     import { supabase } from "./assets/javascript/supabase.js";
 
     const message = document.getElementById("message");
-    const profileDetails = document.getElementById("profileDetails");
+    const profileForm = document.getElementById("profileForm");
     const fullName = document.getElementById("fullName");
     const email = document.getElementById("email");
+    const phone = document.getElementById("phone");
+    const deliveryAddress = document.getElementById("deliveryAddress");
+    const saveButton = document.getElementById("saveButton");
     const logoutButton = document.getElementById("logoutButton");
+    const createdAt = document.getElementById("createdAt");
+    const updatedAt = document.getElementById("updatedAt");
+
+    let currentUser = null;
+
+    function showMessage(text, type = "") {
+      message.textContent = text;
+      message.className = type;
+    }
+
+    function formatDate(value) {
+      if (!value) return "Not available";
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Not available";
+      }
+
+      return new Intl.DateTimeFormat("en-NG", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(date);
+    }
+
+    function displayProfile(profile) {
+      fullName.value = profile.full_name || "";
+      phone.value = profile.phone || "";
+      deliveryAddress.value = profile.delivery_address || "";
+
+      createdAt.textContent = formatDate(profile.created_at);
+      updatedAt.textContent = formatDate(profile.updated_at);
+
+      profileForm.hidden = false;
+    }
 
     async function loadProfile() {
-      const { data, error } = await supabase.auth.getUser();
+      try {
+        const { data: authData, error: authError } =
+          await supabase.auth.getUser();
 
-      if (error || !data.user) {
-        message.textContent =
-          "You are not logged in. Please log in to view your profile.";
+        if (authError) {
+          throw authError;
+        }
 
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 2000);
+        if (!authData.user) {
+          showMessage(
+            "You are not logged in. Please log in to view your profile."
+          );
 
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2500);
+
+          return;
+        }
+
+        currentUser = authData.user;
+        email.value = currentUser.email || "";
+
+        let { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select(
+            "id, full_name, phone, delivery_address, created_at, updated_at"
+          )
+          .eq("id", currentUser.id)
+          .maybeSingle();
+
+        if (profileError) {
+          throw profileError;
+        }
+
+        // Create a profile record if this customer does not have one yet.
+        if (!profile) {
+          const { data: newProfile, error: insertError } = await supabase
+            .from("profiles")
+            .insert({
+              id: currentUser.id,
+              full_name:
+                currentUser.user_metadata?.full_name ||
+                currentUser.user_metadata?.name ||
+                "",
+              phone: "",
+              delivery_address: ""
+            })
+            .select(
+              "id, full_name, phone, delivery_address, created_at, updated_at"
+            )
+            .single();
+
+          if (insertError) {
+            throw insertError;
+          }
+
+          profile = newProfile;
+        }
+
+        displayProfile(profile);
+
+        showMessage("Your profile is ready.", "success");
+
+      } catch (error) {
+        console.error("Profile loading error:", error);
+
+        showMessage(
+          "We couldn't load your profile. Please check your connection and try again.",
+          "error"
+        );
+      }
+    }
+
+    profileForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser) {
+        showMessage("Please log in before saving your profile.", "error");
         return;
       }
 
-      const user = data.user;
+      if (!profileForm.reportValidity()) {
+        return;
+      }
 
-      fullName.textContent =
-        user.user_metadata?.full_name || "Customer";
+      saveButton.disabled = true;
+      saveButton.textContent = "Saving...";
 
-      email.textContent = user.email || "No email available";
+      try {
+        const updates = {
+          full_name: fullName.value.trim(),
+          phone: phone.value.trim(),
+          delivery_address: deliveryAddress.value.trim()
+        };
 
-      message.textContent = "Your account details are below.";
-      profileDetails.hidden = false;
-    }
+        const { data: updatedProfile, error: updateError } = await supabase
+          .from("profiles")
+          .update(updates)
+          .eq("id", currentUser.id)
+          .select(
+            "id, full_name, phone, delivery_address, created_at, updated_at"
+          )
+          .single();
+
+        if (updateError) {
+          throw updateError;
+        }
+
+        displayProfile(updatedProfile);
+
+        showMessage("Your profile has been saved successfully.", "success");
+
+      } catch (error) {
+        console.error("Profile save error:", error);
+
+        showMessage(
+          "Unable to save your profile. Please try again.",
+          "error"
+        );
+
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Changes";
+      }
+    });
 
     logoutButton.addEventListener("click", async () => {
       logoutButton.disabled = true;
       logoutButton.textContent = "Logging out...";
 
-      const { error } = await supabase.auth.signOut();
+      try {
+        const { error } = await supabase.auth.signOut();
 
-      if (error) {
-        message.textContent = "Unable to log out. Please try again.";
+        if (error) {
+          throw error;
+        }
+
+        window.location.href = "login.html";
+
+      } catch (error) {
+        console.error("Logout error:", error);
+
+        showMessage(
+          "Unable to log out. Please try again.",
+          "error"
+        );
+
         logoutButton.disabled = false;
         logoutButton.textContent = "Log Out";
-        return;
       }
-
-      window.location.href = "login.html";
     });
 
     loadProfile();
   </script>
+
 </body>
 </html>
