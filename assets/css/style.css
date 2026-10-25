@@ -1723,7 +1723,7 @@ body {
   pointer-events: none;
 
   transition:
-    opacity 0.3s ease,
+    opacity 0.4s ease,
     visibility 0.3s ease;
 }
 
