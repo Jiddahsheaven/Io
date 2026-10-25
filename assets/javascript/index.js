@@ -427,47 +427,58 @@ function renderFeatured() {
 
 
 /* ==========================================================
-   RENDER ALL PRODUCTS — FIX
-========================================================== */
+   RENDER ALL PRODUCTS
+   ========================================================== */
 
-function renderProducts(filter = "all", query = "") {
+function renderProducts(
+  filter = activeFilter,
+  query = ""
+) {
+
   activeFilter = filter;
 
-  if (!allProducts) {
-    console.error("Product container #allProducts was not found.");
-    return;
-  }
 
   const visible = products.filter((product) => {
-    const matchesFilter =
-      filter === "all" || product.category === filter;
-
-    const matchesQuery =
-      productMatchesSearch(product, query);
-
-    return matchesFilter && matchesQuery;
+    const matchesFilter = filter === "all" || product.category === filter;
+    return matchesFilter && productMatchesSearch(product, query);
   });
 
-  allProducts.replaceChildren();
 
-  if (visible.length === 0) {
+  allProducts.innerHTML = "";
+
+
+  if (!visible.length) {
+
     allProducts.innerHTML = `
+
       <div class="empty-state">
-        <h3>No pieces found.</h3>
-        <p>Try another search or switch categories.</p>
+
+        <h3>
+          No pieces found.
+        </h3>
+
+        <p>
+          Try another search or switch categories.
+        </p>
+
       </div>
+
     `;
+
     return;
   }
 
+
   visible.forEach((product) => {
-    allProducts.appendChild(createProductCard(product));
+
+    allProducts.appendChild(
+      createProductCard(product)
+    );
+
   });
 
-  console.log(
-    `Rendered ${visible.length} products. Search: "${query}"`
-  );
 }
+
 
 /* ==========================================================
    UPDATE FILTER BUTTONS
@@ -1418,273 +1429,3 @@ window.addEventListener("load", () => {
     console.warn("Could not restore page position:", error);
   }
 });
-
-/* =========================================
-   JIDDERHS HEAVEN — GLASS NAVIGATION LOGIC
-========================================= */
-
-(() => {
-  "use strict";
-
-  const nav = document.getElementById("jhGlassNav");
-  const overlay = document.getElementById("jhGlassOverlay");
-  const sheet = document.getElementById("jhAccountSheet");
-
-  const accountButton = document.getElementById("jhBottomAccount");
-  const closeButton = document.getElementById("jhAccountClose");
-  const bagButton = document.getElementById("jhBottomBag");
-
-  const guestActions = document.getElementById("jhGuestActions");
-  const customerActions = document.getElementById("jhCustomerActions");
-
-  const greeting = document.getElementById("jhAccountGreeting");
-  const subtitle = document.getElementById("jhAccountSubtitle");
-
-  const signOutButton = document.getElementById("jhSignOut");
-  const bottomBagCount = document.getElementById("jhBottomBagCount");
-
-  if (
-    !nav ||
-    !overlay ||
-    !sheet ||
-    !accountButton ||
-    !closeButton ||
-    !bagButton
-  ) {
-    console.warn(
-      "Jidderhs Heaven glass navigation: required HTML elements are missing."
-    );
-    return;
-  }
-
-  /* OPEN AND CLOSE ACCOUNT PANEL */
-
-  function openAccountSheet() {
-    sheet.hidden = false;
-    overlay.hidden = false;
-
-    sheet.setAttribute("aria-hidden", "false");
-    accountButton.setAttribute("aria-expanded", "true");
-
-    document.body.classList.add("jh-glass-open");
-  }
-
-  function closeAccountSheet() {
-    sheet.hidden = true;
-    overlay.hidden = true;
-
-    sheet.setAttribute("aria-hidden", "true");
-    accountButton.setAttribute("aria-expanded", "false");
-
-    document.body.classList.remove("jh-glass-open");
-  }
-
-  accountButton.addEventListener("click", () => {
-    if (sheet.hidden) {
-      openAccountSheet();
-    } else {
-      closeAccountSheet();
-    }
-
-    setActiveTab("account");
-  });
-
-  closeButton.addEventListener("click", closeAccountSheet);
-  overlay.addEventListener("click", closeAccountSheet);
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !sheet.hidden) {
-      closeAccountSheet();
-      accountButton.focus();
-    }
-  });
-
-  /* ACTIVE NAVIGATION TAB */
-
-  function setActiveTab(tabName) {
-    nav.querySelectorAll("[data-jh-tab]").forEach((tab) => {
-      const isActive = tab.dataset.jhTab === tabName;
-
-      tab.classList.toggle("is-active", isActive);
-
-      if (isActive && tab.tagName === "A") {
-        tab.setAttribute("aria-current", "page");
-      } else {
-        tab.removeAttribute("aria-current");
-      }
-    });
-  }
-
-  const homeTab = nav.querySelector('[data-jh-tab="home"]');
-  const shopTab = nav.querySelector('[data-jh-tab="shop"]');
-
-  if (homeTab) {
-    homeTab.addEventListener("click", () => {
-      setActiveTab("home");
-      closeAccountSheet();
-    });
-  }
-
-  if (shopTab) {
-    shopTab.addEventListener("click", () => {
-      setActiveTab("shop");
-      closeAccountSheet();
-    });
-  }
-
-  /* ========================================
-   BOTTOM BAG BUTTON
-======================================== */
-
-bagButton.addEventListener("click", () => {
-  closeAccountSheet();
-  setActiveTab("bag");
-
-  if (typeof openCart === "function") {
-    openCart();
-  } else {
-    console.error("Cart function is unavailable.");
-  }
-});
-
-  /* SYNCHRONIZE BAG COUNT */
-
-  function updateBottomBagCount() {
-    if (!bottomBagCount) return;
-
-    const existingCount = document.getElementById("bagCount");
-
-    if (existingCount) {
-      bottomBagCount.textContent =
-        existingCount.textContent.trim() || "0";
-    } else {
-      const count = Array.isArray(window.cart)
-        ? window.cart.reduce(
-            (total, item) => total + (Number(item.qty) || 0),
-            0
-          )
-        : null;
-
-      if (count !== null) {
-        bottomBagCount.textContent = String(count);
-      }
-    }
-  }
-
-  updateBottomBagCount();
-
-  const existingCount = document.getElementById("bagCount");
-
-  if (existingCount) {
-    const bagObserver = new MutationObserver(updateBottomBagCount);
-
-    bagObserver.observe(existingCount, {
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
-  }
-
-  /* SUPABASE ACCOUNT UI */
-
-  function updateAccountUI(session) {
-    const user = session?.user;
-
-    if (user) {
-      if (guestActions) guestActions.hidden = true;
-      if (customerActions) customerActions.hidden = false;
-      if (signOutButton) signOutButton.hidden = false;
-
-      const displayName =
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        user.email?.split("@")[0] ||
-        "Customer";
-
-      if (greeting) {
-        greeting.textContent = `Hello, ${displayName}`;
-      }
-
-      if (subtitle) {
-        subtitle.textContent = user.email || "Welcome back";
-      }
-    } else {
-      if (guestActions) guestActions.hidden = false;
-      if (customerActions) customerActions.hidden = true;
-      if (signOutButton) signOutButton.hidden = true;
-
-      if (greeting) greeting.textContent = "Hello, Guest";
-
-      if (subtitle) {
-        subtitle.textContent = "Sign in to your account";
-      }
-    }
-  }
-
-  async function initializeGlassAccount() {
-    if (
-      typeof supabase === "undefined" ||
-      !supabase?.auth
-    ) {
-      console.warn("Supabase authentication is unavailable.");
-      updateAccountUI(null);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (error) throw error;
-
-      updateAccountUI(data.session);
-    } catch (error) {
-      console.error("Could not load account session:", error);
-      updateAccountUI(null);
-    }
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      updateAccountUI(session);
-    });
-  }
-
-  initializeGlassAccount();
-
-  /* SIGN OUT */
-
-  if (signOutButton) {
-    signOutButton.addEventListener("click", async () => {
-      if (
-        typeof supabase === "undefined" ||
-        !supabase?.auth
-      ) {
-        console.error("Supabase authentication is unavailable.");
-        return;
-      }
-
-      signOutButton.disabled = true;
-
-      try {
-        const { error } = await supabase.auth.signOut();
-
-        if (error) throw error;
-
-        updateAccountUI(null);
-        closeAccountSheet();
-
-        window.location.href = "index.html";
-      } catch (error) {
-        console.error("Sign-out failed:", error);
-
-        alert(
-          "We could not sign you out. Please check your connection and try again."
-        );
-      } finally {
-        signOutButton.disabled = false;
-      }
-    });
-  }
-
-  console.log(
-    "Jidderhs Heaven Liquid Glass navigation initialized."
-  );
-})();
