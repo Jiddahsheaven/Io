@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="theme-color" content="#211a17">
   <title>My Account | Jidderhs Heaven</title>
 
   <style>
@@ -16,8 +16,8 @@
       --white: #fff;
       --muted: #827970;
       --border: #eee5da;
-      --green: #26734d;
       --red: #a83232;
+      --green: #26734d;
       --sidebar: 245px;
     }
 
@@ -29,18 +29,14 @@
       margin: 0;
       background: var(--cream);
       color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 14px;
+      font: 14px Arial, Helvetica, sans-serif;
     }
 
-    button,
-    input,
-    textarea {
+    button, input, textarea {
       font: inherit;
     }
 
-    button,
-    a {
+    button, a {
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -54,8 +50,8 @@
     }
 
     button:disabled {
-      cursor: not-allowed;
       opacity: .6;
+      cursor: not-allowed;
     }
 
     [hidden] {
@@ -77,21 +73,18 @@
     }
 
     .brand {
-      font-family: Georgia, serif;
-      font-size: 24px;
-      font-weight: bold;
+      font: bold 24px Georgia, serif;
       letter-spacing: .2px;
     }
 
-    .brand span {
+    .brand > span:first-child {
       color: var(--gold);
     }
 
     .brand-subtitle {
       display: block;
-      margin-top: 3px;
-      font-family: Arial, sans-serif;
-      font-size: 9px;
+      margin-top: 4px;
+      font: 9px Arial, sans-serif;
       letter-spacing: 3px;
       color: var(--gold-light);
       text-transform: uppercase;
@@ -100,16 +93,12 @@
     .topbar-actions {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 15px;
     }
 
     .store-link {
       color: #f0e5d6;
       font-size: 13px;
-    }
-
-    .store-link:hover {
-      color: var(--gold-light);
     }
 
     .mobile-menu {
@@ -121,7 +110,7 @@
       color: white;
     }
 
-    /* LAYOUT */
+    /* PAGE LAYOUT */
 
     .layout {
       display: grid;
@@ -153,9 +142,7 @@
       border-radius: 50%;
       background: var(--gold-light);
       border: 1px solid #ddc291;
-      color: var(--ink);
-      font-family: Georgia, serif;
-      font-size: 18px;
+      font: 18px Georgia, serif;
     }
 
     .customer-mini-name {
@@ -220,7 +207,7 @@
       color: #a13f36;
     }
 
-    /* MAIN */
+    /* MAIN CONTENT */
 
     .main {
       min-width: 0;
@@ -241,15 +228,32 @@
 
     .page-heading h1 {
       margin: 8px 0;
-      font-family: Georgia, serif;
-      font-size: clamp(27px, 3vw, 38px);
-      font-weight: normal;
+      font: normal clamp(27px, 3vw, 38px) Georgia, serif;
     }
 
     .page-heading p {
       margin: 0;
       color: var(--muted);
       line-height: 1.7;
+    }
+
+    .page-message {
+      margin: 0 0 18px;
+      padding: 12px 15px;
+      border-radius: 7px;
+      background: #fff3d9;
+      color: #6d4e1e;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .page-message.error {
+      background: #fff0ee;
+      color: #922f2f;
+    }
+
+    .page-message:empty {
+      display: none;
     }
 
     /* WELCOME BANNER */
@@ -264,18 +268,18 @@
       color: white;
     }
 
-    .welcome-banner::after {
+    .welcome-banner:after {
       content: "";
       position: absolute;
       width: 180px;
       height: 180px;
       right: -45px;
       top: -65px;
-      border: 1px solid rgba(234, 217, 183, .25);
+      border: 1px solid #ead9b740;
       border-radius: 50%;
       box-shadow:
-        0 0 0 20px rgba(234, 217, 183, .035),
-        0 0 0 40px rgba(234, 217, 183, .025);
+        0 0 0 20px #ead9b709,
+        0 0 0 40px #ead9b706;
       pointer-events: none;
     }
 
@@ -291,9 +295,7 @@
       position: relative;
       z-index: 1;
       margin: 10px 0;
-      font-family: Georgia, serif;
-      font-size: clamp(26px, 3vw, 35px);
-      font-weight: normal;
+      font: normal clamp(26px, 3vw, 35px) Georgia, serif;
     }
 
     .welcome-banner p {
@@ -338,7 +340,7 @@
       border-radius: 6px;
       font-size: 12px;
       font-weight: bold;
-      transition: opacity .2s, background .2s;
+      transition: opacity .2s;
     }
 
     .btn:hover {
@@ -367,11 +369,7 @@
       border-color: #f0d5d0;
     }
 
-    .btn-block {
-      width: 100%;
-    }
-
-    /* CARDS */
+    /* STATISTICS */
 
     .section-title {
       display: flex;
@@ -383,9 +381,7 @@
 
     .section-title h2 {
       margin: 0;
-      font-family: Georgia, serif;
-      font-size: 23px;
-      font-weight: normal;
+      font: normal 23px Georgia, serif;
     }
 
     .section-title p {
@@ -427,8 +423,7 @@
 
     .stat-value {
       margin-top: 7px;
-      font-family: Georgia, serif;
-      font-size: 25px;
+      font: 25px Georgia, serif;
       overflow-wrap: anywhere;
     }
 
@@ -438,6 +433,8 @@
       font-size: 11px;
     }
 
+    /* FORMS AND CARDS */
+
     .content-card {
       padding: 24px;
       margin-bottom: 20px;
@@ -445,8 +442,6 @@
       border: 1px solid var(--border);
       border-radius: 10px;
     }
-
-    /* PROFILE FORM */
 
     .form-grid {
       display: grid;
@@ -490,7 +485,7 @@
     .field input:focus,
     .field textarea:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(189, 150, 83, .12);
+      box-shadow: 0 0 0 3px #bd96531f;
     }
 
     .field input[readonly] {
@@ -513,7 +508,7 @@
       margin-top: 24px;
     }
 
-    /* ORDERS */
+    /* ORDERS TABLE */
 
     .table-wrap {
       overflow-x: auto;
@@ -556,6 +551,8 @@
       text-transform: capitalize;
     }
 
+    /* EMPTY STATE */
+
     .empty-state {
       padding: 35px 15px;
       text-align: center;
@@ -574,13 +571,11 @@
 
     .empty-state h3 {
       margin: 0 0 8px;
-      font-family: Georgia, serif;
-      font-size: 22px;
-      font-weight: normal;
+      font: normal 22px Georgia, serif;
     }
 
     .empty-state p {
-      max-width: 350px;
+      max-width: 380px;
       margin: 0 auto 20px;
       color: var(--muted);
       font-size: 12px;
@@ -629,7 +624,7 @@
       line-height: 1.7;
     }
 
-    /* FOOTER */
+    /* FOOTER AND NOTIFICATIONS */
 
     footer {
       padding: 24px 15px;
@@ -643,8 +638,6 @@
       color: var(--gold);
     }
 
-    /* NOTIFICATIONS */
-
     .toast {
       position: fixed;
       z-index: 1000;
@@ -655,9 +648,9 @@
       border-radius: 8px;
       background: var(--ink);
       color: white;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+      box-shadow: 0 10px 30px #00000026;
       line-height: 1.6;
-      animation: toast-in .25s ease;
+      overflow-wrap: anywhere;
     }
 
     .toast.success {
@@ -668,19 +661,7 @@
       border-left: 4px solid #e27c70;
     }
 
-    @keyframes toast-in {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* RESPONSIVE */
+    /* RESPONSIVE DESIGN */
 
     @media (max-width: 850px) {
       :root {
@@ -829,9 +810,7 @@
 </head>
 
 <body>
-
   <header class="topbar">
-
     <a href="index.html" class="brand">
       Jidderhs <span>Heaven</span>
       <span class="brand-subtitle">Style · Beauty · Living</span>
@@ -850,33 +829,28 @@
         ☰ Menu
       </button>
     </div>
-
   </header>
 
   <div class="layout">
 
-    <!-- ACCOUNT NAVIGATION -->
-
     <aside class="sidebar" id="sidebar">
-
       <div class="customer-mini">
         <div class="avatar" id="sidebarAvatar">JH</div>
 
         <div>
           <div class="customer-mini-name" id="sidebarName">
-            My Account
+            Loading account...
           </div>
 
           <div class="customer-mini-label">
-            Valued Customer
+            My Account
           </div>
         </div>
       </div>
 
-      <div class="nav-heading">My Account</div>
+      <div class="nav-heading">Account Menu</div>
 
       <nav aria-label="Account navigation">
-
         <button type="button" class="nav-link active" data-view="overview">
           <span class="nav-icon">⌂</span>
           Overview
@@ -901,7 +875,6 @@
           <span class="nav-icon">◇</span>
           Account Security
         </button>
-
       </nav>
 
       <div class="sidebar-bottom">
@@ -914,30 +887,33 @@
           Log Out
         </button>
       </div>
-
     </aside>
 
-    <!-- MAIN CONTENT -->
-
     <main class="main">
-
-      <div id="pageMessage" role="status" aria-live="polite"></div>
+      <div
+        id="pageMessage"
+        class="page-message"
+        role="status"
+        aria-live="polite"
+      ></div>
 
       <!-- OVERVIEW -->
 
       <section class="view" id="view-overview">
-
         <div class="page-heading">
           <div class="eyebrow">Your Personal Space</div>
           <h1>My Account</h1>
-          <p>Everything you need for a seamless Jidderhs Heaven experience.</p>
+          <p>
+            Everything you need for a seamless Jidderhs Heaven experience.
+          </p>
         </div>
 
         <div class="welcome-banner">
-
           <div class="welcome-label">Welcome Back</div>
 
-          <h2>Hello, <span id="welcomeName">Customer</span>!</h2>
+          <h2>
+            Hello, <span id="welcomeName">Customer</span>!
+          </h2>
 
           <p>
             Welcome to your personal corner of Jidderhs Heaven.
@@ -945,7 +921,6 @@
           </p>
 
           <div class="welcome-bottom">
-
             <div class="member-date">
               Member since <strong id="memberSince">—</strong>
             </div>
@@ -957,13 +932,10 @@
             >
               Edit My Profile →
             </button>
-
           </div>
-
         </div>
 
         <div class="stats-grid">
-
           <div class="stat-card">
             <div class="stat-icon">▤</div>
             <div class="stat-label">Total Orders</div>
@@ -974,9 +946,7 @@
           <div class="stat-card">
             <div class="stat-icon">♙</div>
             <div class="stat-label">Account Status</div>
-            <div class="stat-value" style="font-size:20px">
-              Active
-            </div>
+            <div class="stat-value" style="font-size:20px">Active</div>
             <div class="stat-note">Signed in successfully</div>
           </div>
 
@@ -986,7 +956,6 @@
             <div class="stat-value" id="orderValue">—</div>
             <div class="stat-note">Based on visible order records</div>
           </div>
-
         </div>
 
         <div class="section-title">
@@ -995,31 +964,22 @@
             <p>Your latest purchases will appear here.</p>
           </div>
 
-          <button
-            type="button"
-            class="btn btn-light"
-            data-go="orders"
-          >
+          <button type="button" class="btn btn-light" data-go="orders">
             View All
           </button>
         </div>
 
         <div class="content-card" id="recentOrdersCard">
-
           <div class="empty-state">
-            <div class="empty-icon">▤</div>
             <h3>Loading your orders</h3>
             <p>Please wait while we retrieve your shopping history.</p>
           </div>
-
         </div>
-
       </section>
 
       <!-- PROFILE -->
 
       <section class="view" id="view-profile" hidden>
-
         <div class="page-heading">
           <div class="eyebrow">Personal Information</div>
           <h1>My Profile</h1>
@@ -1027,11 +987,8 @@
         </div>
 
         <div class="content-card">
-
           <form id="profileForm">
-
             <div class="form-grid">
-
               <div class="field">
                 <label for="fullName">Full Name</label>
                 <input
@@ -1061,21 +1018,21 @@
                   Your email comes from your authenticated account.
                 </span>
               </div>
-
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="btn btn-gold" id="saveProfile">
+              <button
+                type="submit"
+                class="btn btn-gold"
+                id="saveProfile"
+              >
                 Save Changes
               </button>
             </div>
-
           </form>
-
         </div>
 
         <div class="content-card">
-
           <div class="section-title" style="margin-top:0">
             <div>
               <h2>Account Information</h2>
@@ -1084,7 +1041,6 @@
           </div>
 
           <dl class="info-list">
-
             <div class="info-row">
               <dt>Account Created</dt>
               <dd id="profileCreated">—</dd>
@@ -1094,39 +1050,32 @@
               <dt>Last Updated</dt>
               <dd id="profileUpdated">—</dd>
             </div>
-
           </dl>
-
         </div>
-
       </section>
 
       <!-- ORDERS -->
 
       <section class="view" id="view-orders" hidden>
-
         <div class="page-heading">
           <div class="eyebrow">Your Shopping Journey</div>
           <h1>My Orders</h1>
-          <p>Review your purchases and their recorded payment statuses.</p>
+          <p>
+            Review your purchases and their recorded payment statuses.
+          </p>
         </div>
 
         <div class="content-card" id="allOrdersCard">
-
           <div class="empty-state">
-            <div class="empty-icon">▤</div>
             <h3>Loading orders</h3>
             <p>Your order history is being retrieved.</p>
           </div>
-
         </div>
-
       </section>
 
       <!-- DELIVERY DETAILS -->
 
       <section class="view" id="view-addresses" hidden>
-
         <div class="page-heading">
           <div class="eyebrow">Delivery Preferences</div>
           <h1>Delivery Details</h1>
@@ -1134,9 +1083,7 @@
         </div>
 
         <div class="content-card">
-
           <form id="addressForm">
-
             <div class="field">
               <label for="deliveryAddress">Delivery Address</label>
 
@@ -1154,33 +1101,31 @@
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="btn btn-gold" id="saveAddress">
+              <button
+                type="submit"
+                class="btn btn-gold"
+                id="saveAddress"
+              >
                 Save Delivery Details
               </button>
             </div>
-
           </form>
-
         </div>
 
         <div class="content-card">
-          <h2 style="font-family:Georgia,serif;font-weight:normal">
-            Please Note
-          </h2>
+          <h2 style="font:normal 22px Georgia,serif">Please Note</h2>
 
           <p style="color:var(--muted);line-height:1.9">
             Saving your address updates your customer profile.
-            We'll need to connect checkout to this saved address separately
-            if you want it to fill automatically when placing an order.
+            Checkout must be connected separately if you want this
+            address to fill automatically when placing an order.
           </p>
         </div>
-
       </section>
 
-      <!-- SECURITY -->
+      <!-- ACCOUNT SECURITY -->
 
       <section class="view" id="view-security" hidden>
-
         <div class="page-heading">
           <div class="eyebrow">Your Privacy Matters</div>
           <h1>Account Security</h1>
@@ -1188,8 +1133,7 @@
         </div>
 
         <div class="content-card">
-
-          <h2 style="font-family:Georgia,serif;font-weight:normal">
+          <h2 style="font:normal 22px Georgia,serif">
             Change Password
           </h2>
 
@@ -1203,9 +1147,9 @@
           </div>
 
           <form id="passwordForm">
-
             <div class="field">
               <label for="newPassword">New Password</label>
+
               <input
                 id="newPassword"
                 type="password"
@@ -1218,6 +1162,7 @@
 
             <div class="field" style="margin-top:18px">
               <label for="confirmPassword">Confirm New Password</label>
+
               <input
                 id="confirmPassword"
                 type="password"
@@ -1229,24 +1174,23 @@
             </div>
 
             <div class="form-actions">
-              <button type="submit" class="btn btn-gold" id="changePassword">
+              <button
+                type="submit"
+                class="btn btn-gold"
+                id="changePassword"
+              >
                 Update Password
               </button>
             </div>
-
           </form>
-
         </div>
 
         <div class="content-card">
-
-          <h2 style="font-family:Georgia,serif;font-weight:normal">
-            Sign Out
-          </h2>
+          <h2 style="font:normal 22px Georgia,serif">Sign Out</h2>
 
           <p style="color:var(--muted);line-height:1.8">
-            Sign out when you've finished using your account, especially
-            on a shared device.
+            Sign out when you've finished using your account,
+            especially on a shared device.
           </p>
 
           <button
@@ -1256,9 +1200,7 @@
           >
             Log Out of My Account
           </button>
-
         </div>
-
       </section>
 
       <footer>
@@ -1266,18 +1208,21 @@
         Style, beauty and everyday living.<br>
         Thank you for being part of our community.
       </footer>
-
     </main>
-
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+    hidden
+  ></div>
   <script type="module">
     import { supabase } from "./assets/javascript/supabase.js";
 
     const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => document.querySelectorAll(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
 
     const sidebar = $("#sidebar");
     const mobileMenuButton = $("#mobileMenuButton");
@@ -1285,11 +1230,12 @@
 
     let currentUser = null;
     let currentProfile = null;
-    let customerOrders = [];
-    let toastTimer;
+    let toastTimer = null;
 
-    function notify(text, type = "success") {
-      toast.textContent = text;
+    // SHOW NOTIFICATIONS
+
+    function notify(message, type = "success") {
+      toast.textContent = message;
       toast.className = `toast ${type}`;
       toast.hidden = false;
 
@@ -1297,12 +1243,19 @@
 
       toastTimer = setTimeout(() => {
         toast.hidden = true;
-      }, 4000);
+      }, 4500);
     }
 
-    function setPageMessage(text) {
-      $("#pageMessage").textContent = text;
+    // SHOW PAGE MESSAGES
+
+    function setPageMessage(message = "", type = "") {
+      const element = $("#pageMessage");
+
+      element.textContent = message;
+      element.className = `page-message${type ? " " + type : ""}`;
     }
+
+    // FORMAT DATES
 
     function formatDate(value) {
       if (!value) return "Not available";
@@ -1319,6 +1272,8 @@
       }).format(date);
     }
 
+    // FORMAT NAIRA
+
     function formatMoney(value) {
       const amount = Number(value);
 
@@ -1333,21 +1288,57 @@
       }).format(amount);
     }
 
+    // GENERATE CUSTOMER INITIALS
+
     function getInitials(name) {
-      const words = String(name || "Jidderhs Heaven")
+      return String(name || "Jidderhs Heaven")
         .trim()
         .split(/\s+/)
-        .filter(Boolean);
-
-      return words
+        .filter(Boolean)
         .slice(0, 2)
         .map(word => word[0].toUpperCase())
         .join("");
     }
 
-    function safeText(value) {
-      return String(value ?? "");
+    // UPDATE CUSTOMER INFORMATION ON THE PAGE
+
+    function updateCustomerHeader() {
+      const name =
+        currentProfile?.full_name ||
+        currentUser?.user_metadata?.full_name ||
+        currentUser?.user_metadata?.name ||
+        "Valued Customer";
+
+      $("#sidebarName").textContent = name;
+
+      $("#sidebarAvatar").textContent = getInitials(name);
+
+      $("#welcomeName").textContent =
+        name.trim().split(/\s+/)[0] || "Customer";
+
+      $("#email").value = currentUser?.email || "";
+
+      const created =
+        currentProfile?.created_at ||
+        currentUser?.created_at;
+
+      $("#memberSince").textContent = created
+        ? new Intl.DateTimeFormat("en-NG", {
+            month: "long",
+            year: "numeric"
+          }).format(new Date(created))
+        : "Not available";
+
+      $("#profileCreated").textContent = formatDate(
+        currentProfile?.created_at || currentUser?.created_at
+      );
+
+      $("#profileUpdated").textContent = formatDate(
+        currentProfile?.updated_at
+      );
     }
+
+    // SWITCH BETWEEN DASHBOARD SECTIONS
 
     function showView(name) {
       const target = $(`#view-${name}`);
@@ -1371,6 +1362,7 @@
       });
 
       sidebar.classList.remove("open");
+
       mobileMenuButton.setAttribute("aria-expanded", "false");
 
       setPageMessage("");
@@ -1381,43 +1373,16 @@
       });
     }
 
-    function updateCustomerHeader() {
-      const name =
-        currentProfile?.full_name ||
-        currentUser?.user_metadata?.full_name ||
-        currentUser?.user_metadata?.name ||
-        "Valued Customer";
-
-      const initials = getInitials(name);
-
-      $("#sidebarName").textContent = name;
-      $("#sidebarAvatar").textContent = initials;
-      $("#welcomeName").textContent = name.split(/\s+/)[0];
-      $("#email").value = currentUser?.email || "";
-
-      const created = currentProfile?.created_at ||
-        currentUser?.created_at;
-
-      $("#memberSince").textContent = created
-        ? new Intl.DateTimeFormat("en-NG", {
-            month: "long",
-            year: "numeric"
-          }).format(new Date(created))
-        : "Not available";
-
-      $("#profileCreated").textContent = formatDate(
-        currentProfile?.created_at || currentUser?.created_at
-      );
-
-      $("#profileUpdated").textContent = formatDate(
-        currentProfile?.updated_at
-      );
-    }
+    // LOAD THE SIGNED-IN CUSTOMER'S PROFILE
 
     async function loadProfile() {
       const { data, error } = await supabase.auth.getUser();
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(
+          `Authentication check failed: ${error.message}`
+        );
+      }
 
       if (!data.user) {
         window.location.href = "login.html";
@@ -1426,43 +1391,76 @@
 
       currentUser = data.user;
 
-      const { data: profile, error: profileError } = await supabase
+      const {
+        data: profile,
+        error: profileError
+      } = await supabase
         .from("profiles")
-        .select(
-          "id, full_name, phone, delivery_address, created_at, updated_at"
-        )
+        .select(`
+          id,
+          full_name,
+          phone,
+          delivery_address,
+          created_at,
+          updated_at
+        `)
         .eq("id", currentUser.id)
         .maybeSingle();
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        throw new Error(
+          `Could not read your profile: ${profileError.message}`
+        );
+      }
+
+      // CREATE A PROFILE RECORD IF ONE DOES NOT EXIST
 
       if (profile) {
         currentProfile = profile;
       } else {
-        // Create a profile for this authenticated customer if necessary.
-        const { data: newProfile, error: insertError } = await supabase
+        const {
+          data: newProfile,
+          error: insertError
+        } = await supabase
           .from("profiles")
           .insert({
             id: currentUser.id,
+
             full_name:
               currentUser.user_metadata?.full_name ||
               currentUser.user_metadata?.name ||
               "",
+
             phone: "",
             delivery_address: ""
           })
-          .select(
-            "id, full_name, phone, delivery_address, created_at, updated_at"
-          )
+          .select(`
+            id,
+            full_name,
+            phone,
+            delivery_address,
+            created_at,
+            updated_at
+          `)
           .single();
 
-        if (insertError) throw insertError;
+        if (insertError) {
+          throw new Error(
+            `Could not create your profile: ${insertError.message}`
+          );
+        }
 
         currentProfile = newProfile;
       }
 
-      $("#fullName").value = currentProfile.full_name || "";
-      $("#phone").value = currentProfile.phone || "";
+      // FILL IN THE PROFILE FORM
+
+      $("#fullName").value =
+        currentProfile.full_name || "";
+
+      $("#phone").value =
+        currentProfile.phone || "";
+
       $("#deliveryAddress").value =
         currentProfile.delivery_address || "";
 
@@ -1471,18 +1469,23 @@
       return true;
     }
 
-    function renderOrderTable(orders, limit = Infinity) {
-      const visibleOrders = orders.slice(0, limit);
+    // CREATE THE ORDERS TABLE
 
-      if (!visibleOrders.length) {
+    function renderOrderTable(orders, limit = Infinity) {
+      const visible = orders.slice(0, limit);
+
+      if (!visible.length) {
         return `
           <div class="empty-state">
             <div class="empty-icon">▤</div>
+
             <h3>No Orders Yet</h3>
+
             <p>
-              Your purchases will appear here after orders have been
-              recorded in your account.
+              Your purchases will appear here after orders have
+              been recorded and made available to your account.
             </p>
+
             <a class="btn btn-gold" href="index.html">
               Explore the Store
             </a>
@@ -1490,16 +1493,28 @@
         `;
       }
 
-      const rows = visibleOrders.map(order => {
-        const reference = safeText(order.id).slice(0, 8).toUpperCase();
-        const status = safeText(order.payment_status || "pending");
+      const rows = visible.map(order => {
+        const reference = String(order.id ?? "")
+          .slice(0, 8)
+          .toUpperCase();
+
+        const status = String(
+          order.payment_status || "pending"
+        );
 
         return `
           <tr>
             <td>#${reference}</td>
+
             <td>${formatDate(order.created_at)}</td>
+
             <td>${formatMoney(order.total_amount)}</td>
-            <td><span class="status">${status}</span></td>
+
+            <td>
+              <span class="status">
+                ${status.replace(/[<>]/g, "")}
+              </span>
+            </td>
           </tr>
         `;
       }).join("");
@@ -1515,11 +1530,16 @@
                 <th>Payment Status</th>
               </tr>
             </thead>
-            <tbody>${rows}</tbody>
+
+            <tbody>
+              ${rows}
+            </tbody>
           </table>
         </div>
       `;
     }
+
+    // LOAD THE CUSTOMER'S ORDERS
 
     async function loadOrders() {
       $("#recentOrdersCard").innerHTML = `
@@ -1534,6 +1554,305 @@
         </div>
       `;
 
-      // The existing orders schema has customer_email, not user_id.
-      // RLS must authorize access to the current customer's own orders.
-      const { data, error } =
+      const {
+        data,
+        error
+      } = await supabase
+        .from("orders")
+        .select(`
+          id,
+          created_at,
+          total_amount,
+          payment_status
+        `)
+        .eq("customer_email", currentUser.email)
+        .order("created_at", {
+          ascending: false
+        });
+
+      if (error) {
+        console.error("Order history error:", error);
+
+        $("#orderCount").textContent = "—";
+        $("#orderValue").textContent = "—";
+
+        $("#recentOrdersCard").innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">▤</div>
+
+            <h3>Order history unavailable</h3>
+
+            <p>
+              Your profile may still work, but access to your
+              orders failed. Check your orders table policies
+              and the browser console.
+            </p>
+          </div>
+        `;
+
+        $("#allOrdersCard").innerHTML = `
+          <div class="empty-state">
+            <h3>Unable to load orders</h3>
+
+            <p>
+              Please try again later or check the order table
+              access policies.
+            </p>
+          </div>
+        `;
+
+        return;
+      }
+
+      const orders = data || [];
+
+      $("#orderCount").textContent = orders.length;
+
+      const total = orders.reduce((sum, order) => {
+        const amount = Number(order.total_amount);
+
+        return sum + (
+          Number.isFinite(amount) ? amount : 0
+        );
+      }, 0);
+
+      $("#orderValue").textContent = formatMoney(total);
+
+      $("#recentOrdersCard").innerHTML =
+        renderOrderTable(orders, 3);
+
+      $("#allOrdersCard").innerHTML =
+        renderOrderTable(orders);
+    }
+    // SAVE PROFILE CHANGES
+
+    $("#profileForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const button = $("#saveProfile");
+      const fullName = $("#fullName").value.trim();
+      const phone = $("#phone").value.trim();
+
+      if (!fullName) {
+        notify("Please enter your full name.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .update({
+            full_name: fullName,
+            phone,
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", currentUser.id)
+          .select(`
+            id,
+            full_name,
+            phone,
+            delivery_address,
+            created_at,
+            updated_at
+          `)
+          .single();
+
+        if (error) throw error;
+
+        currentProfile = data;
+        updateCustomerHeader();
+
+        notify("Your profile has been updated successfully.");
+      } catch (error) {
+        console.error("Profile update error:", error);
+
+        notify(
+          "Could not save your profile: " + error.message,
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Save Changes";
+      }
+    });
+
+    // SAVE DELIVERY ADDRESS
+
+    $("#addressForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const button = $("#saveAddress");
+      const address = $("#deliveryAddress").value.trim();
+
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .update({
+            delivery_address: address,
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", currentUser.id)
+          .select(`
+            id,
+            full_name,
+            phone,
+            delivery_address,
+            created_at,
+            updated_at
+          `)
+          .single();
+
+        if (error) throw error;
+
+        currentProfile = data;
+        updateCustomerHeader();
+
+        notify("Your delivery details have been saved.");
+      } catch (error) {
+        console.error("Delivery address update error:", error);
+
+        notify(
+          "Could not save delivery details: " + error.message,
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Save Delivery Details";
+      }
+    });
+
+    // UPDATE PASSWORD
+
+    $("#passwordForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const button = $("#changePassword");
+      const password = $("#newPassword").value;
+      const confirmPassword = $("#confirmPassword").value;
+
+      if (password.length < 8) {
+        notify(
+          "Your password must contain at least 8 characters.",
+          "error"
+        );
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        notify("The passwords do not match.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Updating...";
+
+      try {
+        const { error } = await supabase.auth.updateUser({
+          password
+        });
+
+        if (error) throw error;
+
+        $("#passwordForm").reset();
+
+        notify("Your password has been updated successfully.");
+      } catch (error) {
+        console.error("Password update error:", error);
+
+        notify(
+          "Could not update your password: " + error.message,
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Update Password";
+      }
+    });
+
+    // LOG OUT
+
+    async function logout() {
+      const confirmed = window.confirm(
+        "Are you sure you want to log out of your account?"
+      );
+
+      if (!confirmed) return;
+
+      try {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) throw error;
+
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+
+        notify(
+          "Could not log out: " + error.message,
+          "error"
+        );
+      }
+    }
+
+    $("#sidebarLogout").addEventListener("click", logout);
+    $("#securityLogout").addEventListener("click", logout);
+
+    // DESKTOP AND MOBILE NAVIGATION
+
+    $$(".nav-link[data-view]").forEach(button => {
+      button.addEventListener("click", () => {
+        showView(button.dataset.view);
+      });
+    });
+
+    $$("[data-go]").forEach(button => {
+      button.addEventListener("click", () => {
+        showView(button.dataset.go);
+      });
+    });
+
+    mobileMenuButton.addEventListener("click", () => {
+      const isOpen = sidebar.classList.toggle("open");
+
+      mobileMenuButton.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
+    });
+
+    // INITIALIZE THE DASHBOARD
+
+    async function initializeDashboard() {
+      setPageMessage("Loading your account...");
+
+      try {
+        const authenticated = await loadProfile();
+
+        if (!authenticated) return;
+
+        setPageMessage("");
+
+        await loadOrders();
+
+      } catch (error) {
+        console.error("Dashboard initialization error:", error);
+
+        setPageMessage(
+          "We could not load your account: " +
+          error.message +
+          ". Check your Supabase connection, profiles table, and access policies.",
+          "error"
+        );
+      }
+    }
+
+    initializeDashboard();
+  </script>
+</body>
+</html>
