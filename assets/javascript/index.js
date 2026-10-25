@@ -427,58 +427,47 @@ function renderFeatured() {
 
 
 /* ==========================================================
-   RENDER ALL PRODUCTS
-   ========================================================== */
+   RENDER ALL PRODUCTS — FIX
+========================================================== */
 
-function renderProducts(
-  filter = activeFilter,
-  query = ""
-) {
-
+function renderProducts(filter = "all", query = "") {
   activeFilter = filter;
 
-
-  const visible = products.filter((product) => {
-    const matchesFilter = filter === "all" || product.category === filter;
-    return matchesFilter && productMatchesSearch(product, query);
-  });
-
-
-  allProducts.innerHTML = "";
-
-
-  if (!visible.length) {
-
-    allProducts.innerHTML = `
-
-      <div class="empty-state">
-
-        <h3>
-          No pieces found.
-        </h3>
-
-        <p>
-          Try another search or switch categories.
-        </p>
-
-      </div>
-
-    `;
-
+  if (!allProducts) {
+    console.error("Product container #allProducts was not found.");
     return;
   }
 
+  const visible = products.filter((product) => {
+    const matchesFilter =
+      filter === "all" || product.category === filter;
 
-  visible.forEach((product) => {
+    const matchesQuery =
+      productMatchesSearch(product, query);
 
-    allProducts.appendChild(
-      createProductCard(product)
-    );
-
+    return matchesFilter && matchesQuery;
   });
 
-}
+  allProducts.replaceChildren();
 
+  if (visible.length === 0) {
+    allProducts.innerHTML = `
+      <div class="empty-state">
+        <h3>No pieces found.</h3>
+        <p>Try another search or switch categories.</p>
+      </div>
+    `;
+    return;
+  }
+
+  visible.forEach((product) => {
+    allProducts.appendChild(createProductCard(product));
+  });
+
+  console.log(
+    `Rendered ${visible.length} products. Search: "${query}"`
+  );
+}
 
 /* ==========================================================
    UPDATE FILTER BUTTONS
