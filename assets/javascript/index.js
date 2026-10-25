@@ -1618,8 +1618,19 @@ window.addEventListener("load", () => {
     }
   }
 
-  closeButton.addEventListener("click", closeAccountPanel);
-  overlay.addEventListener("click", closeAccountPanel);
+  // Close account panel when the close button is clicked
+closeButton.onclick = function (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  closeAccountPanel();
+};
+
+// Close account panel when the overlay is clicked
+overlay.onclick = function (event) {
+  if (event.target === overlay) {
+    closeAccountPanel();
+  }
+};
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
