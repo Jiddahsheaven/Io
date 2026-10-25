@@ -1543,30 +1543,20 @@ window.addEventListener("load", () => {
     });
   }
 
-  /* OPEN EXISTING SHOPPING BAG */
+  /* ========================================
+   BOTTOM BAG BUTTON
+======================================== */
 
-  bagButton.addEventListener("click", () => {
-    closeAccountSheet();
-    setActiveTab("bag");
+bagButton.addEventListener("click", () => {
+  closeAccountSheet();
+  setActiveTab("bag");
 
-    const existingBagButton = document.getElementById("bagToggle");
-
-    if (existingBagButton) {
-      existingBagButton.click();
-    } else {
-      /*
-       * The top bag button may have been removed.
-       * Use the existing cart-opening function instead.
-       */
-      if (typeof openCart === "function") {
-        openCart();
-      } else {
-        console.error(
-          "Could not open the cart. The existing openCart() function is unavailable."
-        );
-      }
-    }
-  });
+  if (typeof openCart === "function") {
+    openCart();
+  } else {
+    console.error("Cart function is unavailable.");
+  }
+});
 
   /* SYNCHRONIZE BAG COUNT */
 
