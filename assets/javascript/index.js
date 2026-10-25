@@ -1563,14 +1563,20 @@ window.addEventListener("load", () => {
 
     const existingBagButton = document.getElementById("bagToggle");
 
-    if (existingBagButton) {
-      existingBagButton.click();
-    } else {
-      console.warn(
-        "Existing #bagToggle was not found. The original cart button must remain in index.html."
-      );
-    }
-  });
+if (existingBagButton) {
+  existingBagButton.click();
+} else {
+  const cartDrawer = document.getElementById("cartDrawer");
+  const cartOverlay = document.getElementById("cartOverlay");
+
+  if (cartDrawer && cartOverlay) {
+    cartDrawer.classList.add("open");
+    cartOverlay.classList.add("active");
+    document.body.classList.add("cart-open");
+  } else {
+    console.warn("Could not find the existing cart drawer.");
+  }
+}
 
   /* -----------------------------------------
      KEEP THE BAG COUNT IN SYNC
