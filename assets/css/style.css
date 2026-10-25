@@ -1442,3 +1442,209 @@ h2 em {
 .cart-item-details h4 {
   overflow-wrap: anywhere;
 }
+/* =========================================
+   JIDDERHS HEAVEN — FROSTED BOTTOM NAV
+========================================= */
+
+.jh-bottom-nav {
+  position: fixed;
+  z-index: 9999;
+
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+
+  width: min(410px, calc(100% - 32px));
+  min-height: 70px;
+  padding: 8px 10px;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  gap: 4px;
+
+  background: rgba(250, 247, 241, 0.78);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 24px;
+
+  box-shadow:
+    0 8px 30px rgba(33, 26, 23, 0.10),
+    0 2px 8px rgba(33, 26, 23, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+  isolation: isolate;
+}
+
+/* Individual navigation items */
+
+.jh-bottom-nav .jh-nav-item {
+  position: relative;
+
+  min-width: 0;
+  min-height: 52px;
+  padding: 6px 2px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+
+  color: rgba(33, 26, 23, 0.65);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+/* Minimal line icons */
+
+.jh-bottom-nav .jh-nav-item svg {
+  width: 21px;
+  height: 21px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+}
+
+/* Active tab */
+
+.jh-bottom-nav .jh-nav-item.is-active {
+  color: #98713b;
+  background: rgba(189, 150, 83, 0.11);
+  font-weight: 650;
+}
+
+.jh-bottom-nav .jh-nav-item.is-active svg {
+  stroke-width: 1.9;
+}
+
+/* Small gold active indicator */
+
+.jh-bottom-nav .jh-nav-item.is-active::after {
+  content: "";
+
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+
+  width: 13px;
+  height: 2px;
+
+  border-radius: 10px;
+  background: #bd9653;
+
+  transform: translateX(-50%);
+}
+
+/* Shopping bag and count */
+
+.jh-bottom-nav .jh-bag-icon {
+  position: relative;
+  display: inline-flex;
+}
+
+.jh-bottom-nav .jh-bottom-bag-count {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1.5px solid #faf7f1;
+  border-radius: 20px;
+
+  background: #bd9653;
+  color: #fff;
+
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.jh-bottom-nav .jh-bottom-bag-count:empty {
+  display: none;
+}
+
+/* Gentle touch feedback */
+
+@media (hover: hover) {
+  .jh-bottom-nav .jh-nav-item:hover {
+    background: rgba(189, 150, 83, 0.09);
+  }
+}
+
+.jh-bottom-nav .jh-nav-item:active {
+  transform: scale(0.94);
+}
+
+/* Keyboard accessibility */
+
+.jh-bottom-nav .jh-nav-item:focus-visible {
+  outline: 2px solid #bd9653;
+  outline-offset: 2px;
+}
+
+/* Prevent the navigation from covering page content */
+
+body {
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Slightly smaller screens */
+
+@media (max-width: 360px) {
+  .jh-bottom-nav {
+    width: calc(100% - 22px);
+    min-height: 65px;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    padding: 6px;
+    border-radius: 21px;
+  }
+
+  .jh-bottom-nav .jh-nav-item {
+    font-size: 9px;
+  }
+
+  .jh-bottom-nav .jh-nav-item svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .jh-bottom-nav *,
+  .jh-bottom-nav *::before,
+  .jh-bottom-nav *::after {
+    transition: none !important;
+  }
+}
