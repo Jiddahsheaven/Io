@@ -1429,3 +1429,139 @@ window.addEventListener("load", () => {
     console.warn("Could not restore page position:", error);
   }
 });
+
+/* ========================================
+   JIDDERHS HEAVEN
+   BOTTOM NAVIGATION CONTROLLER
+======================================== */
+
+(() => {
+  const nav = document.getElementById("jhBottomNav");
+
+  if (!nav || nav.dataset.initialized === "true") {
+    return;
+  }
+
+  nav.dataset.initialized = "true";
+
+  const buttons = nav.querySelectorAll("[data-jh-tab]");
+
+  function activateTab(tab) {
+    nav.dataset.active = tab;
+
+    buttons.forEach((button) => {
+      const active = button.dataset.jhTab === tab;
+
+      button.classList.toggle("is-active", active);
+
+      if (active) {
+        button.setAttribute("aria-current", "page");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  function scrollToElement(element) {
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  function syncBagCount() {
+    const badge = document.getElementById("jhBottomBagCount");
+
+    if (!badge) return;
+
+    const oldBadge = document.getElementById("bagCount");
+
+    if (oldBadge) {
+      badge.textContent = oldBadge.textContent.trim() || "0";
+      return;
+    }
+
+    // Fallback when the old visible bag counter is absent.
+    try {
+      if (typeof cart !== "undefined" && Array.isArray(cart)) {
+        const total = cart.reduce((sum, item) => {
+          return sum + Number(item.quantity || 1);
+        }, 0);
+
+        badge.textContent = String(total);
+      }
+    } catch (error) {
+      console.warn("Could not read the current cart count.");
+    }
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const tab = button.dataset.jhTab;
+
+      activateTab(tab);
+
+      if (tab === "home") {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
+
+      if (tab === "shop") {
+        if (typeof setFilter === "function") {
+          setFilter("all", true);
+        } else {
+          const collection =
+            document.getElementById("productCollection") ||
+            document.getElementById("allProducts");
+
+          scrollToElement(collection);
+        }
+      }
+
+      if (tab === "bag") {
+        syncBagCount();
+
+        if (typeof openCart === "function") {
+          openCart();
+        } else {
+          console.error("The existing cart-opening function was not found.");
+        }
+      }
+
+      if (tab === "account") {
+        const account =
+          document.getElementById("accountSection") ||
+          document.getElementById("account");
+
+        if (account) {
+          scrollToElement(account);
+        } else {
+          console.info(
+            "Connect this tab to your account section when available."
+          );
+        }
+      }
+    });
+  });
+
+  // Keep the bag badge updated after cart interactions.
+  const oldBadge = document.getElementById("bagCount");
+
+  if (oldBadge) {
+    new MutationObserver(syncBagCount).observe(oldBadge, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  }
+
+  document.addEventListener("click", syncBagCount);
+
+  syncBagCount();
+
+  console.log("Jidderhs Heaven navigation is ready.");
+})();
