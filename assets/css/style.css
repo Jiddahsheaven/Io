@@ -1442,3 +1442,560 @@ h2 em {
 .cart-item-details h4 {
   overflow-wrap: anywhere;
 }
+
+/* =========================================
+   JIDDERHS HEAVEN — LIQUID GLASS NAVIGATION
+   Responsive: mobile, tablet and desktop
+========================================= */
+
+:root {
+  --jh-glass-cream: rgba(250, 247, 241, 0.78);
+  --jh-glass-border: rgba(255, 255, 255, 0.78);
+  --jh-glass-gold: #bd9653;
+  --jh-glass-gold-light: #ead9b7;
+  --jh-glass-ink: #211a17;
+  --jh-glass-muted: #766d65;
+}
+
+/* Keep hidden elements hidden */
+[hidden] {
+  display: none !important;
+}
+
+/* Give the page room below the fixed navigation */
+body {
+  padding-bottom: max(110px, calc(100px + env(safe-area-inset-bottom)));
+}
+
+/* =========================================
+   GLASS BOTTOM BAR
+========================================= */
+
+.jh-glass-nav {
+  position: fixed;
+
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+
+  transform: translateX(-50%);
+
+  z-index: 9000;
+
+  width: calc(100% - 24px);
+  max-width: 760px;
+
+  min-height: 82px;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+
+  padding: 9px 10px;
+
+  border: 1px solid var(--jh-glass-border);
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.70),
+      rgba(250, 247, 241, 0.48)
+    );
+
+  -webkit-backdrop-filter: blur(28px) saturate(165%);
+  backdrop-filter: blur(28px) saturate(165%);
+
+  box-shadow:
+    0 10px 40px rgba(47, 34, 22, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Individual tabs */
+
+.jh-glass-tab {
+  position: relative;
+
+  min-width: 0;
+  min-height: 62px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 7px 3px;
+
+  border: 0;
+  border-radius: 20px;
+
+  background: transparent;
+
+  color: var(--jh-glass-ink);
+  font: inherit;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.jh-glass-tab svg {
+  width: 25px;
+  height: 25px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  flex-shrink: 0;
+}
+
+.jh-glass-tab > span:last-child {
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.jh-glass-tab.is-active {
+  color: var(--jh-glass-gold);
+}
+
+.jh-glass-tab.is-active svg {
+  stroke-width: 2;
+}
+
+.jh-glass-tab:active {
+  transform: scale(0.94);
+}
+
+@media (hover: hover) {
+  .jh-glass-tab:hover {
+    background: rgba(255, 255, 255, 0.38);
+  }
+}
+
+.jh-glass-tab:focus-visible,
+.jh-sheet-close:focus-visible,
+.jh-account-link:focus-visible {
+  outline: 2px solid var(--jh-glass-gold);
+  outline-offset: 3px;
+}
+
+/* Bag count */
+
+.jh-tab-icon {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jh-bag-badge {
+  position: absolute;
+
+  top: -7px;
+  right: -10px;
+
+  min-width: 20px;
+  height: 20px;
+
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50px;
+
+  background: var(--jh-glass-gold);
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =========================================
+   BACKDROP
+========================================= */
+
+.jh-glass-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9001;
+
+  background: rgba(30, 23, 19, 0.24);
+
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+/* =========================================
+   ACCOUNT GLASS SHEET
+========================================= */
+
+.jh-account-sheet {
+  position: fixed;
+
+  left: 50%;
+  bottom: calc(104px + env(safe-area-inset-bottom));
+
+  transform: translateX(-50%);
+
+  z-index: 9002;
+
+  width: calc(100% - 24px);
+  max-width: 640px;
+
+  max-height: min(
+    72dvh,
+    calc(100dvh - 145px - env(safe-area-inset-top))
+  );
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding: 12px 16px 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.86),
+      rgba(250, 247, 241, 0.74)
+    );
+
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  backdrop-filter: blur(32px) saturate(160%);
+
+  box-shadow:
+    0 18px 60px rgba(35, 25, 18, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(189, 150, 83, 0.45) transparent;
+}
+
+.jh-sheet-handle {
+  width: 42px;
+  height: 5px;
+
+  margin: 0 auto 17px;
+
+  border-radius: 20px;
+  background: rgba(65, 53, 43, 0.30);
+}
+
+/* Account heading */
+
+.jh-account-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 3px 2px 18px;
+}
+
+.jh-account-avatar {
+  width: 62px;
+  height: 62px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(234, 217, 183, 0.55)
+    );
+
+  box-shadow:
+    0 5px 16px rgba(90, 66, 39, 0.08),
+    inset 0 1px 0 #fff;
+}
+
+.jh-account-avatar svg {
+  width: 30px;
+  height: 30px;
+
+  fill: none;
+  stroke: var(--jh-glass-ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.jh-account-intro {
+  flex: 1;
+  min-width: 0;
+}
+
+.jh-account-intro h2 {
+  margin: 0 0 5px;
+
+  color: var(--jh-glass-ink);
+
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 600;
+
+  overflow-wrap: anywhere;
+}
+
+.jh-account-intro p {
+  margin: 0;
+
+  color: var(--jh-glass-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.jh-sheet-close {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.40);
+  color: var(--jh-glass-ink);
+
+  cursor: pointer;
+}
+
+.jh-sheet-close svg {
+  width: 23px;
+  height: 23px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Account links */
+
+.jh-account-group {
+  margin-bottom: 12px;
+  padding: 0 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.jh-account-link {
+  width: 100%;
+  min-height: 62px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 12px 8px;
+
+  border: 0;
+  border-bottom: 1px solid rgba(90, 70, 50, 0.10);
+
+  background: transparent;
+
+  color: var(--jh-glass-ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  text-align: left;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.jh-account-group .jh-account-link:last-child {
+  border-bottom: 0;
+}
+
+.jh-account-link > svg:first-child {
+  width: 23px;
+  height: 23px;
+
+  flex-shrink: 0;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.jh-account-link > span {
+  flex: 1;
+}
+
+.jh-account-link .jh-link-arrow {
+  width: 19px;
+  height: 19px;
+
+  flex-shrink: 0;
+
+  fill: none;
+  stroke: var(--jh-glass-muted);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (hover: hover) {
+  .jh-account-link:hover {
+    color: var(--jh-glass-gold);
+  }
+}
+
+.jh-signout-button {
+  margin-top: 4px;
+  padding: 12px 18px;
+
+  border: 1px solid rgba(189, 150, 83, 0.18);
+  border-radius: 18px;
+
+  background: rgba(189, 150, 83, 0.08);
+}
+
+.jh-account-brand {
+  margin: 16px 0 0;
+
+  color: var(--jh-glass-muted);
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+
+  text-align: center;
+}
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 380px) {
+  .jh-glass-nav {
+    width: calc(100% - 16px);
+    min-height: 76px;
+    padding: 6px;
+    border-radius: 25px;
+  }
+
+  .jh-glass-tab {
+    min-height: 58px;
+    gap: 4px;
+  }
+
+  .jh-glass-tab svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .jh-glass-tab > span:last-child {
+    font-size: 11px;
+  }
+
+  .jh-account-sheet {
+    width: calc(100% - 16px);
+    padding: 11px 12px 16px;
+    border-radius: 25px;
+  }
+
+  .jh-account-avatar {
+    width: 54px;
+    height: 54px;
+  }
+
+  .jh-account-intro h2 {
+    font-size: 18px;
+  }
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (min-width: 600px) {
+  .jh-glass-nav {
+    max-width: 680px;
+    min-height: 88px;
+    padding: 11px 18px;
+    border-radius: 32px;
+  }
+
+  .jh-glass-tab {
+    min-height: 66px;
+    gap: 7px;
+  }
+
+  .jh-glass-tab svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .jh-glass-tab > span:last-child {
+    font-size: 13px;
+  }
+
+  .jh-account-sheet {
+    padding: 17px 22px 22px;
+    border-radius: 32px;
+  }
+
+  .jh-account-link {
+    min-height: 66px;
+    font-size: 15px;
+  }
+}
+
+/* =========================================
+   LARGE SCREENS
+========================================= */
+
+@media (min-width: 1024px) {
+  .jh-glass-nav {
+    max-width: 720px;
+    bottom: 22px;
+  }
+
+  .jh-account-sheet {
+    bottom: 126px;
+    max-width: 600px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .jh-glass-tab {
+    transition: none;
+  }
+}
