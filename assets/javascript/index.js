@@ -1495,60 +1495,70 @@ window.addEventListener("load", () => {
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      const tab = button.dataset.jhTab;
+  const tab = button.dataset.jhTab;
 
-      setActiveTab(button);
+  // Close the bag whenever another tab is selected.
+  if (tab !== "bag" && typeof closeCart === "function") {
+    closeCart();
+  }
 
-      if (tab === "home") {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-      }
+  // Update the active tab.
+  setActiveTab(button);
 
-      if (tab === "shop") {
-        const shopSection =
-          document.getElementById("allProducts") ||
-          document.getElementById("shopSection");
+  // HOME
+  if (tab === "home") {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
 
-        if (shopSection) {
-          shopSection.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-        }
+  // SHOP
+  if (tab === "shop") {
+    if (typeof setFilter === "function") {
+      setFilter("all", true);
+    }
 
-        if (typeof setFilter === "function") {
-          setFilter("all", true);
-        }
-      }
+    const shopSection =
+      document.getElementById("allProducts") ||
+      document.getElementById("shopSection");
 
-      if (tab === "bag") {
-        if (typeof openCart === "function") {
-          openCart();
-        } else {
-          console.error(
-            "JH Bottom Nav: openCart() is unavailable."
-          );
-        }
-      }
+    if (shopSection) {
+      shopSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  }
 
-      if (tab === "account") {
-        const accountSection =
-          document.getElementById("accountSection") ||
-          document.getElementById("account");
+  // BAG
+  if (tab === "bag") {
+    if (typeof openCart === "function") {
+      openCart();
+    } else {
+      console.error("Shopping cart function is unavailable.");
+    }
+  }
 
-        if (accountSection) {
-          accountSection.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-        } else {
-          console.warn(
-            "JH Bottom Nav: No account section was found."
-          );
-        }
-      }
+  // ACCOUNT
+  if (tab === "account") {
+    const profile =
+      document.getElementById("accountSection") ||
+      document.getElementById("account") ||
+      document.getElementById("profileSection");
+
+    if (profile) {
+      profile.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    } else {
+      console.warn(
+        "Account tab clicked, but no profile section was found."
+      );
+    }
+  }
+});
     });
   });
 
