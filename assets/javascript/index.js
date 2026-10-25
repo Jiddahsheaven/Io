@@ -605,8 +605,24 @@ function updateCartUI() {
     0
   );
 
-  bagCount.textContent = count;
-  cartSubtotal.textContent = formatNaira(subtotal);
+    // Update the old header counter only if it exists.
+  if (bagCount) {
+    bagCount.textContent = String(count);
+  }
+
+  // Update the cart subtotal.
+  if (cartSubtotal) {
+    cartSubtotal.textContent = formatNaira(subtotal);
+  }
+
+  // Update the bottom navigation counter immediately.
+  const bottomBagCount =
+    document.getElementById("jhBottomBagCount");
+
+  if (bottomBagCount) {
+    bottomBagCount.textContent = String(count);
+    bottomBagCount.hidden = count === 0;
+  }
 
   // Empty cart message.
   if (!cart.length) {
@@ -1061,11 +1077,11 @@ $("#mobileNav").addEventListener(
    CART BUTTON
    ========================================================== */
 
-$("#bagToggle").addEventListener(
-  "click",
-  openCart
-);
+const bagToggle = $("#bagToggle");
 
+if (bagToggle) {
+  bagToggle.addEventListener("click", openCart);
+}
 
 /* ==========================================================
    CART CLOSE
