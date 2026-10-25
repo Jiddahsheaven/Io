@@ -391,6 +391,221 @@
       <button class="button button-dark button-full" id="checkoutButton">Proceed to checkout</button>
     </div>
   </aside>
+<!-- =========================================
+     JIDDERHS HEAVEN
+     LIQUID GLASS BOTTOM NAVIGATION
+========================================== -->
+
+<div class="jh-glass-overlay" id="jhGlassOverlay" hidden></div>
+
+<!-- ACCOUNT GLASS PANEL -->
+<section
+  class="jh-account-sheet"
+  id="jhAccountSheet"
+  aria-label="Account menu"
+  aria-hidden="true"
+  hidden
+>
+  <div class="jh-sheet-handle" aria-hidden="true"></div>
+
+  <div class="jh-account-heading">
+    <div class="jh-account-avatar">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21a8 8 0 0 1 16 0"></path>
+      </svg>
+    </div>
+
+    <div class="jh-account-intro">
+      <h2 id="jhAccountGreeting">Hello, Guest</h2>
+      <p id="jhAccountSubtitle">Sign in to your account</p>
+    </div>
+
+    <button
+      class="jh-sheet-close"
+      id="jhAccountClose"
+      type="button"
+      aria-label="Close account menu"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- GUEST ACTIONS -->
+  <div class="jh-account-group" id="jhGuestActions">
+
+    <a href="login.html" class="jh-account-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21a8 8 0 0 1 16 0"></path>
+      </svg>
+
+      <span>Log In</span>
+
+      <svg class="jh-link-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </a>
+
+    <a href="signup.html" class="jh-account-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="9" cy="8" r="4"></circle>
+        <path d="M2 21a7 7 0 0 1 14 0"></path>
+        <path d="M19 8v8M15 12h8"></path>
+      </svg>
+
+      <span>Sign Up</span>
+
+      <svg class="jh-link-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </a>
+
+  </div>
+
+  <!-- AUTHENTICATED CUSTOMER ACTIONS -->
+  <div class="jh-account-group" id="jhCustomerActions" hidden>
+
+    <a href="profile.html" class="jh-account-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21a8 8 0 0 1 16 0"></path>
+      </svg>
+
+      <span>My Profile</span>
+
+      <svg class="jh-link-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </a>
+
+  </div>
+
+  <!-- SHARED ACCOUNT OPTIONS -->
+  <div class="jh-account-group">
+
+    <a href="profile.html#notifications" class="jh-account-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+        <path d="M10 21h4"></path>
+      </svg>
+
+      <span>Notifications</span>
+
+      <svg class="jh-link-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </a>
+
+    <a href="profile.html#settings" class="jh-account-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="m19.4 15 .1.1 1.4 1.1-1.5 2.6-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.9h-3l-.3-1.9a8 8 0 0 1-1.7-1l-1.7.7-1.5-2.6 1.4-1.1a8 8 0 0 1 0-2l-1.4-1.1 1.5-2.6 1.7.7a8 8 0 0 1 1.7-1l.3-1.9h3l.3 1.9a8 8 0 0 1 1.7 1l1.7-.7 1.5 2.6-1.4 1.1a8 8 0 0 1 0 2Z"></path>
+      </svg>
+
+      <span>Settings</span>
+
+      <svg class="jh-link-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </a>
+
+  </div>
+
+  <!-- SIGN OUT -->
+  <button
+    type="button"
+    class="jh-account-link jh-signout-button"
+    id="jhSignOut"
+    hidden
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M10 17l5-5-5-5"></path>
+      <path d="M15 12H3"></path>
+      <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+    </svg>
+
+    <span>Sign Out</span>
+  </button>
+
+  <p class="jh-account-brand">JIDDERHS HEAVEN</p>
+
+</section>
+
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="jh-glass-nav" id="jhGlassNav" aria-label="Quick navigation">
+
+  <!-- HOME -->
+  <a
+    href="#top"
+    class="jh-glass-tab is-active"
+    data-jh-tab="home"
+    aria-current="page"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m3 10 9-7 9 7"></path>
+      <path d="M5 9v12h14V9"></path>
+      <path d="M9 21v-7h6v7"></path>
+    </svg>
+
+    <span>Home</span>
+  </a>
+
+  <!-- SHOP -->
+  <a
+    href="#shop"
+    class="jh-glass-tab"
+    data-jh-tab="shop"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 8h14l1 13H4L5 8Z"></path>
+      <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+    </svg>
+
+    <span>Shop</span>
+  </a>
+
+  <!-- BAG -->
+  <button
+    type="button"
+    class="jh-glass-tab"
+    id="jhBottomBag"
+    data-jh-tab="bag"
+    aria-label="Open shopping bag"
+  >
+    <span class="jh-tab-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 8h14l1 13H4L5 8Z"></path>
+        <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+      </svg>
+
+      <span class="jh-bag-badge" id="jhBottomBagCount">0</span>
+    </span>
+
+    <span>Bag</span>
+  </button>
+
+  <!-- ACCOUNT -->
+  <button
+    type="button"
+    class="jh-glass-tab"
+    id="jhBottomAccount"
+    data-jh-tab="account"
+    aria-expanded="false"
+    aria-controls="jhAccountSheet"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="8" r="4"></circle>
+      <path d="M4 21a8 8 0 0 1 16 0"></path>
+    </svg>
+
+    <span>Account</span>
+  </button>
+
+</nav>
 
   <script type="module" src="./assets/javascript/index.js"></script>
 </body>
