@@ -2071,3 +2071,42 @@ body {
     transition: none;
   }
 }
+
+/* =====================================
+   FIX: CHECKOUT BUTTON HIDDEN BY BOTTOM BAR
+   JIDDERHS HEAVEN
+===================================== */
+
+/* Keep enough space below page content */
+body {
+  padding-bottom: 110px;
+}
+
+/* Ensure checkout content has room */
+.checkout-container,
+.checkout-content,
+.checkout-summary {
+  padding-bottom: 30px;
+}
+
+/* Keep the checkout button visible and clickable */
+#placeOrderButton,
+#checkoutButton {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 25px;
+  scroll-margin-bottom: 120px;
+}
+
+/* Extra room on mobile devices */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+
+  #placeOrderButton,
+  #checkoutButton {
+    margin-bottom: 35px;
+    width: 100%;
+  }
+}
