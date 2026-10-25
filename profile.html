@@ -4,19 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>My Profile | Jidderhs Heaven</title>
+  <title>My Account | Jidderhs Heaven</title>
 
   <style>
     :root {
       --ink: #211a17;
+      --brown: #382920;
       --gold: #bd9653;
       --gold-light: #ead9b7;
       --cream: #faf7f1;
-      --white: #ffffff;
-      --muted: #756d66;
-      --border: #e9e1d7;
-      --success: #26734d;
-      --danger: #a83232;
+      --white: #fff;
+      --muted: #827970;
+      --border: #eee5da;
+      --green: #26734d;
+      --red: #a83232;
+      --sidebar: 245px;
     }
 
     * {
@@ -25,241 +27,802 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
       background: var(--cream);
       color: var(--ink);
-      line-height: 1.6;
-    }
-
-    header {
-      background: var(--ink);
-      color: var(--white);
-      padding: 20px;
-      text-align: center;
-      border-bottom: 3px solid var(--gold);
-    }
-
-    header h1 {
-      margin: 0;
-      font-family: Georgia, serif;
-      font-size: 25px;
-      letter-spacing: 0.5px;
-    }
-
-    header p {
-      margin: 4px 0 0;
-      color: var(--gold-light);
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    main {
-      width: 92%;
-      max-width: 650px;
-      margin: 35px auto;
-    }
-
-    .profile-card {
-      background: var(--white);
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(33, 26, 23, 0.06);
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    h2 {
-      margin: 4px 0 8px;
-      font-family: Georgia, serif;
-      font-size: 29px;
-    }
-
-    .intro {
-      color: var(--muted);
+      font-family: Arial, Helvetica, sans-serif;
       font-size: 14px;
-      margin: 0 0 24px;
-    }
-
-    #message {
-      padding: 12px;
-      margin: 15px 0;
-      border-radius: 7px;
-      background: #f5f0e8;
-      color: var(--ink);
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    #message:empty {
-      display: none;
-    }
-
-    #message.success {
-      background: #e8f5ed;
-      color: var(--success);
-    }
-
-    #message.error {
-      background: #fbeaea;
-      color: var(--danger);
-    }
-
-    .field {
-      margin: 20px 0;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .field input,
-    .field textarea {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      background: #fff;
-      color: var(--ink);
-      font: inherit;
-      font-size: 14px;
-    }
-
-    .field input:focus,
-    .field textarea:focus {
-      outline: 2px solid var(--gold-light);
-      border-color: var(--gold);
-    }
-
-    .field input[readonly] {
-      background: #f6f3ef;
-      color: var(--muted);
-    }
-
-    .field textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .helper {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .account-info {
-      margin-top: 28px;
-      padding: 17px;
-      background: var(--cream);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-    }
-
-    .account-info h3 {
-      margin: 0 0 12px;
-      font-family: Georgia, serif;
-      font-size: 17px;
-    }
-
-    .date-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-    }
-
-    .date-row:last-child {
-      border-bottom: none;
-    }
-
-    .date-row span:first-child {
-      color: var(--muted);
-    }
-
-    .date-row span:last-child {
-      text-align: right;
-      overflow-wrap: anywhere;
     }
 
     button,
-    .back-link {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      margin-top: 14px;
-      border: none;
-      border-radius: 7px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: opacity 0.2s;
+    input,
+    textarea {
+      font: inherit;
     }
 
-    button:hover,
-    .back-link:hover {
-      opacity: 0.88;
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     button:disabled {
-      opacity: 0.6;
       cursor: not-allowed;
-    }
-
-    .save-button {
-      background: var(--gold);
-      color: var(--ink);
-    }
-
-    .back-link {
-      background: #f0e9df;
-      color: var(--ink);
-    }
-
-    .logout-button {
-      background: var(--ink);
-      color: var(--white);
+      opacity: .6;
     }
 
     [hidden] {
       display: none !important;
     }
 
-    @media (max-width: 480px) {
-      main {
-        margin: 22px auto;
+    /* HEADER */
+
+    .topbar {
+      min-height: 76px;
+      padding: 15px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--ink);
+      color: white;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: .2px;
+    }
+
+    .brand span {
+      color: var(--gold);
+    }
+
+    .brand-subtitle {
+      display: block;
+      margin-top: 3px;
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .store-link {
+      color: #f0e5d6;
+      font-size: 13px;
+    }
+
+    .store-link:hover {
+      color: var(--gold-light);
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 9px 12px;
+      border: 1px solid #76604c;
+      border-radius: 6px;
+      background: transparent;
+      color: white;
+    }
+
+    /* LAYOUT */
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: calc(100vh - 79px);
+    }
+
+    .sidebar {
+      padding: 28px 17px;
+      background: white;
+      border-right: 1px solid var(--border);
+    }
+
+    .customer-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 5px 5px 25px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 25px;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--gold-light);
+      border: 1px solid #ddc291;
+      color: var(--ink);
+      font-family: Georgia, serif;
+      font-size: 18px;
+    }
+
+    .customer-mini-name {
+      font-weight: bold;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .customer-mini-label {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .nav-heading {
+      padding: 0 10px;
+      margin-bottom: 10px;
+      color: #a09487;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 12px;
+      margin: 4px 0;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: #655b52;
+      text-align: left;
+      transition: background .2s, color .2s;
+    }
+
+    .nav-link:hover {
+      background: #faf5ed;
+    }
+
+    .nav-link.active {
+      background: var(--ink);
+      color: white;
+    }
+
+    .nav-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    .sidebar-bottom {
+      margin-top: 35px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .logout-nav {
+      color: #a13f36;
+    }
+
+    /* MAIN */
+
+    .main {
+      min-width: 0;
+      padding: 34px clamp(18px, 4vw, 55px);
+    }
+
+    .page-heading {
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .page-heading h1 {
+      margin: 8px 0;
+      font-family: Georgia, serif;
+      font-size: clamp(27px, 3vw, 38px);
+      font-weight: normal;
+    }
+
+    .page-heading p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* WELCOME BANNER */
+
+    .welcome-banner {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      margin-bottom: 25px;
+      border-radius: 12px;
+      background: var(--ink);
+      color: white;
+    }
+
+    .welcome-banner::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -45px;
+      top: -65px;
+      border: 1px solid rgba(234, 217, 183, .25);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 20px rgba(234, 217, 183, .035),
+        0 0 0 40px rgba(234, 217, 183, .025);
+      pointer-events: none;
+    }
+
+    .welcome-label {
+      color: var(--gold-light);
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .welcome-banner h2 {
+      position: relative;
+      z-index: 1;
+      margin: 10px 0;
+      font-family: Georgia, serif;
+      font-size: clamp(26px, 3vw, 35px);
+      font-weight: normal;
+    }
+
+    .welcome-banner p {
+      max-width: 470px;
+      margin: 0;
+      color: #ded3c7;
+      line-height: 1.8;
+    }
+
+    .welcome-bottom {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 23px;
+      padding-top: 20px;
+      border-top: 1px solid #50443b;
+    }
+
+    .member-date {
+      color: #ded3c7;
+      font-size: 12px;
+    }
+
+    .member-date strong {
+      color: var(--gold-light);
+    }
+
+    /* BUTTONS */
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 43px;
+      padding: 11px 17px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      transition: opacity .2s, background .2s;
+    }
+
+    .btn:hover {
+      opacity: .86;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    .btn-light {
+      background: white;
+      color: var(--ink);
+      border-color: var(--border);
+    }
+
+    .btn-dark {
+      background: var(--ink);
+      color: white;
+    }
+
+    .btn-danger {
+      background: #fff0ee;
+      color: #a13f36;
+      border-color: #f0d5d0;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* CARDS */
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 30px 0 17px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 23px;
+      font-weight: normal;
+    }
+
+    .section-title p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 17px;
+      border-radius: 8px;
+      background: #f6efe3;
+      color: #8b6834;
+      font-size: 19px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stat-value {
+      margin-top: 7px;
+      font-family: Georgia, serif;
+      font-size: 25px;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-note {
+      margin-top: 7px;
+      color: #a09487;
+      font-size: 11px;
+    }
+
+    .content-card {
+      padding: 24px;
+      margin-bottom: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    /* PROFILE FORM */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      min-height: 45px;
+      padding: 12px;
+      border: 1px solid #e5ddd2;
+      border-radius: 6px;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .field textarea {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(189, 150, 83, .12);
+    }
+
+    .field input[readonly] {
+      background: #f7f4ef;
+      color: var(--muted);
+    }
+
+    .field-help {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    /* ORDERS */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .orders-table th {
+      padding: 13px 12px;
+      background: #faf7f1;
+      color: #827970;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .orders-table td {
+      padding: 16px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .orders-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 30px;
+      background: #f6efe3;
+      color: #82612d;
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .empty-state {
+      padding: 35px 15px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      width: 55px;
+      height: 55px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: #f6efe3;
+      font-size: 24px;
+    }
+
+    .empty-state h3 {
+      margin: 0 0 8px;
+      font-family: Georgia, serif;
+      font-size: 22px;
+      font-weight: normal;
+    }
+
+    .empty-state p {
+      max-width: 350px;
+      margin: 0 auto 20px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* ACCOUNT INFORMATION */
+
+    .info-list {
+      margin: 0;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-row dt {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .info-row dd {
+      margin: 0;
+      text-align: right;
+      font-size: 12px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    .security-note {
+      margin: 0 0 20px;
+      padding: 13px;
+      border-radius: 7px;
+      background: #faf5ed;
+      color: #6d5740;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 24px 15px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    footer span {
+      color: var(--gold);
+    }
+
+    /* NOTIFICATIONS */
+
+    .toast {
+      position: fixed;
+      z-index: 1000;
+      right: 20px;
+      bottom: 20px;
+      max-width: min(380px, calc(100vw - 40px));
+      padding: 15px 18px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+      line-height: 1.6;
+      animation: toast-in .25s ease;
+    }
+
+    .toast.success {
+      border-left: 4px solid #68b58b;
+    }
+
+    .toast.error {
+      border-left: 4px solid #e27c70;
+    }
+
+    @keyframes toast-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
       }
 
-      .profile-card {
-        padding: 21px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+      :root {
+        --sidebar: 215px;
       }
 
-      h2 {
-        font-size: 25px;
+      .main {
+        padding: 25px 20px;
       }
 
-      .date-row {
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat-card:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .topbar {
+        min-height: 68px;
+        padding: 13px 17px;
+      }
+
+      .brand {
+        font-size: 20px;
+      }
+
+      .brand-subtitle {
+        font-size: 8px;
+        letter-spacing: 2px;
+      }
+
+      .topbar-actions {
+        gap: 10px;
+      }
+
+      .store-link {
+        font-size: 11px;
+      }
+
+      .mobile-menu {
+        display: inline-block;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+        padding: 17px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar.open {
+        display: block;
+        animation: menu-in .2s ease;
+      }
+
+      @keyframes menu-in {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .customer-mini {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+      }
+
+      .sidebar-bottom {
+        margin-top: 15px;
+        padding-top: 10px;
+      }
+
+      .main {
+        padding: 24px 16px;
+      }
+
+      .welcome-banner {
+        padding: 23px;
+      }
+
+      .stats-grid {
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 16px;
+      }
+
+      .stat-value {
+        font-size: 21px;
+      }
+
+      .content-card {
+        padding: 17px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 17px;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .section-title {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .brand {
+        font-size: 17px;
+      }
+
+      .store-link {
+        display: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card:last-child {
+        grid-column: auto;
+      }
+
+      .welcome-bottom {
+        align-items: flex-start;
         flex-direction: column;
-        gap: 2px;
-      }
-
-      .date-row span:last-child {
-        text-align: left;
       }
     }
   </style>
@@ -267,135 +830,478 @@
 
 <body>
 
-  <header>
-    <h1>Jidderhs Heaven</h1>
-    <p>Your account, your way</p>
+  <header class="topbar">
+
+    <a href="index.html" class="brand">
+      Jidderhs <span>Heaven</span>
+      <span class="brand-subtitle">Style · Beauty · Living</span>
+    </a>
+
+    <div class="topbar-actions">
+      <a href="index.html" class="store-link">← Back to Store</a>
+
+      <button
+        type="button"
+        class="mobile-menu"
+        id="mobileMenuButton"
+        aria-expanded="false"
+        aria-controls="sidebar"
+      >
+        ☰ Menu
+      </button>
+    </div>
+
   </header>
 
-  <main>
-    <section class="profile-card">
+  <div class="layout">
 
-      <div class="eyebrow">Customer Account</div>
+    <!-- ACCOUNT NAVIGATION -->
 
-      <h2>My Profile</h2>
+    <aside class="sidebar" id="sidebar">
 
-      <p class="intro">
-        Manage your personal information and delivery details.
-      </p>
+      <div class="customer-mini">
+        <div class="avatar" id="sidebarAvatar">JH</div>
 
-      <p id="message" role="status" aria-live="polite">
-        Loading your account...
-      </p>
+        <div>
+          <div class="customer-mini-name" id="sidebarName">
+            My Account
+          </div>
 
-      <form id="profileForm" hidden>
-
-        <div class="field">
-          <label for="fullName">Full Name</label>
-          <input
-            type="text"
-            id="fullName"
-            name="fullName"
-            maxlength="100"
-            autocomplete="name"
-            required
-          >
+          <div class="customer-mini-label">
+            Valued Customer
+          </div>
         </div>
+      </div>
 
-        <div class="field">
-          <label for="email">Email Address</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            readonly
-            autocomplete="email"
-          >
-          <span class="helper">
-            Your email is managed by your login account.
-          </span>
-        </div>
+      <div class="nav-heading">My Account</div>
 
-        <div class="field">
-          <label for="phone">Phone Number</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            maxlength="30"
-            autocomplete="tel"
-            placeholder="Enter your phone number"
-          >
-        </div>
+      <nav aria-label="Account navigation">
 
-        <div class="field">
-          <label for="deliveryAddress">Delivery Address</label>
-          <textarea
-            id="deliveryAddress"
-            name="deliveryAddress"
-            maxlength="1000"
-            autocomplete="street-address"
-            placeholder="Enter your delivery address"
-          ></textarea>
-        </div>
-
-        <button
-          type="submit"
-          id="saveButton"
-          class="save-button"
-        >
-          Save Changes
+        <button type="button" class="nav-link active" data-view="overview">
+          <span class="nav-icon">⌂</span>
+          Overview
         </button>
 
-        <div class="account-info">
-          <h3>Account Information</h3>
+        <button type="button" class="nav-link" data-view="profile">
+          <span class="nav-icon">♙</span>
+          My Profile
+        </button>
 
-          <div class="date-row">
-            <span>Account Created</span>
-            <span id="createdAt">Not available</span>
-          </div>
+        <button type="button" class="nav-link" data-view="orders">
+          <span class="nav-icon">▤</span>
+          My Orders
+        </button>
 
-          <div class="date-row">
-            <span>Last Updated</span>
-            <span id="updatedAt">Not available</span>
-          </div>
-        </div>
+        <button type="button" class="nav-link" data-view="addresses">
+          <span class="nav-icon">⌖</span>
+          Delivery Details
+        </button>
 
+        <button type="button" class="nav-link" data-view="security">
+          <span class="nav-icon">◇</span>
+          Account Security
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
         <button
           type="button"
-          id="logoutButton"
-          class="logout-button"
+          class="nav-link logout-nav"
+          id="sidebarLogout"
         >
+          <span class="nav-icon">↪</span>
           Log Out
         </button>
+      </div>
 
-      </form>
+    </aside>
 
-      <a class="back-link" href="index.html">
-        Back to Store
-      </a>
+    <!-- MAIN CONTENT -->
 
-    </section>
-  </main>
+    <main class="main">
+
+      <div id="pageMessage" role="status" aria-live="polite"></div>
+
+      <!-- OVERVIEW -->
+
+      <section class="view" id="view-overview">
+
+        <div class="page-heading">
+          <div class="eyebrow">Your Personal Space</div>
+          <h1>My Account</h1>
+          <p>Everything you need for a seamless Jidderhs Heaven experience.</p>
+        </div>
+
+        <div class="welcome-banner">
+
+          <div class="welcome-label">Welcome Back</div>
+
+          <h2>Hello, <span id="welcomeName">Customer</span>!</h2>
+
+          <p>
+            Welcome to your personal corner of Jidderhs Heaven.
+            Manage your details and keep track of your shopping journey.
+          </p>
+
+          <div class="welcome-bottom">
+
+            <div class="member-date">
+              Member since <strong id="memberSince">—</strong>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-gold"
+              data-go="profile"
+            >
+              Edit My Profile →
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">▤</div>
+            <div class="stat-label">Total Orders</div>
+            <div class="stat-value" id="orderCount">—</div>
+            <div class="stat-note">Your shopping history</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">♙</div>
+            <div class="stat-label">Account Status</div>
+            <div class="stat-value" style="font-size:20px">
+              Active
+            </div>
+            <div class="stat-note">Signed in successfully</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">₦</div>
+            <div class="stat-label">Total Order Value</div>
+            <div class="stat-value" id="orderValue">—</div>
+            <div class="stat-note">Based on visible order records</div>
+          </div>
+
+        </div>
+
+        <div class="section-title">
+          <div>
+            <h2>Recent Orders</h2>
+            <p>Your latest purchases will appear here.</p>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-light"
+            data-go="orders"
+          >
+            View All
+          </button>
+        </div>
+
+        <div class="content-card" id="recentOrdersCard">
+
+          <div class="empty-state">
+            <div class="empty-icon">▤</div>
+            <h3>Loading your orders</h3>
+            <p>Please wait while we retrieve your shopping history.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PROFILE -->
+
+      <section class="view" id="view-profile" hidden>
+
+        <div class="page-heading">
+          <div class="eyebrow">Personal Information</div>
+          <h1>My Profile</h1>
+          <p>Keep your personal information accurate and up to date.</p>
+        </div>
+
+        <div class="content-card">
+
+          <form id="profileForm">
+
+            <div class="form-grid">
+
+              <div class="field">
+                <label for="fullName">Full Name</label>
+                <input
+                  id="fullName"
+                  type="text"
+                  maxlength="100"
+                  autocomplete="name"
+                  required
+                >
+              </div>
+
+              <div class="field">
+                <label for="phone">Phone Number</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  maxlength="30"
+                  autocomplete="tel"
+                  placeholder="Enter your phone number"
+                >
+              </div>
+
+              <div class="field full">
+                <label for="email">Email Address</label>
+                <input id="email" type="email" readonly>
+                <span class="field-help">
+                  Your email comes from your authenticated account.
+                </span>
+              </div>
+
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-gold" id="saveProfile">
+                Save Changes
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+        <div class="content-card">
+
+          <div class="section-title" style="margin-top:0">
+            <div>
+              <h2>Account Information</h2>
+              <p>Details about your customer account.</p>
+            </div>
+          </div>
+
+          <dl class="info-list">
+
+            <div class="info-row">
+              <dt>Account Created</dt>
+              <dd id="profileCreated">—</dd>
+            </div>
+
+            <div class="info-row">
+              <dt>Last Updated</dt>
+              <dd id="profileUpdated">—</dd>
+            </div>
+
+          </dl>
+
+        </div>
+
+      </section>
+
+      <!-- ORDERS -->
+
+      <section class="view" id="view-orders" hidden>
+
+        <div class="page-heading">
+          <div class="eyebrow">Your Shopping Journey</div>
+          <h1>My Orders</h1>
+          <p>Review your purchases and their recorded payment statuses.</p>
+        </div>
+
+        <div class="content-card" id="allOrdersCard">
+
+          <div class="empty-state">
+            <div class="empty-icon">▤</div>
+            <h3>Loading orders</h3>
+            <p>Your order history is being retrieved.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- DELIVERY DETAILS -->
+
+      <section class="view" id="view-addresses" hidden>
+
+        <div class="page-heading">
+          <div class="eyebrow">Delivery Preferences</div>
+          <h1>Delivery Details</h1>
+          <p>Save your preferred delivery address for future orders.</p>
+        </div>
+
+        <div class="content-card">
+
+          <form id="addressForm">
+
+            <div class="field">
+              <label for="deliveryAddress">Delivery Address</label>
+
+              <textarea
+                id="deliveryAddress"
+                maxlength="1000"
+                autocomplete="street-address"
+                placeholder="Enter your street, area, city and other delivery details"
+              ></textarea>
+
+              <span class="field-help">
+                Make sure your address is complete enough for your order
+                to reach you.
+              </span>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-gold" id="saveAddress">
+                Save Delivery Details
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+        <div class="content-card">
+          <h2 style="font-family:Georgia,serif;font-weight:normal">
+            Please Note
+          </h2>
+
+          <p style="color:var(--muted);line-height:1.9">
+            Saving your address updates your customer profile.
+            We'll need to connect checkout to this saved address separately
+            if you want it to fill automatically when placing an order.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- SECURITY -->
+
+      <section class="view" id="view-security" hidden>
+
+        <div class="page-heading">
+          <div class="eyebrow">Your Privacy Matters</div>
+          <h1>Account Security</h1>
+          <p>Manage your sign-in credentials and account access.</p>
+        </div>
+
+        <div class="content-card">
+
+          <h2 style="font-family:Georgia,serif;font-weight:normal">
+            Change Password
+          </h2>
+
+          <p style="color:var(--muted);line-height:1.8">
+            Choose a strong password that you don't use on other websites.
+          </p>
+
+          <div class="security-note">
+            If you have forgotten your current password, use your
+            website's password-reset process instead.
+          </div>
+
+          <form id="passwordForm">
+
+            <div class="field">
+              <label for="newPassword">New Password</label>
+              <input
+                id="newPassword"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                required
+                placeholder="At least 8 characters"
+              >
+            </div>
+
+            <div class="field" style="margin-top:18px">
+              <label for="confirmPassword">Confirm New Password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                required
+                placeholder="Enter the same password again"
+              >
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-gold" id="changePassword">
+                Update Password
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+        <div class="content-card">
+
+          <h2 style="font-family:Georgia,serif;font-weight:normal">
+            Sign Out
+          </h2>
+
+          <p style="color:var(--muted);line-height:1.8">
+            Sign out when you've finished using your account, especially
+            on a shared device.
+          </p>
+
+          <button
+            type="button"
+            class="btn btn-danger"
+            id="securityLogout"
+          >
+            Log Out of My Account
+          </button>
+
+        </div>
+
+      </section>
+
+      <footer>
+        <span>Jidderhs Heaven</span><br>
+        Style, beauty and everyday living.<br>
+        Thank you for being part of our community.
+      </footer>
+
+    </main>
+
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script type="module">
     import { supabase } from "./assets/javascript/supabase.js";
 
-    const message = document.getElementById("message");
-    const profileForm = document.getElementById("profileForm");
-    const fullName = document.getElementById("fullName");
-    const email = document.getElementById("email");
-    const phone = document.getElementById("phone");
-    const deliveryAddress = document.getElementById("deliveryAddress");
-    const saveButton = document.getElementById("saveButton");
-    const logoutButton = document.getElementById("logoutButton");
-    const createdAt = document.getElementById("createdAt");
-    const updatedAt = document.getElementById("updatedAt");
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => document.querySelectorAll(selector);
+
+    const sidebar = $("#sidebar");
+    const mobileMenuButton = $("#mobileMenuButton");
+    const toast = $("#toast");
 
     let currentUser = null;
+    let currentProfile = null;
+    let customerOrders = [];
+    let toastTimer;
 
-    function showMessage(text, type = "") {
-      message.textContent = text;
-      message.className = type;
+    function notify(text, type = "success") {
+      toast.textContent = text;
+      toast.className = `toast ${type}`;
+      toast.hidden = false;
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.hidden = true;
+      }, 4000);
+    }
+
+    function setPageMessage(text) {
+      $("#pageMessage").textContent = text;
     }
 
     function formatDate(value) {
@@ -413,173 +1319,221 @@
       }).format(date);
     }
 
-    function displayProfile(profile) {
-      fullName.value = profile.full_name || "";
-      phone.value = profile.phone || "";
-      deliveryAddress.value = profile.delivery_address || "";
+    function formatMoney(value) {
+      const amount = Number(value);
 
-      createdAt.textContent = formatDate(profile.created_at);
-      updatedAt.textContent = formatDate(profile.updated_at);
+      if (!Number.isFinite(amount)) {
+        return "Not available";
+      }
 
-      profileForm.hidden = false;
+      return new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+        maximumFractionDigits: 2
+      }).format(amount);
+    }
+
+    function getInitials(name) {
+      const words = String(name || "Jidderhs Heaven")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      return words
+        .slice(0, 2)
+        .map(word => word[0].toUpperCase())
+        .join("");
+    }
+
+    function safeText(value) {
+      return String(value ?? "");
+    }
+
+    function showView(name) {
+      const target = $(`#view-${name}`);
+
+      if (!target) return;
+
+      $$(".view").forEach(section => {
+        section.hidden = section !== target;
+      });
+
+      $$(".nav-link[data-view]").forEach(button => {
+        const active = button.dataset.view === name;
+
+        button.classList.toggle("active", active);
+
+        if (active) {
+          button.setAttribute("aria-current", "page");
+        } else {
+          button.removeAttribute("aria-current");
+        }
+      });
+
+      sidebar.classList.remove("open");
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+
+      setPageMessage("");
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function updateCustomerHeader() {
+      const name =
+        currentProfile?.full_name ||
+        currentUser?.user_metadata?.full_name ||
+        currentUser?.user_metadata?.name ||
+        "Valued Customer";
+
+      const initials = getInitials(name);
+
+      $("#sidebarName").textContent = name;
+      $("#sidebarAvatar").textContent = initials;
+      $("#welcomeName").textContent = name.split(/\s+/)[0];
+      $("#email").value = currentUser?.email || "";
+
+      const created = currentProfile?.created_at ||
+        currentUser?.created_at;
+
+      $("#memberSince").textContent = created
+        ? new Intl.DateTimeFormat("en-NG", {
+            month: "long",
+            year: "numeric"
+          }).format(new Date(created))
+        : "Not available";
+
+      $("#profileCreated").textContent = formatDate(
+        currentProfile?.created_at || currentUser?.created_at
+      );
+
+      $("#profileUpdated").textContent = formatDate(
+        currentProfile?.updated_at
+      );
     }
 
     async function loadProfile() {
-      try {
-        const { data: authData, error: authError } =
-          await supabase.auth.getUser();
+      const { data, error } = await supabase.auth.getUser();
 
-        if (authError) {
-          throw authError;
-        }
+      if (error) throw error;
 
-        if (!authData.user) {
-          showMessage(
-            "You are not logged in. Please log in to view your profile."
-          );
+      if (!data.user) {
+        window.location.href = "login.html";
+        return false;
+      }
 
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 2500);
+      currentUser = data.user;
 
-          return;
-        }
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select(
+          "id, full_name, phone, delivery_address, created_at, updated_at"
+        )
+        .eq("id", currentUser.id)
+        .maybeSingle();
 
-        currentUser = authData.user;
-        email.value = currentUser.email || "";
+      if (profileError) throw profileError;
 
-        let { data: profile, error: profileError } = await supabase
+      if (profile) {
+        currentProfile = profile;
+      } else {
+        // Create a profile for this authenticated customer if necessary.
+        const { data: newProfile, error: insertError } = await supabase
           .from("profiles")
-          .select(
-            "id, full_name, phone, delivery_address, created_at, updated_at"
-          )
-          .eq("id", currentUser.id)
-          .maybeSingle();
-
-        if (profileError) {
-          throw profileError;
-        }
-
-        // Create a profile record if this customer does not have one yet.
-        if (!profile) {
-          const { data: newProfile, error: insertError } = await supabase
-            .from("profiles")
-            .insert({
-              id: currentUser.id,
-              full_name:
-                currentUser.user_metadata?.full_name ||
-                currentUser.user_metadata?.name ||
-                "",
-              phone: "",
-              delivery_address: ""
-            })
-            .select(
-              "id, full_name, phone, delivery_address, created_at, updated_at"
-            )
-            .single();
-
-          if (insertError) {
-            throw insertError;
-          }
-
-          profile = newProfile;
-        }
-
-        displayProfile(profile);
-
-        showMessage("Your profile is ready.", "success");
-
-      } catch (error) {
-        console.error("Profile loading error:", error);
-
-        showMessage(
-          "We couldn't load your profile. Please check your connection and try again.",
-          "error"
-        );
-      }
-    }
-
-    profileForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      if (!currentUser) {
-        showMessage("Please log in before saving your profile.", "error");
-        return;
-      }
-
-      if (!profileForm.reportValidity()) {
-        return;
-      }
-
-      saveButton.disabled = true;
-      saveButton.textContent = "Saving...";
-
-      try {
-        const updates = {
-          full_name: fullName.value.trim(),
-          phone: phone.value.trim(),
-          delivery_address: deliveryAddress.value.trim()
-        };
-
-        const { data: updatedProfile, error: updateError } = await supabase
-          .from("profiles")
-          .update(updates)
-          .eq("id", currentUser.id)
+          .insert({
+            id: currentUser.id,
+            full_name:
+              currentUser.user_metadata?.full_name ||
+              currentUser.user_metadata?.name ||
+              "",
+            phone: "",
+            delivery_address: ""
+          })
           .select(
             "id, full_name, phone, delivery_address, created_at, updated_at"
           )
           .single();
 
-        if (updateError) {
-          throw updateError;
-        }
+        if (insertError) throw insertError;
 
-        displayProfile(updatedProfile);
-
-        showMessage("Your profile has been saved successfully.", "success");
-
-      } catch (error) {
-        console.error("Profile save error:", error);
-
-        showMessage(
-          "Unable to save your profile. Please try again.",
-          "error"
-        );
-
-      } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = "Save Changes";
+        currentProfile = newProfile;
       }
-    });
 
-    logoutButton.addEventListener("click", async () => {
-      logoutButton.disabled = true;
-      logoutButton.textContent = "Logging out...";
+      $("#fullName").value = currentProfile.full_name || "";
+      $("#phone").value = currentProfile.phone || "";
+      $("#deliveryAddress").value =
+        currentProfile.delivery_address || "";
 
-      try {
-        const { error } = await supabase.auth.signOut();
+      updateCustomerHeader();
 
-        if (error) {
-          throw error;
-        }
+      return true;
+    }
 
-        window.location.href = "login.html";
+    function renderOrderTable(orders, limit = Infinity) {
+      const visibleOrders = orders.slice(0, limit);
 
-      } catch (error) {
-        console.error("Logout error:", error);
-
-        showMessage(
-          "Unable to log out. Please try again.",
-          "error"
-        );
-
-        logoutButton.disabled = false;
-        logoutButton.textContent = "Log Out";
+      if (!visibleOrders.length) {
+        return `
+          <div class="empty-state">
+            <div class="empty-icon">▤</div>
+            <h3>No Orders Yet</h3>
+            <p>
+              Your purchases will appear here after orders have been
+              recorded in your account.
+            </p>
+            <a class="btn btn-gold" href="index.html">
+              Explore the Store
+            </a>
+          </div>
+        `;
       }
-    });
 
-    loadProfile();
-  </script>
+      const rows = visibleOrders.map(order => {
+        const reference = safeText(order.id).slice(0, 8).toUpperCase();
+        const status = safeText(order.payment_status || "pending");
 
-</body>
-</html>
+        return `
+          <tr>
+            <td>#${reference}</td>
+            <td>${formatDate(order.created_at)}</td>
+            <td>${formatMoney(order.total_amount)}</td>
+            <td><span class="status">${status}</span></td>
+          </tr>
+        `;
+      }).join("");
+
+      return `
+        <div class="table-wrap">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Payment Status</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    async function loadOrders() {
+      $("#recentOrdersCard").innerHTML = `
+        <div class="empty-state">
+          <h3>Loading orders...</h3>
+        </div>
+      `;
+
+      $("#allOrdersCard").innerHTML = `
+        <div class="empty-state">
+          <h3>Loading orders...</h3>
+        </div>
+      `;
+
+      // The existing orders schema has customer_email, not user_id.
+      // RLS must authorize access to the current customer's own orders.
+      const { data, error } =
