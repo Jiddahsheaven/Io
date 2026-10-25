@@ -1541,25 +1541,12 @@ window.addEventListener("load", () => {
       }
 
       if (tab === "account") {
-        const accountPanel =
-          document.getElementById("accountPanel") ||
-          document.getElementById("accountDrawer") ||
-          document.getElementById("accountSection") ||
-          document.getElementById("account");
-
-        if (accountPanel) {
-          accountPanel.classList.add("open");
-
-          accountPanel.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-        } else {
-          console.error(
-            "Account panel is missing. Its HTML must be added before this tab can open it."
-          );
-        }
-      }
+  if (window.jhAccountPanel) {
+    window.jhAccountPanel.open();
+  } else {
+    console.error("Account panel controls did not initialize.");
+  }
+}
 
       updateBottomBagCount();
     });
@@ -1572,4 +1559,100 @@ window.addEventListener("load", () => {
   updateBottomBagCount();
 
   console.log("Jidderhs Heaven bottom navigation initialized.");
+})();
+
+/* =========================================
+   ACCOUNT PANEL CONTROLS
+========================================= */
+
+(() => {
+  const panel = document.getElementById("accountPanel");
+  const overlay = document.getElementById("accountOverlay");
+  const closeButton = document.getElementById("accountClose");
+  const nav = document.getElementById("jhBottomNav");
+
+  if (!panel || !overlay || !closeButton) {
+    console.error("Account panel HTML is incomplete.");
+    return;
+  }
+
+  function openAccountPanel() {
+    if (typeof closeCart === "function") {
+      closeCart();
+    }
+
+    panel.classList.add("open");
+    overlay.classList.add("open");
+
+    panel.setAttribute("aria-hidden", "false");
+    overlay.setAttribute("aria-hidden", "false");
+
+    document.body.classList.add("no-scroll");
+
+    const accountButton = nav?.querySelector(
+      '[data-jh-tab="account"]'
+    );
+
+    if (accountButton) {
+      accountButton.classList.add("is-active");
+      nav.dataset.active = "account";
+    }
+  }
+
+  function closeAccountPanel() {
+    panel.classList.remove("open");
+    overlay.classList.remove("open");
+
+    panel.setAttribute("aria-hidden", "true");
+    overlay.setAttribute("aria-hidden", "true");
+
+    document.body.classList.remove("no-scroll");
+
+    const accountButton = nav?.querySelector(
+      '[data-jh-tab="account"]'
+    );
+
+    if (accountButton) {
+      accountButton.classList.remove("is-active");
+      accountButton.removeAttribute("aria-current");
+    }
+  }
+
+  closeButton.addEventListener("click", closeAccountPanel);
+  overlay.addEventListener("click", closeAccountPanel);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAccountPanel();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const featureButton = event.target.closest(
+      "[data-account-feature]"
+    );
+
+    if (!featureButton) return;
+
+    const feature = featureButton.dataset.accountFeature;
+
+    const messages = {
+      orders: "Your order history needs to be connected.",
+      notifications: "Your notification centre needs to be connected.",
+      settings: "Your account settings need to be connected.",
+      support: "Your customer support page needs to be connected."
+    };
+
+    if (typeof showToast === "function") {
+      showToast(messages[feature] || "This feature is not available yet.");
+    }
+
+  });
+
+  window.jhAccountPanel = {
+    open: openAccountPanel,
+    close: closeAccountPanel
+  };
+
+  console.log("Account panel controls initialized.");
 })();
