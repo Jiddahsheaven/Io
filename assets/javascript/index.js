@@ -1494,83 +1494,81 @@ window.addEventListener("load", () => {
   }
 
   buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-  const tab = button.dataset.jhTab;
+    buttons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const tab = button.dataset.jhTab;
 
-  // Close the bag whenever another tab is selected.
-  if (tab !== "bag" && typeof closeCart === "function") {
-    closeCart();
-  }
+    // Close the cart before switching to another tab.
+    if (tab !== "bag") {
+      if (typeof closeCart === "function") {
+        closeCart();
+      }
 
-  // Update the active tab.
-  setActiveTab(button);
+      // Ensure the cart overlay is also closed.
+      const overlay = document.getElementById("cartOverlay");
 
-  // HOME
-  if (tab === "home") {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }
+      if (overlay) {
+        overlay.classList.remove("open");
+      }
 
-  // SHOP
-  if (tab === "shop") {
-    if (typeof setFilter === "function") {
-      setFilter("all", true);
+      const drawer = document.getElementById("cartDrawer");
+
+      if (drawer) {
+        drawer.classList.remove("open");
+      }
+
+      document.body.classList.remove("cart-open");
     }
 
-    const shopSection =
-      document.getElementById("allProducts") ||
-      document.getElementById("shopSection");
+    setActiveTab(button);
 
-    if (shopSection) {
-      shopSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+    if (tab === "home") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
       });
     }
-  }
 
-  // BAG
-  if (tab === "bag") {
-    if (typeof openCart === "function") {
-      openCart();
-    } else {
-      console.error("Shopping cart function is unavailable.");
+    if (tab === "shop") {
+      if (typeof setFilter === "function") {
+        setFilter("all", true);
+      }
+
+      const shop = document.getElementById("allProducts");
+
+      if (shop) {
+        shop.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
     }
-  }
 
-  // ACCOUNT
-  if (tab === "account") {
-    const profile =
-      document.getElementById("accountSection") ||
-      document.getElementById("account") ||
-      document.getElementById("profileSection");
-
-    if (profile) {
-      profile.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    } else {
-      console.warn(
-        "Account tab clicked, but no profile section was found."
-      );
+    if (tab === "bag") {
+      if (typeof openCart === "function") {
+        openCart();
+      }
     }
-  }
-});
-    });
+
+    if (tab === "account") {
+      // Open the account panel if it already exists.
+      const accountPanel =
+        document.getElementById("accountPanel") ||
+        document.getElementById("accountDrawer") ||
+        document.getElementById("accountSection");
+
+      if (accountPanel) {
+        accountPanel.classList.add("open");
+
+        accountPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+      } else {
+        console.error(
+          "Account panel not found. The account HTML must be added."
+        );
+      }
+    }
   });
-
-  // Update the bag badge when the saved cart changes.
-  window.addEventListener("storage", updateBottomBagCount);
-
-  // Keep the badge updated when other code changes the cart.
-  window.setInterval(updateBottomBagCount, 1000);
-
-  updateBottomBagCount();
-
-  console.log(
-    "JH Bottom Nav: Navigation initialized successfully."
-  );
-})();
+});
