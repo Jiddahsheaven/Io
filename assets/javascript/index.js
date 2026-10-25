@@ -1452,7 +1452,6 @@ window.addEventListener("load", () => {
   const subtitle = document.getElementById("jhAccountSubtitle");
 
   const signOutButton = document.getElementById("jhSignOut");
-
   const bottomBagCount = document.getElementById("jhBottomBagCount");
 
   if (
@@ -1466,13 +1465,10 @@ window.addEventListener("load", () => {
     console.warn(
       "Jidderhs Heaven glass navigation: required HTML elements are missing."
     );
-
     return;
   }
 
-  /* -----------------------------------------
-     OPEN AND CLOSE ACCOUNT PANEL
-  ----------------------------------------- */
+  /* OPEN AND CLOSE ACCOUNT PANEL */
 
   function openAccountSheet() {
     sheet.hidden = false;
@@ -1500,10 +1496,11 @@ window.addEventListener("load", () => {
     } else {
       closeAccountSheet();
     }
+
+    setActiveTab("account");
   });
 
   closeButton.addEventListener("click", closeAccountSheet);
-
   overlay.addEventListener("click", closeAccountSheet);
 
   document.addEventListener("keydown", (event) => {
@@ -1513,9 +1510,7 @@ window.addEventListener("load", () => {
     }
   });
 
-  /* -----------------------------------------
-     ACTIVE NAVIGATION TAB
-  ----------------------------------------- */
+  /* ACTIVE NAVIGATION TAB */
 
   function setActiveTab(tabName) {
     nav.querySelectorAll("[data-jh-tab]").forEach((tab) => {
@@ -1548,39 +1543,32 @@ window.addEventListener("load", () => {
     });
   }
 
-  accountButton.addEventListener("click", () => {
-    setActiveTab("account");
-  });
-
-  /* -----------------------------------------
-     CONNECT TO THE EXISTING SHOPPING BAG
-  ----------------------------------------- */
+  /* OPEN EXISTING SHOPPING BAG */
 
   bagButton.addEventListener("click", () => {
     closeAccountSheet();
-
     setActiveTab("bag");
 
     const existingBagButton = document.getElementById("bagToggle");
 
-if (existingBagButton) {
-  existingBagButton.click();
-} else {
-  const cartDrawer = document.getElementById("cartDrawer");
-  const cartOverlay = document.getElementById("cartOverlay");
+    if (existingBagButton) {
+      existingBagButton.click();
+    } else {
+      /*
+       * The top bag button may have been removed.
+       * Use the existing cart-opening function instead.
+       */
+      if (typeof openCart === "function") {
+        openCart();
+      } else {
+        console.error(
+          "Could not open the cart. The existing openCart() function is unavailable."
+        );
+      }
+    }
+  });
 
-  if (cartDrawer && cartOverlay) {
-    cartDrawer.classList.add("open");
-    cartOverlay.classList.add("active");
-    document.body.classList.add("cart-open");
-  } else {
-    console.warn("Could not find the existing cart drawer.");
-  }
-}
-
-  /* -----------------------------------------
-     KEEP THE BAG COUNT IN SYNC
-  ----------------------------------------- */
+  /* SYNCHRONIZE BAG COUNT */
 
   function updateBottomBagCount() {
     if (!bottomBagCount) return;
@@ -1590,37 +1578,42 @@ if (existingBagButton) {
     if (existingCount) {
       bottomBagCount.textContent =
         existingCount.textContent.trim() || "0";
+    } else {
+      const count = Array.isArray(window.cart)
+        ? window.cart.reduce(
+            (total, item) => total + (Number(item.qty) || 0),
+            0
+          )
+        : null;
+
+      if (count !== null) {
+        bottomBagCount.textContent = String(count);
+      }
     }
   }
 
   updateBottomBagCount();
 
-  if (document.body) {
+  const existingCount = document.getElementById("bagCount");
+
+  if (existingCount) {
     const bagObserver = new MutationObserver(updateBottomBagCount);
 
-    const existingCount = document.getElementById("bagCount");
-
-    if (existingCount) {
-      bagObserver.observe(existingCount, {
-        childList: true,
-        characterData: true,
-        subtree: true
-      });
-    }
+    bagObserver.observe(existingCount, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
   }
 
-  /* -----------------------------------------
-     SUPABASE AUTHENTICATION
-  ----------------------------------------- */
+  /* SUPABASE ACCOUNT UI */
 
   function updateAccountUI(session) {
     const user = session?.user;
 
     if (user) {
       if (guestActions) guestActions.hidden = true;
-
       if (customerActions) customerActions.hidden = false;
-
       if (signOutButton) signOutButton.hidden = false;
 
       const displayName =
@@ -1638,9 +1631,7 @@ if (existingBagButton) {
       }
     } else {
       if (guestActions) guestActions.hidden = false;
-
       if (customerActions) customerActions.hidden = true;
-
       if (signOutButton) signOutButton.hidden = true;
 
       if (greeting) greeting.textContent = "Hello, Guest";
@@ -1656,30 +1647,19 @@ if (existingBagButton) {
       typeof supabase === "undefined" ||
       !supabase?.auth
     ) {
-      console.warn(
-        "Glass account menu: existing Supabase client is unavailable."
-      );
-
+      console.warn("Supabase authentication is unavailable.");
       updateAccountUI(null);
-
       return;
     }
 
     try {
-      const {
-        data: { session },
-        error
-      } = await supabase.auth.getSession();
+      const { data, error } = await supabase.auth.getSession();
 
       if (error) throw error;
 
-      updateAccountUI(session);
+      updateAccountUI(data.session);
     } catch (error) {
-      console.error(
-        "Could not load the current customer session:",
-        error
-      );
-
+      console.error("Could not load account session:", error);
       updateAccountUI(null);
     }
 
@@ -1690,9 +1670,7 @@ if (existingBagButton) {
 
   initializeGlassAccount();
 
-  /* -----------------------------------------
-     SIGN OUT
-  ----------------------------------------- */
+  /* SIGN OUT */
 
   if (signOutButton) {
     signOutButton.addEventListener("click", async () => {
@@ -1730,5 +1708,4 @@ if (existingBagButton) {
   console.log(
     "Jidderhs Heaven Liquid Glass navigation initialized."
   );
-
 })();
