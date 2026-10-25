@@ -1493,7 +1493,7 @@ body {
   padding: 9px 10px;
 
   border: 1px solid var(--jh-glass-border);
-  border-radius: 30px;
+  border-radius: 34px;
 
   background:
     linear-gradient(
@@ -1542,9 +1542,10 @@ body {
   -webkit-tap-highlight-color: transparent;
 
   transition:
-    color 180ms ease,
-    background 180ms ease,
-    transform 180ms ease;
+  color 250ms ease,
+  background 250ms ease,
+  transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+  box-shadow 250ms ease;
 }
 
 .jh-glass-tab svg {
@@ -1997,5 +1998,74 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .jh-glass-tab {
     transition: none;
+  }
+}
+
+/* =========================================
+   LIQUID GLASS TAB ANIMATIONS
+========================================= */
+
+/* Smooth icon movement when a tab is selected */
+.jh-glass-tab svg {
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 250ms ease;
+}
+
+/* Selected tab gently lifts */
+.jh-glass-tab.is-active {
+  background: rgba(255, 255, 255, 0.36);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.jh-glass-tab.is-active svg {
+  transform: translateY(-3px) scale(1.06);
+}
+
+/* Press feedback */
+.jh-glass-tab:active {
+  transform: scale(0.92);
+}
+
+/* Account panel enters smoothly */
+@keyframes jhGlassSheetIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 18px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.jh-account-sheet:not([hidden]) {
+  animation: jhGlassSheetIn 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Gentle fade for the backdrop */
+@keyframes jhGlassFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.jh-glass-overlay:not([hidden]) {
+  animation: jhGlassFadeIn 220ms ease;
+}
+
+/* Respect accessibility settings */
+@media (prefers-reduced-motion: reduce) {
+  .jh-glass-tab,
+  .jh-glass-tab svg,
+  .jh-account-sheet:not([hidden]),
+  .jh-glass-overlay:not([hidden]) {
+    animation: none !important;
+    transition: none !important;
   }
 }
