@@ -1440,28 +1440,20 @@ window.addEventListener("load", () => {
   const nav = document.getElementById("jhBottomNav");
 
   if (!nav) {
-    console.error(
-      "JH Bottom Nav: #jhBottomNav was not found."
-    );
+    console.error("Bottom navigation HTML was not found.");
     return;
   }
-
-  if (nav.dataset.initialized === "true") {
-    return;
-  }
-
-  nav.dataset.initialized = "true";
 
   const buttons = nav.querySelectorAll("[data-jh-tab]");
   const bagBadge = document.getElementById("jhBottomBagCount");
 
   function setActiveTab(activeButton) {
     buttons.forEach((button) => {
-      const isActive = button === activeButton;
+      const active = button === activeButton;
 
-      button.classList.toggle("is-active", isActive);
+      button.classList.toggle("is-active", active);
 
-      if (isActive) {
+      if (active) {
         button.setAttribute("aria-current", "page");
       } else {
         button.removeAttribute("aria-current");
@@ -1469,6 +1461,20 @@ window.addEventListener("load", () => {
     });
 
     nav.dataset.active = activeButton.dataset.jhTab;
+  }
+
+  function closeCartSafely() {
+    if (typeof closeCart === "function") {
+      closeCart();
+    }
+
+    const drawer = document.getElementById("cartDrawer");
+    const overlay = document.getElementById("cartOverlay");
+
+    if (drawer) drawer.classList.remove("open");
+    if (overlay) overlay.classList.remove("open");
+
+    document.body.classList.remove("no-scroll", "cart-open");
   }
 
   function updateBottomBagCount() {
@@ -1479,96 +1485,91 @@ window.addEventListener("load", () => {
         localStorage.getItem("jiddamarh-cart") || "[]"
       );
 
-      const total = savedCart.reduce((sum, item) => {
-        return sum + Math.max(0, Number(item.qty) || 0);
-      }, 0);
+      const total = Array.isArray(savedCart)
+        ? savedCart.reduce(
+            (sum, item) => sum + Math.max(0, Number(item.qty) || 0),
+            0
+          )
+        : 0;
 
       bagBadge.textContent = String(total);
       bagBadge.hidden = total === 0;
     } catch (error) {
-      console.error(
-        "JH Bottom Nav: Could not update bag count.",
-        error
-      );
+      console.error("Could not update bottom bag counter:", error);
     }
   }
 
   buttons.forEach((button) => {
-    buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const tab = button.dataset.jhTab;
+    button.addEventListener("click", () => {
+      const tab = button.dataset.jhTab;
 
-    // Close the cart before switching to another tab.
-    if (tab !== "bag") {
-      if (typeof closeCart === "function") {
-        closeCart();
+      // Close the cart before navigating elsewhere.
+      if (tab !== "bag") {
+        closeCartSafely();
       }
 
-      // Ensure the cart overlay is also closed.
-      const overlay = document.getElementById("cartOverlay");
+      setActiveTab(button);
 
-      if (overlay) {
-        overlay.classList.remove("open");
-      }
-
-      const drawer = document.getElementById("cartDrawer");
-
-      if (drawer) {
-        drawer.classList.remove("open");
-      }
-
-      document.body.classList.remove("cart-open");
-    }
-
-    setActiveTab(button);
-
-    if (tab === "home") {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    }
-
-    if (tab === "shop") {
-      if (typeof setFilter === "function") {
-        setFilter("all", true);
-      }
-
-      const shop = document.getElementById("allProducts");
-
-      if (shop) {
-        shop.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
+      if (tab === "home") {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
         });
       }
-    }
 
-    if (tab === "bag") {
-      if (typeof openCart === "function") {
-        openCart();
+      if (tab === "shop") {
+        if (typeof setFilter === "function") {
+          setFilter("all", true);
+        }
+
+        const shop =
+          document.getElementById("productCollection") ||
+          document.getElementById("allProducts");
+
+        if (shop) {
+          shop.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
       }
-    }
 
-    if (tab === "account") {
-      // Open the account panel if it already exists.
-      const accountPanel =
-        document.getElementById("accountPanel") ||
-        document.getElementById("accountDrawer") ||
-        document.getElementById("accountSection");
-
-      if (accountPanel) {
-        accountPanel.classList.add("open");
-
-        accountPanel.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest"
-        });
-      } else {
-        console.error(
-          "Account panel not found. The account HTML must be added."
-        );
+      if (tab === "bag") {
+        if (typeof openCart === "function") {
+          openCart();
+        }
       }
-    }
+
+      if (tab === "account") {
+        const accountPanel =
+          document.getElementById("accountPanel") ||
+          document.getElementById("accountDrawer") ||
+          document.getElementById("accountSection") ||
+          document.getElementById("account");
+
+        if (accountPanel) {
+          accountPanel.classList.add("open");
+
+          accountPanel.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        } else {
+          console.error(
+            "Account panel is missing. Its HTML must be added before this tab can open it."
+          );
+        }
+      }
+
+      updateBottomBagCount();
+    });
   });
-});
+
+  // Keep the badge updated when the page's cart changes.
+  window.addEventListener("storage", updateBottomBagCount);
+
+  // Initial counter update.
+  updateBottomBagCount();
+
+  console.log("Jidderhs Heaven bottom navigation initialized.");
+})();
