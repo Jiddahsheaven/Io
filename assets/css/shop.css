@@ -899,3 +899,514 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================================
+   JIDDERHS HEAVEN — SHOP INTERACTIVE COMPONENTS
+========================================================= */
+
+/* Keep hidden elements hidden */
+.jh-shop-page [hidden] {
+  display: none !important;
+}
+
+/* Search panel */
+.jh-shop-page .shop-search-panel {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 5%;
+  background: #fffdf9;
+  border-bottom: 1px solid rgba(189, 150, 83, 0.25);
+}
+
+.jh-shop-page .shop-search-panel label {
+  width: 100%;
+  color: #211a17;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.jh-shop-page .shop-search-panel input {
+  flex: 1;
+  min-width: 180px;
+  padding: 13px 15px;
+  border: 1px solid #dfd2bd;
+  border-radius: 5px;
+  background: #fff;
+  color: #211a17;
+  font: inherit;
+  outline: none;
+}
+
+.jh-shop-page .shop-search-panel input:focus {
+  border-color: #bd9653;
+  box-shadow: 0 0 0 3px rgba(189, 150, 83, 0.12);
+}
+
+.jh-shop-page .shop-search-panel button {
+  padding: 12px 18px;
+  border: 1px solid #bd9653;
+  border-radius: 5px;
+  background: #faf7f1;
+  color: #211a17;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Product image placeholder */
+.jh-shop-page .shop-image-placeholder {
+  display: flex;
+  min-height: 220px;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      #fffdf8 0,
+      #f2e7d4 55%,
+      #e7d5b5 100%
+    );
+  color: #8b6a37;
+}
+
+.jh-shop-page .shop-image-placeholder span {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 3rem;
+  letter-spacing: 0.12em;
+}
+
+.jh-shop-page .shop-image-placeholder small {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Product image and card buttons */
+.jh-shop-page .shop-product-details {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.jh-shop-page .shop-product-details img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  object-fit: cover;
+}
+
+.jh-shop-page .shop-product-name {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #211a17;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.jh-shop-page .shop-product-name:hover {
+  color: #8b6a37;
+}
+
+.jh-shop-page .shop-product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.jh-shop-page .shop-view-details,
+.jh-shop-page .shop-add-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 13px;
+  border: 1px solid #bd9653;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.jh-shop-page .shop-view-details {
+  background: transparent;
+  color: #211a17;
+}
+
+.jh-shop-page .shop-add-button {
+  background: #211a17;
+  color: #fffdf8;
+}
+
+.jh-shop-page .shop-view-details:hover {
+  background: #ead9b7;
+}
+
+.jh-shop-page .shop-add-button:hover {
+  background: #bd9653;
+  border-color: #bd9653;
+  color: #211a17;
+}
+
+.jh-shop-page .shop-add-button:disabled {
+  border-color: #d8d0c4;
+  background: #e9e4dc;
+  color: #77716a;
+  cursor: not-allowed;
+}
+
+/* Category and stock labels */
+.jh-shop-page .shop-product-category,
+.jh-shop-page .shop-stock-label {
+  display: inline-block;
+  padding: 5px 9px;
+  background: #faf7f1;
+  color: #65513a;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.jh-shop-page .shop-stock-label {
+  background: #f4e3dc;
+  color: #8a3326;
+}
+
+/* Empty and loading messages */
+.jh-shop-page .shop-message {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid #ead9b7;
+  border-radius: 5px;
+  background: #fffdf8;
+  color: #514338;
+  line-height: 1.6;
+}
+
+.jh-shop-page .shop-message[data-type="warning"] {
+  border-color: #d8b87f;
+  background: #fff8e9;
+}
+
+/* Load more button */
+.jh-shop-page .shop-load-more {
+  display: block;
+  margin: 30px auto;
+  padding: 13px 24px;
+  border: 1px solid #bd9653;
+  border-radius: 4px;
+  background: transparent;
+  color: #211a17;
+  font: inherit;
+  cursor: pointer;
+}
+
+.jh-shop-page .shop-load-more:hover {
+  background: #ead9b7;
+}
+
+/* Modal background */
+.jh-shop-page .shop-details-overlay,
+.jh-shop-page .shop-cart-overlay {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(24, 19, 15, 0.68);
+  backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+
+/* Product details modal */
+.jh-shop-page .shop-details-dialog {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 35px;
+  border: 1px solid rgba(189, 150, 83, 0.35);
+  border-radius: 8px;
+  background: #faf7f1;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+}
+
+.jh-shop-page .shop-details-close {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 15px;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid #dfd2bd;
+  border-radius: 50%;
+  background: #fffdf9;
+  color: #211a17;
+  font-size: 1.7rem;
+  cursor: pointer;
+}
+
+.jh-shop-page .shop-details-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 35px;
+  align-items: center;
+}
+
+.jh-shop-page .shop-details-image {
+  min-height: 320px;
+  overflow: hidden;
+  background: #eee4d4;
+}
+
+.jh-shop-page .shop-details-image img {
+  display: block;
+  width: 100%;
+  min-height: 320px;
+  max-height: 520px;
+  object-fit: cover;
+}
+
+.jh-shop-page .shop-details-info h2 {
+  margin: 8px 0 12px;
+  color: #211a17;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.jh-shop-page .shop-details-price {
+  margin: 12px 0;
+  color: #8b6a37;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.jh-shop-page .shop-details-description {
+  color: #655c53;
+  line-height: 1.8;
+}
+
+.jh-shop-page .shop-details-stock {
+  margin: 18px 0;
+  color: #65513a;
+  font-size: 0.88rem;
+}
+
+.jh-shop-page .shop-details-info .shop-add-button {
+  width: 100%;
+  min-height: 48px;
+}
+
+/* Shopping bag drawer */
+.jh-shop-page .shop-cart-overlay {
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.jh-shop-page .shop-cart-dialog {
+  display: flex;
+  width: min(460px, 100%);
+  height: 100%;
+  max-height: 100dvh;
+  flex-direction: column;
+  padding: 25px;
+  overflow-y: auto;
+  background: #faf7f1;
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.18);
+}
+
+.jh-shop-page .shop-cart-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5d8c5;
+}
+
+.jh-shop-page .shop-cart-heading h2 {
+  margin: 0;
+  color: #211a17;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.jh-shop-page #shopCartClose {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #dfd2bd;
+  border-radius: 50%;
+  background: #fffdf9;
+  color: #211a17;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.jh-shop-page #shopCartItems {
+  flex: 1;
+  padding: 15px 0;
+}
+
+.jh-shop-page .shop-cart-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5d8c5;
+}
+
+.jh-shop-page .shop-cart-item h3 {
+  margin: 0 0 7px;
+  color: #211a17;
+  font-size: 0.95rem;
+}
+
+.jh-shop-page .shop-cart-item p {
+  margin: 0 0 12px;
+  color: #8b6a37;
+}
+
+.jh-shop-page .shop-cart-item > strong {
+  white-space: nowrap;
+}
+
+.jh-shop-page .shop-cart-quantity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.jh-shop-page .shop-cart-quantity button {
+  padding: 5px 9px;
+  border: 1px solid #dfd2bd;
+  border-radius: 3px;
+  background: #fffdf9;
+  color: #211a17;
+  cursor: pointer;
+}
+
+.jh-shop-page .shop-cart-quantity span {
+  min-width: 16px;
+  text-align: center;
+}
+
+.jh-shop-page .shop-cart-empty {
+  padding: 30px 0;
+  color: #655c53;
+  line-height: 1.7;
+}
+
+.jh-shop-page .shop-cart-footer {
+  padding-top: 20px;
+  border-top: 1px solid #e5d8c5;
+}
+
+.jh-shop-page .shop-cart-footer > p {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #211a17;
+}
+
+.jh-shop-page .shop-cart-footer strong {
+  color: #8b6a37;
+}
+
+.jh-shop-page #shopCheckoutLink,
+.jh-shop-page .shop-continue-shopping {
+  display: block;
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #bd9653;
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.jh-shop-page #shopCheckoutLink {
+  background: #211a17;
+  color: #fffdf8;
+}
+
+.jh-shop-page .shop-continue-shopping {
+  background: transparent;
+  color: #211a17;
+}
+
+.jh-shop-page #shopCheckoutLink:hover {
+  background: #bd9653;
+  color: #211a17;
+}
+
+/* Prevent background scrolling while a modal is open */
+.jh-shop-page.shop-modal-open {
+  overflow: hidden;
+}
+
+/* Mobile layout */
+@media (max-width: 640px) {
+  .jh-shop-page .shop-details-overlay {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .jh-shop-page .shop-details-dialog {
+    max-height: calc(100dvh - 24px);
+    padding: 50px 18px 22px;
+  }
+
+  .jh-shop-page .shop-details-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .jh-shop-page .shop-details-image,
+  .jh-shop-page .shop-details-image img {
+    min-height: 220px;
+  }
+
+  .jh-shop-page .shop-product-actions > button {
+    flex: 1;
+  }
+
+  .jh-shop-page .shop-cart-dialog {
+    padding: 20px 16px;
+  }
+
+  .jh-shop-page .shop-search-panel {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jh-shop-page *,
+  .jh-shop-page *::before,
+  .jh-shop-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
