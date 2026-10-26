@@ -1,921 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#211a17" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#211a17">
   <title>Jidderhs Heaven | Admin</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --ink: #211a17;
-      --ink-soft: #4d4039;
       --gold: #bd9653;
-      --gold-light: #ead9b7;
       --cream: #faf7f1;
-      --paper: #ffffff;
+      --white: #fff;
       --line: #eee6da;
-      --muted: #8b8178;
+      --muted: #81776f;
       --green: #267a55;
-      --green-bg: #e9f5ee;
       --red: #b53e3e;
-      --red-bg: #fff0ed;
-      --amber: #94671d;
-      --amber-bg: #fff5dc;
-      --shadow: 0 18px 50px rgba(38, 26, 18, .07);
-      --radius: 18px;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font-family: "DM Sans", sans-serif; }
     button, input, select, textarea { font: inherit; }
     button { cursor: pointer; }
-    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(189,150,83,.35); outline-offset: 2px; }
     [hidden] { display: none !important; }
-    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-    .brand-mark { display: grid; place-items: center; flex: 0 0 43px; height: 43px; border: 1px solid rgba(189,150,83,.65); border-radius: 14px 14px 14px 4px; color: var(--gold-light); background: var(--ink); font: 700 16px 'Playfair Display', serif; letter-spacing: -1px; }
-    .brand-name { margin: 0; color: var(--ink); font: 600 20px/1.05 'Playfair Display', serif; letter-spacing: -.3px; }
-    .brand-name span { display: block; margin-top: 5px; font: 700 9px/1 'DM Sans', sans-serif; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); }
-    .login-screen { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 15% 10%, rgba(234,217,183,.55), transparent 28%), radial-gradient(circle at 90% 95%, rgba(189,150,83,.12), transparent 32%), var(--cream); }
-    .login-card { width: min(100%, 430px); padding: 36px; border: 1px solid var(--line); border-radius: 26px; background: rgba(255,255,255,.92); box-shadow: var(--shadow); }
-    .login-card .brand { margin-bottom: 34px; }
-    .login-card h1 { margin: 0 0 9px; font: 600 30px/1.15 'Playfair Display', serif; }
-    .login-card .subtext { margin: 0 0 25px; color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .field { display: grid; gap: 7px; margin-bottom: 16px; }
-    .field label { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
-    .field input, .field select, .field textarea { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 11px; padding: 12px 13px; color: var(--ink); background: #fffdfa; transition: border .18s, box-shadow .18s; }
-    .field input:focus, .field select:focus, .field textarea:focus { outline: 0; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(189,150,83,.13); }
-    .input-wrap { position: relative; }
-    .input-wrap input { padding-right: 48px; }
-    .reveal-btn { position: absolute; top: 50%; right: 9px; transform: translateY(-50%); padding: 6px 8px; border: 0; background: transparent; color: var(--muted); font-size: 11px; font-weight: 700; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 10px 15px; border: 1px solid transparent; border-radius: 11px; font-size: 12px; font-weight: 700; transition: transform .18s, background .18s, border-color .18s; }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { color: #fff; background: var(--ink); }
-    .btn-primary:hover { background: #382b25; }
-    .btn-gold { color: var(--ink); background: var(--gold-light); }
-    .btn-outline { color: var(--ink-soft); border-color: var(--line); background: #fff; }
-    .btn-outline:hover { border-color: var(--gold); }
-    .btn-danger { color: var(--red); border-color: #f1d8d3; background: var(--red-bg); }
-    .login-card .btn-primary { width: 100%; min-height: 47px; margin-top: 3px; }
-    .login-foot { margin-top: 22px; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.6; }
-    .message { display: none; margin: 0 0 16px; padding: 11px 12px; border-radius: 10px; font-size: 12px; line-height: 1.5; }
-    .message.show { display: block; }
-    .message.error { color: var(--red); background: var(--red-bg); }
-    .message.success { color: var(--green); background: var(--green-bg); }
-    .app-shell { min-height: 100vh; }
-    .sidebar { position: fixed; z-index: 30; inset: 0 auto 0 0; display: flex; flex-direction: column; width: 254px; padding: 27px 17px 18px; background: var(--ink); color: #fff; }
-    .sidebar .brand { padding: 0 9px 27px; border-bottom: 1px solid rgba(255,255,255,.1); }
-    .sidebar .brand-name { color: #fffaf3; font-size: 19px; }
-    .sidebar .brand-name span { color: var(--gold-light); }
-    .nav-label { margin: 25px 12px 11px; color: #a89a8e; font-size: 9px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; }
-    .nav-list { display: grid; gap: 5px; }
-    .nav-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 13px; border: 1px solid transparent; border-radius: 11px; color: #cfc5bb; background: transparent; text-align: left; font-size: 12px; font-weight: 600; transition: .18s; }
-    .nav-item .nav-icon { width: 18px; height: 18px; display: grid; place-items: center; color: #a99a8b; font-size: 16px; }
-    .nav-item:hover { color: white; background: rgba(255,255,255,.055); }
-    .nav-item.active { color: #fff; border-color: rgba(234,217,183,.15); background: linear-gradient(100deg, rgba(189,150,83,.24), rgba(189,150,83,.08)); }
-    .nav-item.active .nav-icon { color: var(--gold-light); }
-    .sidebar-bottom { margin-top: auto; }
-    .sidebar-note { margin: 0 4px 18px; padding: 13px; border: 1px solid rgba(234,217,183,.14); border-radius: 12px; background: rgba(255,255,255,.035); }
-    .sidebar-note strong { display: block; margin-bottom: 5px; color: var(--gold-light); font: 600 13px 'Playfair Display', serif; }
-    .sidebar-note p { margin: 0; color: #b7aba0; font-size: 10px; line-height: 1.6; }
-    .account-row { display: flex; align-items: center; gap: 9px; padding: 14px 8px 0; border-top: 1px solid rgba(255,255,255,.1); }
-    .avatar { display: grid; place-items: center; width: 33px; height: 33px; flex-shrink: 0; border-radius: 50%; color: var(--ink); background: var(--gold-light); font-weight: 700; font-size: 11px; }
-    .account-info { min-width: 0; flex: 1; }
-    .account-info strong, .account-info small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .account-info strong { color: #fff; font-size: 11px; }
-    .account-info small { margin-top: 4px; color: #aa9e93; font-size: 9px; }
-    .logout-mini { border: 0; padding: 7px; color: #d7c8b9; background: transparent; font-size: 16px; }
-    .main-area { min-height: 100vh; margin-left: 254px; padding: 0 32px 38px; }
-    .topbar { position: sticky; z-index: 15; top: 0; display: flex; align-items: center; gap: 18px; min-height: 91px; margin: 0 -32px 27px; padding: 18px 32px; border-bottom: 1px solid rgba(238,230,218,.85); background: rgba(250,247,241,.91); backdrop-filter: blur(14px); }
-    .menu-toggle { display: none; border: 1px solid var(--line); border-radius: 10px; width: 40px; height: 40px; color: var(--ink); background: #fff; }
-    .page-heading { flex: 1; min-width: 0; }
-    .eyebrow { margin: 0 0 5px; color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; }
-    .page-heading h1 { margin: 0; font: 600 25px/1.1 'Playfair Display', serif; }
-    .page-heading p { display: none; }
-    .top-actions { display: flex; align-items: center; gap: 9px; }
-    .connection-pill { display: inline-flex; align-items: center; gap: 7px; padding: 9px 11px; border: 1px solid #d8ebdf; border-radius: 99px; color: var(--green); background: #eff8f2; font-size: 10px; font-weight: 700; white-space: nowrap; }
-    .connection-pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-    .connection-pill.offline { border-color: #f1d8d3; color: var(--red); background: var(--red-bg); }
-    .views { max-width: 1500px; margin: 0 auto; }
-    .view { display: none; animation: enter .24s ease both; }
-    .view.active { display: block; }
-    @keyframes enter { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .section-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 0 0 21px; }
-    .section-intro h2 { margin: 0 0 6px; font: 600 23px 'Playfair Display', serif; }
-    .section-intro p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 22px; }
-    .stat-card { position: relative; overflow: hidden; min-height: 143px; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: 0 6px 20px rgba(38,26,18,.025); }
-    .stat-card::after { content: ''; position: absolute; right: -23px; bottom: -32px; width: 90px; height: 90px; border-radius: 50%; border: 1px solid rgba(189,150,83,.18); box-shadow: 0 0 0 13px rgba(189,150,83,.035), 0 0 0 27px rgba(189,150,83,.025); }
-    .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .stat-label { color: var(--muted); font-size: 11px; font-weight: 600; }
-    .stat-icon { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 10px; color: var(--gold); background: #faf2e4; font-size: 15px; }
-    .stat-value { margin: 18px 0 6px; font: 600 26px/1 'Playfair Display', serif; letter-spacing: -.4px; }
-    .stat-foot { margin: 0; color: var(--muted); font-size: 10px; }
-    .stat-foot strong { color: var(--green); font-weight: 700; }
-    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .85fr); gap: 17px; align-items: start; }
-    .panel { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: 0 6px 20px rgba(38,26,18,.025); }
-    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 19px 20px 16px; border-bottom: 1px solid #f2ece4; }
-    .panel-head h3 { margin: 0; font: 600 17px 'Playfair Display', serif; }
-    .panel-head p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
-    .panel-body { padding: 17px 20px 20px; }
-    .link-btn { border: 0; padding: 4px 0; color: var(--gold); background: transparent; font-size: 11px; font-weight: 700; white-space: nowrap; }
-    .mini-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .mini-table th { padding: 0 8px 12px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
-    .mini-table td { padding: 12px 8px; border-top: 1px solid #f3eee7; font-size: 11px; vertical-align: middle; }
-    .mini-table th:first-child, .mini-table td:first-child { padding-left: 0; }
-    .mini-table th:last-child, .mini-table td:last-child { padding-right: 0; }
-    .product-cell { display: flex; align-items: center; gap: 10px; min-width: 125px; }
-    .product-thumb { display: grid; place-items: center; flex: 0 0 37px; width: 37px; height: 37px; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; color: var(--gold); background: #fbf5e9; font-size: 13px; }
-    .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .product-cell strong { display: block; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
-    .product-cell small { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; }
-    .money { font-weight: 700; white-space: nowrap; }
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 8px; border-radius: 99px; font-size: 9px; font-weight: 700; text-transform: capitalize; white-space: nowrap; }
-    .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-    .badge.active, .badge.paid, .badge.success { color: var(--green); background: var(--green-bg); }
-    .badge.inactive, .badge.failed, .badge.cancelled { color: var(--red); background: var(--red-bg); }
-    .badge.pending, .badge.low, .badge.processing { color: var(--amber); background: var(--amber-bg); }
-    .category-tag { padding: 5px 7px; border-radius: 7px; color: #79654b; background: #f8f0e3; font-size: 9px; text-transform: capitalize; white-space: nowrap; }
-    .empty-state { padding: 32px 16px; color: var(--muted); text-align: center; font-size: 12px; }
-    .empty-state strong { display: block; margin-bottom: 7px; color: var(--ink-soft); font: 600 16px 'Playfair Display', serif; }
-    .activity-list { display: grid; gap: 0; }
-    .activity-item { display: flex; gap: 11px; padding: 13px 0; border-bottom: 1px solid #f3eee7; }
-    .activity-item:last-child { border-bottom: 0; padding-bottom: 0; }
-    .activity-icon { display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; border-radius: 10px; color: var(--gold); background: #faf2e4; }
-    .activity-text { min-width: 0; flex: 1; }
-    .activity-text strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
-    .activity-text p { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
-    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 15px; }
-    .toolbar-left, .toolbar-right { display: flex; align-items: center; gap: 9px; min-width: 0; }
-    .search-box { display: flex; align-items: center; gap: 8px; width: min(330px, 45vw); padding: 0 12px; border: 1px solid var(--line); border-radius: 11px; background: #fff; }
-    .search-box span { color: var(--muted); }
-    .search-box input { width: 100%; min-width: 0; height: 40px; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 11px; }
-    .filter-select { min-height: 40px; max-width: 180px; padding: 0 11px; border: 1px solid var(--line); border-radius: 11px; color: var(--ink-soft); background: #fff; font-size: 11px; }
-    .table-panel { overflow: hidden; }
-    .table-scroll { width: 100%; overflow-x: auto; }
-    .data-table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
-    .data-table thead { background: #fcfaf6; }
-    .data-table th { padding: 13px 17px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; }
-    .data-table td { padding: 13px 17px; border-top: 1px solid #f1ece4; font-size: 11px; vertical-align: middle; }
-    .data-table tbody tr:hover { background: #fffdf9; }
-    .table-name { max-width: 190px; overflow: hidden; text-overflow: ellipsis; font-weight: 700; }
-    .muted { color: var(--muted); }
-    .row-actions { display: flex; align-items: center; gap: 7px; }
-    .icon-btn { display: inline-grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink-soft); background: #fff; }
-    .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
-    .small-select { max-width: 125px; min-height: 32px; padding: 0 7px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink-soft); background: #fff; font-size: 10px; }
-    .stock-control { display: flex; align-items: center; gap: 7px; }
-    .stock-control input { width: 65px; min-height: 32px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 8px; font-size: 11px; }
-    .stock-control .btn { min-height: 32px; padding: 6px 9px; font-size: 10px; }
-    .table-foot { display: flex; justify-content: space-between; gap: 12px; padding: 13px 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
-    .stock-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-bottom: 18px; }
-    .summary-tile { padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
-    .summary-tile p { margin: 0 0 10px; color: var(--muted); font-size: 10px; }
-    .summary-tile strong { font: 600 23px 'Playfair Display', serif; }
-    .customer-card-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 13px; margin-bottom: 18px; }
-    .customer-stat { padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
-    .customer-stat span { color: var(--muted); font-size: 10px; }
-    .customer-stat strong { display: block; margin-top: 8px; font: 600 22px 'Playfair Display', serif; }
-    .customer-email { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
-    .settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
-    .settings-card { padding: 21px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
-    .settings-card h3 { margin: 0 0 8px; font: 600 18px 'Playfair Display', serif; }
-    .settings-card > p { margin: 0 0 17px; color: var(--muted); font-size: 11px; line-height: 1.7; }
-    .setting-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 12px 0; border-top: 1px solid #f2ece4; }
-    .setting-row > div { min-width: 0; }
-    .setting-row strong { display: block; font-size: 11px; }
-    .setting-row small { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.5; word-break: break-word; }
-    .setting-value { max-width: 58%; color: var(--ink-soft); font-size: 10px; text-align: right; word-break: break-word; }
-    .notice { margin: 17px 0 0; padding: 13px 14px; border: 1px solid #eedfbb; border-radius: 12px; color: #765826; background: #fff8e9; font-size: 10px; line-height: 1.7; }
-    .notice strong { color: #5d4217; }
-    .alert-bar { display: none; margin: -7px 0 20px; padding: 12px 14px; border: 1px solid #f1d8d3; border-radius: 12px; color: var(--red); background: var(--red-bg); font-size: 11px; line-height: 1.6; }
-    .alert-bar.show { display: block; }
-    .modal-backdrop { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; padding: 18px; background: rgba(22,16,13,.52); backdrop-filter: blur(5px); }
-    .modal { width: min(100%, 610px); max-height: 90vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 21px; background: #fffdfa; box-shadow: 0 25px 90px rgba(0,0,0,.22); animation: enter .18s ease both; }
-    .modal.wide { width: min(100%, 720px); }
-    .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 22px 24px 17px; border-bottom: 1px solid var(--line); }
-    .modal-head h2 { margin: 0; font: 600 22px 'Playfair Display', serif; }
-    .modal-head p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
-    .modal-close { border: 0; border-radius: 8px; width: 32px; height: 32px; color: var(--muted); background: #f6f0e8; font-size: 18px; }
-    .modal-body { padding: 21px 24px 24px; }
-    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 14px; }
-    .field.full { grid-column: 1 / -1; }
-    .check-field { display: flex; align-items: center; gap: 9px; margin: 4px 0 18px; color: var(--ink-soft); font-size: 11px; }
-    .check-field input { accent-color: var(--gold); }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 7px; padding-top: 16px; border-top: 1px solid var(--line); }
-    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-bottom: 18px; }
-    .detail-box { padding: 13px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
-    .detail-box span { display: block; margin-bottom: 7px; color: var(--muted); font-size: 9px; letter-spacing: .7px; text-transform: uppercase; }
-    .detail-box strong { display: block; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
-    .detail-box.full { grid-column: 1 / -1; }
-    .detail-items { display: grid; gap: 8px; margin-bottom: 17px; }
-    .detail-item { display: flex; justify-content: space-between; gap: 14px; padding: 10px 0; border-bottom: 1px solid #f1ece4; font-size: 11px; }
-    .toast-wrap { position: fixed; z-index: 120; right: 20px; bottom: 20px; display: grid; gap: 9px; width: min(360px, calc(100vw - 40px)); }
-    .toast { padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #fff; box-shadow: var(--shadow); font-size: 11px; line-height: 1.5; animation: enter .2s ease both; }
-    .toast.error { border-color: #f1d8d3; color: var(--red); }
-    .toast.success { border-color: #d8ebdf; color: var(--green); }
-    .mobile-shade { display: none; }
-    @media (max-width: 1180px) {
-      .main-area { padding-right: 23px; padding-left: 23px; }
-      .topbar { margin-right: -23px; margin-left: -23px; padding-right: 23px; padding-left: 23px; }
-      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .dashboard-grid { grid-template-columns: minmax(0, 1fr); }
-    }
-    @media (max-width: 800px) {
-      .sidebar { transform: translateX(-103%); transition: transform .24s ease; box-shadow: 15px 0 40px rgba(0,0,0,.13); }
-      .sidebar.open { transform: translateX(0); }
-      .mobile-shade.show { position: fixed; z-index: 25; inset: 0; display: block; background: rgba(25,18,14,.38); }
-      .main-area { margin-left: 0; padding: 0 17px 28px; }
-      .topbar { min-height: 80px; margin: 0 -17px 22px; padding: 14px 17px; gap: 11px; }
-      .menu-toggle { display: inline-grid; place-items: center; flex-shrink: 0; }
-      .page-heading h1 { font-size: 22px; }
-      .top-actions .connection-pill { display: none; }
-      .top-actions .btn { min-height: 37px; padding: 8px 10px; }
-      .section-intro { align-items: flex-start; }
-      .settings-grid { grid-template-columns: 1fr; }
-      .customer-card-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    }
-    @media (max-width: 520px) {
-      .login-card { padding: 25px 21px; }
-      .login-card h1 { font-size: 26px; }
-      .topbar { gap: 8px; }
-      .page-heading h1 { font-size: 19px; }
-      .eyebrow { font-size: 8px; letter-spacing: 1.2px; }
-      .top-actions { gap: 6px; }
-      .top-actions .btn { width: 38px; min-width: 38px; padding: 8px; overflow: hidden; font-size: 0; }
-      .top-actions .btn span { font-size: 15px; }
-      .section-intro { display: block; }
-      .section-intro > .btn { margin-top: 13px; }
-      .stats-grid { gap: 9px; }
-      .stat-card { min-height: 125px; padding: 13px; border-radius: 14px; }
-      .stat-value { margin-top: 15px; font-size: 23px; }
-      .stat-label { font-size: 10px; }
-      .stat-icon { width: 27px; height: 27px; }
-      .stock-summary { grid-template-columns: 1fr; gap: 9px; }
-      .summary-tile { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 15px; }
-      .summary-tile p { margin: 0; }
-      .summary-tile strong { font-size: 20px; }
-      .customer-card-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
-      .customer-stat { padding: 13px; }
-      .customer-stat strong { font-size: 20px; }
-      .toolbar { align-items: stretch; flex-direction: column; }
-      .toolbar-left, .toolbar-right { width: 100%; }
-      .search-box { width: 100%; }
-      .toolbar-right > .btn { flex: 1; }
-      .filter-select { flex: 1; max-width: unset; }
-      .panel-head { padding: 16px; }
-      .panel-body { padding: 14px 16px 17px; }
-      .mini-table td, .mini-table th { padding-right: 5px; padding-left: 5px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border: 1px solid var(--gold); border-radius: 13px 13px 13px 4px; color: #ead9b7; background: var(--ink); font: 700 16px "Playfair Display", serif; }
+    .brand-name { margin: 0; color: var(--ink); font: 600 20px/1.1 "Playfair Display", serif; }
+    .brand-name small { display: block; margin-top: 5px; color: var(--gold); font: 700 9px "DM Sans", sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+    .login-screen { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at top left, #efe0c1, transparent 36%), var(--cream); }
+    .login-card { width: min(100%, 410px); padding: 30px; border: 1px solid var(--line); border-radius: 20px; background: var(--white); box-shadow: 0 15px 40px #211a1710; }
+    .login-card .brand { margin-bottom: 28px; }
+    h1, h2, h3 { font-family: "Playfair Display", serif; }
+    .login-card h1 { margin: 0 0 8px; font-size: 29px; }
+    .muted, .hint { color: var(--muted); }
+    .hint { font-size: 12px; line-height: 1.6; }
+    .field { display: grid; gap: 6px; margin: 14px 0; }
+    .field label { font-size: 12px; font-weight: 700; }
+    input, select, textarea { width: 100%; min-width: 0; padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: #fffdfa; color: var(--ink); }
+    input:focus, select:focus, textarea:focus { outline: 2px solid #bd965355; border-color: var(--gold); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 14px; border: 1px solid transparent; border-radius: 9px; font-size: 12px; font-weight: 700; }
+    .btn-primary { color: white; background: var(--ink); }
+    .btn-gold { color: var(--ink); background: #ead9b7; }
+    .btn-light { border-color: var(--line); color: var(--ink); background: white; }
+    .btn-danger { border-color: #f0d8d3; color: var(--red); background: #fff0ed; }
+    .wide { width: 100%; }
+    .message { margin: 12px 0; padding: 10px 12px; border-radius: 8px; font-size: 12px; line-height: 1.5; }
+    .message.error { color: var(--red); background: #fff0ed; }
+    .message.success { color: var(--green); background: #e9f5ee; }
+    #app { display: grid; grid-template-columns: 235px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar { position: sticky; top: 0; display: flex; flex-direction: column; height: 100vh; padding: 23px 15px; color: white; background: var(--ink); }
+    .sidebar .brand { padding: 0 5px 22px; border-bottom: 1px solid #ffffff20; }
+    .sidebar .brand-name { color: #fffaf3; font-size: 18px; }
+    .sidebar .brand-name small { color: #ead9b7; }
+    .nav-title { margin: 22px 10px 9px; color: #b9a99a; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .nav { display: grid; gap: 5px; }
+    .nav button { width: 100%; padding: 12px; border: 1px solid transparent; border-radius: 9px; color: #ddd1c5; background: transparent; text-align: left; font-size: 12px; }
+    .nav button:hover, .nav button.active { border-color: #bd965344; color: white; background: #bd965522; }
+    .side-note { margin-top: auto; padding: 13px; border: 1px solid #ffffff20; border-radius: 10px; color: #cbbdb0; font-size: 10px; line-height: 1.6; }
+    .side-note strong { display: block; margin-bottom: 4px; color: #ead9b7; font: 600 14px "Playfair Display", serif; }
+    .main { min-width: 0; padding: 0 25px 35px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 82px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+    .topbar h1 { margin: 0; font-size: 25px; }
+    .top-actions { display: flex; gap: 8px; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .intro h2 { margin: 0 0 5px; font-size: 22px; }
+    .intro p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .card, .panel { min-width: 0; padding: 17px; border: 1px solid var(--line); border-radius: 13px; background: var(--white); box-shadow: 0 5px 18px #211a1706; }
+    .card p { margin: 0 0 9px; color: var(--muted); font-size: 11px; }
+    .card strong { font: 600 25px "Playfair Display", serif; overflow-wrap: anywhere; }
+    .panel { margin-bottom: 16px; padding: 0; overflow: hidden; }
+    .panel-head { padding: 16px 17px; border-bottom: 1px solid var(--line); }
+    .panel-head h3 { margin: 0; font-size: 17px; }
+    .panel-body { padding: 16px 17px; }
+    .toolbar { display: flex; gap: 9px; margin-bottom: 13px; }
+    .toolbar input { max-width: 340px; }
+    .toolbar select { max-width: 190px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 13px; }
+    .form-grid .field { margin: 7px 0 12px; }
+    .full { grid-column: 1 / -1; }
+    .form-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+    .check-row { display: flex; align-items: center; gap: 8px; margin: 8px 0 13px; font-size: 12px; }
+    .check-row input { width: auto; accent-color: var(--gold); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
+    th { padding: 12px 14px; color: var(--muted); background: #fcfaf6; font-size: 9px; letter-spacing: .6px; text-transform: uppercase; }
+    td { padding: 12px 14px; border-top: 1px solid #f1ece4; font-size: 11px; vertical-align: middle; }
+    .small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; white-space: normal; }
+    .badge { display: inline-block; padding: 5px 8px; border-radius: 30px; color: var(--green); background: #e9f5ee; font-size: 10px; font-weight: 700; }
+    .badge.off, .badge.failed, .badge.cancelled { color: var(--red); background: #fff0ed; }
+    .badge.pending, .badge.low { color: #94671d; background: #fff5dc; }
+    .row-buttons { display: flex; align-items: center; gap: 6px; }
+    .row-buttons .btn { padding: 7px 9px; }
+    .status-select { width: 115px; padding: 7px; font-size: 10px; }
+    .empty { padding: 25px 15px; color: var(--muted); text-align: center; font-size: 12px; }
+    .settings-list { display: grid; gap: 0; }
+    .settings-row { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+    .settings-row span:last-child { max-width: 60%; text-align: right; overflow-wrap: anywhere; }
+    .note { margin-top: 13px; padding: 12px; border-radius: 9px; color: #765826; background: #fff8e9; font-size: 11px; line-height: 1.6; }
+    @media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 720px) {
+      #app { display: block; }
+      .sidebar { position: static; width: 100%; height: auto; padding: 14px; }
+      .sidebar .brand { padding-bottom: 13px; }
+      .nav-title, .side-note { display: none; }
+      .nav { display: flex; gap: 6px; margin-top: 12px; overflow-x: auto; }
+      .nav button { width: auto; flex: 0 0 auto; padding: 10px; white-space: nowrap; }
+      .main { padding: 0 13px 25px; }
+      .topbar { min-height: 70px; margin-bottom: 18px; }
+      .topbar h1 { font-size: 21px; }
+      .top-actions .btn { padding: 9px; }
+      .intro { display: block; }
+      .intro > .btn { margin-top: 12px; }
       .form-grid { grid-template-columns: 1fr; }
-      .field.full { grid-column: auto; }
-      .modal-head { padding: 18px 18px 15px; }
-      .modal-body { padding: 18px; }
-      .detail-grid { grid-template-columns: 1fr; }
-      .detail-box.full { grid-column: auto; }
-      .setting-row { flex-direction: column; gap: 7px; }
-      .setting-value { max-width: none; text-align: left; }
+      .full { grid-column: auto; }
+      .toolbar { flex-direction: column; }
+      .toolbar input, .toolbar select { max-width: none; }
+      .card, .panel { border-radius: 11px; }
+      .settings-row { flex-direction: column; gap: 5px; }
+      .settings-row span:last-child { max-width: 100%; text-align: left; }
     }
+    @media (max-width: 400px) { .cards { gap: 8px; } .card { padding: 12px; } .card strong { font-size: 21px; } .login-card { padding: 22px; } }
   </style>
 </head>
 <body>
-  <!-- Sign-in screen -->
+  <!-- LOGIN -->
   <section id="authScreen" class="login-screen">
     <div class="login-card">
-      <div class="brand">
-        <div class="brand-mark">JH</div>
-        <p class="brand-name">Jidderhs Heaven<span>Store administration</span></p>
-      </div>
-      <p class="eyebrow">Private workspace</p>
+      <div class="brand"><div class="brand-mark">JH</div><p class="brand-name">Jidderhs Heaven<small>Store administration</small></p></div>
       <h1>Welcome back.</h1>
-      <p class="subtext">Sign in to manage your products, orders, stock and customer records in one place.</p>
-      <div id="loginMessage" class="message" role="alert"></div>
-      <form id="loginForm" autocomplete="on">
-        <div class="field">
-          <label for="loginEmail">Email address</label>
-          <input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="you@example.com" required />
-        </div>
-        <div class="field">
-          <label for="loginPassword">Password</label>
-          <div class="input-wrap">
-            <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
-            <button id="revealPassword" class="reveal-btn" type="button" aria-label="Show password">SHOW</button>
-          </div>
-        </div>
-        <button id="loginButton" class="btn btn-primary" type="submit">Sign in to dashboard <span aria-hidden="true">→</span></button>
+      <p class="hint">Sign in with your existing Supabase administrator account.</p>
+      <div id="loginMessage" class="message" hidden></div>
+      <form id="loginForm">
+        <div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="username" required></div>
+        <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
+        <button id="loginButton" class="btn btn-primary wide" type="submit">Sign in</button>
       </form>
-      <div class="login-foot">Jidderhs Heaven · Private store management<br />Sign-in uses your existing Supabase Auth account.</div>
+      <p class="hint">Jidderhs Heaven · Private store management</p>
     </div>
   </section>
 
-  <!-- Main dashboard -->
-  <div id="appShell" class="app-shell" hidden>
-    <aside id="sidebar" class="sidebar">
-      <div class="brand">
-        <div class="brand-mark">JH</div>
-        <p class="brand-name">Jidderhs Heaven<span>Store administration</span></p>
-      </div>
-      <p class="nav-label">Workspace</p>
-      <nav class="nav-list" aria-label="Dashboard sections">
-        <button class="nav-item active" type="button" data-section="overview"><span class="nav-icon">◫</span>Overview</button>
-        <button class="nav-item" type="button" data-section="products"><span class="nav-icon">▧</span>Product catalogue</button>
-        <button class="nav-item" type="button" data-section="orders"><span class="nav-icon">▤</span>Orders & payments</button>
-        <button class="nav-item" type="button" data-section="customers"><span class="nav-icon">♙</span>Customers</button>
-        <button class="nav-item" type="button" data-section="inventory"><span class="nav-icon">▦</span>Stock control</button>
+  <!-- DASHBOARD: each button opens one clear section -->
+  <div id="app" hidden>
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">JH</div><p class="brand-name">Jidderhs Heaven<small>Store administration</small></p></div>
+      <p class="nav-title">Main menu</p>
+      <nav class="nav" aria-label="Dashboard sections">
+        <button class="active" data-page="overview">Overview</button>
+        <button data-page="products">Products</button>
+        <button data-page="homepage">Homepage Manager</button>
+        <button data-page="shop">Shop Manager</button>
+        <button data-page="orders">Orders & payments</button>
+        <button data-page="customers">Customers</button>
+        <button data-page="stock">Stock control</button>
+        <button data-page="settings">Settings</button>
       </nav>
-      <p class="nav-label">Management</p>
-      <nav class="nav-list" aria-label="Management sections">
-        <button class="nav-item" type="button" data-section="settings"><span class="nav-icon">⚙</span>Settings & connection</button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="sidebar-note"><strong>A calmer way to manage.</strong><p>Keep your catalogue tidy, check orders, and stay on top of stock from one workspace.</p></div>
-        <div class="account-row">
-          <div id="accountAvatar" class="avatar">JH</div>
-          <div class="account-info"><strong id="accountName">Store administrator</strong><small id="accountEmail">Signed in</small></div>
-          <button id="logoutButton" class="logout-mini" type="button" title="Sign out" aria-label="Sign out">↗</button>
-        </div>
-      </div>
+      <div class="side-note"><strong>Jidderhs Heaven</strong>Manage your products, orders and stock in one place.</div>
     </aside>
-    <div id="mobileShade" class="mobile-shade"></div>
-    <main class="main-area">
+
+    <main class="main">
       <header class="topbar">
-        <button id="menuToggle" class="menu-toggle" type="button" aria-label="Open navigation">☰</button>
-        <div class="page-heading"><p class="eyebrow">Jidderhs Heaven workspace</p><h1 id="sectionTitle">Overview</h1></div>
-        <div class="top-actions">
-          <span id="connectionPill" class="connection-pill">Connected</span>
-          <button id="refreshButton" class="btn btn-outline" type="button" title="Refresh data"><span aria-hidden="true">↻</span> Refresh</button>
-        </div>
+        <h1 id="pageTitle">Overview</h1>
+        <div class="top-actions"><button id="refreshButton" class="btn btn-light" type="button">Refresh</button><button id="logoutButton" class="btn btn-primary" type="button">Sign out</button></div>
       </header>
-      <div id="globalAlert" class="alert-bar" role="alert"></div>
+      <div id="mainMessage" class="message" hidden></div>
 
-      <div class="views">
-        <section class="view active" data-view="overview">
-          <div class="section-intro"><div><h2>Your store at a glance</h2><p>A quick look at products, orders, revenue recorded in orders, and stock that needs attention.</p></div></div>
-          <div class="stats-grid">
-            <article class="stat-card"><div class="stat-top"><span class="stat-label">Total products</span><span class="stat-icon">▧</span></div><p id="statProducts" class="stat-value">—</p><p class="stat-foot">Items in your catalogue</p></article>
-            <article class="stat-card"><div class="stat-top"><span class="stat-label">Total orders</span><span class="stat-icon">▤</span></div><p id="statOrders" class="stat-value">—</p><p class="stat-foot">Orders saved in the database</p></article>
-            <article class="stat-card"><div class="stat-top"><span class="stat-label">Recorded sales</span><span class="stat-icon">₦</span></div><p id="statSales" class="stat-value">—</p><p class="stat-foot">Sum of order totals, not verified payouts</p></article>
-            <article class="stat-card"><div class="stat-top"><span class="stat-label">Low-stock items</span><span class="stat-icon">!</span></div><p id="statLowStock" class="stat-value">—</p><p class="stat-foot">Products with 5 units or fewer</p></article>
+      <!-- OVERVIEW -->
+      <section class="page active" data-content="overview">
+        <div class="intro"><div><h2>Store overview</h2><p class="hint">A quick summary of the information saved in your database.</p></div></div>
+        <div class="cards">
+          <article class="card"><p>Total products</p><strong id="totalProducts">—</strong></article>
+          <article class="card"><p>Total orders</p><strong id="totalOrders">—</strong></article>
+          <article class="card"><p>Recorded order value</p><strong id="totalSales">—</strong></article>
+          <article class="card"><p>Low-stock products</p><strong id="lowStock">—</strong></article>
+        </div>
+        <article class="panel"><div class="panel-head"><h3>Recent orders</h3></div><div class="table-wrap"><table><thead><tr><th>Reference</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr></thead><tbody id="recentOrders"><tr><td colspan="5" class="empty">Sign in to load orders.</td></tr></tbody></table></div></article>
+        <article class="panel"><div class="panel-head"><h3>Products that need attention</h3></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Status</th></tr></thead><tbody id="overviewStock"><tr><td colspan="4" class="empty">Loading stock…</td></tr></tbody></table></div></article>
+      </section>
+
+      <!-- PRODUCTS -->
+      <section class="page" data-content="products">
+        <div class="intro"><div><h2>Product catalogue</h2><p>Add a new product or edit a product already saved in Supabase.</p></div></div>
+        <article class="panel">
+          <div class="panel-head"><h3 id="productFormTitle">Add a product</h3></div>
+          <div class="panel-body">
+            <form id="productForm">
+              <input id="editProductId" type="hidden">
+              <div class="form-grid">
+                <div class="field"><label for="productName">Product name</label><input id="productName" required maxlength="150"></div>
+                <div class="field"><label for="productCategory">Category</label><select id="productCategory"><option value="apparel">Apparel</option><option value="beauty">Beauty</option><option value="kitchen">Kitchen</option><option value="toiletries">Toiletries</option><option value="other">Other</option></select></div>
+                <div class="field"><label for="productPrice">Price (₦)</label><input id="productPrice" type="number" min="0" step="0.01" required></div>
+                <div class="field"><label for="productStock">Quantity in stock</label><input id="productStock" type="number" min="0" step="1" required value="0"></div>
+                <div class="field"><label for="productImage">Image URL (optional)</label><input id="productImage" type="url" placeholder="https://..."></div>
+                <div class="field"><label for="productDescription">Description (optional)</label><input id="productDescription" maxlength="2000"></div>
+              </div>
+              <label class="check-row"><input id="productActive" type="checkbox" checked> Active — show this product on the store</label>
+              <div class="field full"><label class="check-row"><input id="productShowHome" type="checkbox"> Show on homepage</label></div>
+                <div class="field full"><label class="check-row"><input id="productShowShop" type="checkbox" checked> Show in shop catalogue</label></div>
+                <div class="field full"><label class="check-row"><input id="productFeatured" type="checkbox"> Mark as featured product</label></div>
+                <div class="field full"><label class="check-row"><input id="productNewArrival" type="checkbox"> Mark as new arrival</label></div>
+                <div class="field"><label for="productDisplayOrder">Display order (smaller appears first)</label><input id="productDisplayOrder" type="number" step="1" value="0"></div>
+              <div class="form-actions"><button id="saveProductButton" class="btn btn-primary" type="submit">Save product</button><button id="cancelEditButton" class="btn btn-light" type="button" hidden>Cancel edit</button></div>
+            </form>
           </div>
-          <div class="dashboard-grid">
-            <article class="panel">
-              <div class="panel-head"><div><h3>Recent orders</h3><p>Latest checkouts saved by your store</p></div><button class="link-btn" type="button" data-go="orders">View all →</button></div>
-              <div class="panel-body" id="recentOrdersWrap"><div class="empty-state">Loading orders…</div></div>
-            </article>
-            <article class="panel">
-              <div class="panel-head"><div><h3>Stock to watch</h3><p>Items that may need restocking</p></div><button class="link-btn" type="button" data-go="inventory">Manage stock →</button></div>
-              <div class="panel-body" id="lowStockWrap"><div class="empty-state">Loading inventory…</div></div>
-            </article>
-          </div>
-          <article class="panel" style="margin-top:17px">
-            <div class="panel-head"><div><h3>Recently added products</h3><p>Newest items in your catalogue</p></div><button class="link-btn" type="button" data-go="products">Open catalogue →</button></div>
-            <div class="panel-body" id="recentProductsWrap"><div class="empty-state">Loading products…</div></div>
-          </article>
-        </section>
+        </article>
+        <div class="toolbar"><input id="productSearch" type="search" placeholder="Search products..."><select id="productFilter"><option value="all">All products</option><option value="active">Active only</option><option value="inactive">Inactive only</option></select></div>
+        <article class="panel"><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsTable"><tr><td colspan="6" class="empty">Loading products…</td></tr></tbody></table></div></article>
+      </section>
 
-        <section class="view" data-view="products">
-          <div class="section-intro"><div><h2>Product catalogue</h2><p>Add products, edit product details, and control which products appear as active.</p></div><button id="addProductButton" class="btn btn-primary" type="button">＋ Add product</button></div>
-          <div class="toolbar"><div class="toolbar-left"><label class="search-box"><span>⌕</span><input id="productSearch" type="search" placeholder="Search name, category or ID…" /></label></div><div class="toolbar-right"><select id="productCategoryFilter" class="filter-select" aria-label="Filter products by category"><option value="all">All categories</option><option value="apparel">Apparel</option><option value="beauty">Beauty</option><option value="kitchen">Kitchen</option><option value="toiletries">Toiletries</option><option value="other">Other</option></select><select id="productStatusFilter" class="filter-select" aria-label="Filter products by status"><option value="all">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div></div>
-          <article class="panel table-panel"><div class="table-scroll"><table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsTableBody"><tr><td colspan="6"><div class="empty-state">Loading products…</div></td></tr></tbody></table></div><div class="table-foot"><span id="productCountLabel">0 products</span><span>Prices are shown in Nigerian naira (₦)</span></div></article>
-        </section>
+      <!-- HOMEPAGE MANAGER -->
+      <section class="page" data-content="homepage">
+        <div class="intro"><div><h2>Homepage Manager</h2><p>Choose which active products are promoted on your storefront homepage. Use the product editor to change a product's homepage setting.</p></div></div>
+        <div class="cards"><article class="card"><p>Homepage products</p><strong id="homeCount">0</strong></article><article class="card"><p>Featured products</p><strong id="featuredCount">0</strong></article><article class="card"><p>New arrivals</p><strong id="newArrivalCount">0</strong></article><article class="card"><p>Active products</p><strong id="homeActiveCount">0</strong></article></div>
+        <article class="panel"><div class="panel-head"><h3>Homepage display list</h3></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>Active</th><th>Homepage</th><th>Featured</th><th>New arrival</th><th>Order</th><th>Manage</th></tr></thead><tbody id="homepageTable"><tr><td colspan="7" class="empty">Load products to manage homepage.</td></tr></tbody></table></div></article>
+      </section>
 
-        <section class="view" data-view="orders">
-          <div class="section-intro"><div><h2>Orders & payments</h2><p>Review order details and update the recorded payment status. This does not charge a customer.</p></div></div>
-          <div class="toolbar"><div class="toolbar-left"><label class="search-box"><span>⌕</span><input id="orderSearch" type="search" placeholder="Search order, customer or email…" /></label></div><div class="toolbar-right"><select id="orderStatusFilter" class="filter-select" aria-label="Filter orders by payment status"><option value="all">All payment statuses</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="failed">Failed</option><option value="cancelled">Cancelled</option></select></div></div>
-          <article class="panel table-panel"><div class="table-scroll"><table class="data-table"><thead><tr><th>Order reference</th><th>Customer</th><th>Date</th><th>Total</th><th>Payment status</th><th>Actions</th></tr></thead><tbody id="ordersTableBody"><tr><td colspan="6"><div class="empty-state">Loading orders…</div></td></tr></tbody></table></div><div class="table-foot"><span id="orderCountLabel">0 orders</span><span>Payment status is a record, not a payment processor</span></div></article>
-        </section>
+      <!-- SHOP MANAGER -->
+      <section class="page" data-content="shop">
+        <div class="intro"><div><h2>Shop Manager</h2><p>Control which active products appear in the shop catalogue and the order they are displayed in.</p></div></div>
+        <div class="toolbar"><input id="shopSearch" type="search" placeholder="Search shop products..."><select id="shopVisibility"><option value="all">All products</option><option value="visible">Visible in shop</option><option value="hidden">Hidden from shop</option></select></div>
+        <article class="panel"><div class="panel-head"><h3>Shop catalogue visibility</h3></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Active</th><th>Shop visibility</th><th>Display order</th><th>Manage</th></tr></thead><tbody id="shopTable"><tr><td colspan="6" class="empty">Load products to manage the shop.</td></tr></tbody></table></div></article>
+      </section>
 
-        <section class="view" data-view="customers">
-          <div class="section-intro"><div><h2>Customers</h2><p>Customer records are grouped from email addresses saved on orders. No separate customer profile table is assumed.</p></div></div>
-          <div class="customer-card-grid"><article class="customer-stat"><span>Unique customer emails</span><strong id="customerTotal">—</strong></article><article class="customer-stat"><span>Repeat customers</span><strong id="repeatCustomers">—</strong></article><article class="customer-stat"><span>Orders represented</span><strong id="customerOrdersTotal">—</strong></article></div>
-          <div class="toolbar"><div class="toolbar-left"><label class="search-box"><span>⌕</span><input id="customerSearch" type="search" placeholder="Search customer, email or phone…" /></label></div></div>
-          <article class="panel table-panel"><div class="table-scroll"><table class="data-table"><thead><tr><th>Customer</th><th>Email</th><th>Phone</th><th>Total orders</th><th>Total order value</th><th>Last order</th></tr></thead><tbody id="customersTableBody"><tr><td colspan="6"><div class="empty-state">Loading customers…</div></td></tr></tbody></table></div><div class="table-foot"><span id="customerCountLabel">0 customers</span><span>Based on order history</span></div></article>
-        </section>
+      <!-- ORDERS -->
+      <section class="page" data-content="orders">
+        <div class="intro"><div><h2>Orders & payments</h2><p>Review checkout records. Changing a payment status here does not process a payment.</p></div></div>
+        <div class="toolbar"><input id="orderSearch" type="search" placeholder="Search order or customer..."><select id="orderFilter"><option value="all">All payment statuses</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="failed">Failed</option><option value="cancelled">Cancelled</option></select></div>
+        <article class="panel"><div class="table-wrap"><table><thead><tr><th>Order</th><th>Customer details</th><th>Delivery address</th><th>Date</th><th>Total</th><th>Payment status</th><th>Save</th></tr></thead><tbody id="ordersTable"><tr><td colspan="7" class="empty">Loading orders…</td></tr></tbody></table></div></article>
+      </section>
 
-        <section class="view" data-view="inventory">
-          <div class="section-intro"><div><h2>Stock control</h2><p>Update stock counts and quickly spot items running low. Changes are saved directly to the products table.</p></div></div>
-          <div class="stock-summary"><article class="summary-tile"><p>Total units recorded</p><strong id="stockUnitsTotal">—</strong></article><article class="summary-tile"><p>Low stock (≤ 5)</p><strong id="stockLowTotal">—</strong></article><article class="summary-tile"><p>Out of stock</p><strong id="stockOutTotal">—</strong></article></div>
-          <div class="toolbar"><div class="toolbar-left"><label class="search-box"><span>⌕</span><input id="inventorySearch" type="search" placeholder="Search product or category…" /></label></div><div class="toolbar-right"><select id="inventoryFilter" class="filter-select" aria-label="Filter stock"><option value="all">All inventory</option><option value="low">Low stock (≤ 5)</option><option value="out">Out of stock</option><option value="healthy">Healthy stock</option></select></div></div>
-          <article class="panel table-panel"><div class="table-scroll"><table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Current stock</th><th>Stock status</th><th>Update stock</th></tr></thead><tbody id="inventoryTableBody"><tr><td colspan="5"><div class="empty-state">Loading inventory…</div></td></tr></tbody></table></div><div class="table-foot"><span id="inventoryCountLabel">0 products</span><span>Stock threshold is 5 units</span></div></article>
-        </section>
+      <!-- CUSTOMERS -->
+      <section class="page" data-content="customers">
+        <div class="intro"><div><h2>Customers</h2><p>Customer information is grouped from the email addresses saved with orders.</p></div></div>
+        <div class="toolbar"><input id="customerSearch" type="search" placeholder="Search name, email or phone..."></div>
+        <article class="panel"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Orders</th><th>Total order value</th><th>Latest order</th></tr></thead><tbody id="customersTable"><tr><td colspan="6" class="empty">Loading customers…</td></tr></tbody></table></div></article>
+      </section>
 
-        <section class="view" data-view="settings">
-          <div class="section-intro"><div><h2>Settings & connection</h2><p>Check the connected project and your signed-in session. Store keys are not managed from this page.</p></div></div>
-          <div class="settings-grid">
-            <article class="settings-card"><h3>Account & session</h3><p>These details come from the current Supabase Auth session.</p><div class="setting-row"><div><strong>Signed-in account</strong><small>Current authentication identity</small></div><span id="settingsEmail" class="setting-value">—</span></div><div class="setting-row"><div><strong>Account ID</strong><small>Supabase Auth user ID</small></div><span id="settingsUserId" class="setting-value">—</span></div><div class="setting-row"><div><strong>Session</strong><small>Authentication status</small></div><span id="settingsSession" class="setting-value">—</span></div><div style="margin-top:15px"><button id="settingsLogout" class="btn btn-outline" type="button">Sign out securely</button></div></article>
-            <article class="settings-card"><h3>Database connection</h3><p>The dashboard uses the same Supabase client module as your storefront. Keep one shared configuration to avoid mismatched keys.</p><div class="setting-row"><div><strong>Project URL</strong><small>Public project endpoint</small></div><span id="settingsProjectUrl" class="setting-value">Reading configuration…</span></div><div class="setting-row"><div><strong>Products table</strong><small>Catalogue and inventory</small></div><span id="productsConnectionState" class="setting-value">Not checked</span></div><div class="setting-row"><div><strong>Orders table</strong><small>Checkout records</small></div><span id="ordersConnectionState" class="setting-value">Not checked</span></div><div style="margin-top:15px"><button id="testConnectionButton" class="btn btn-gold" type="button">Test connection</button></div></article>
-            <article class="settings-card"><h3>Store conventions</h3><p>This dashboard is aligned with the current Jidderhs Heaven database structure.</p><div class="setting-row"><div><strong>Currency</strong><small>Used for product prices and order totals</small></div><span class="setting-value">NGN · ₦</span></div><div class="setting-row"><div><strong>Product categories</strong><small>Editable when creating or updating a product</small></div><span class="setting-value">Apparel, beauty, kitchen, toiletries</span></div><div class="setting-row"><div><strong>Customer data</strong><small>Derived from the orders table</small></div><span class="setting-value">Name, email, phone</span></div></article>
-            <article class="settings-card"><h3>Security reminder</h3><p>Keep this workspace private and make sure the database—not only the screen—enforces who can read or change records.</p><div class="notice"><strong>Important:</strong> never put a Supabase <code>service_role</code> or secret key in HTML or browser JavaScript. Use a publishable/anon key in the browser and set Row Level Security policies so only trusted administrators can access sensitive order and customer data.</div></article>
-          </div>
-        </section>
-      </div>
+      <!-- STOCK -->
+      <section class="page" data-content="stock">
+        <div class="intro"><div><h2>Stock control</h2><p>Update product quantities and find products that are low or out of stock.</p></div></div>
+        <div class="cards"><article class="card"><p>Total units</p><strong id="stockUnits">—</strong></article><article class="card"><p>Low stock (1–5)</p><strong id="stockLow">—</strong></article><article class="card"><p>Out of stock</p><strong id="stockOut">—</strong></article><article class="card"><p>Stock warning level</p><strong>5</strong></article></div>
+        <div class="toolbar"><input id="stockSearch" type="search" placeholder="Search stock..."><select id="stockFilter"><option value="all">All stock</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="healthy">Healthy stock</option></select></div>
+        <article class="panel"><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Current stock</th><th>New quantity</th><th>Save</th></tr></thead><tbody id="stockTable"><tr><td colspan="5" class="empty">Loading stock…</td></tr></tbody></table></div></article>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" data-content="settings">
+        <div class="intro"><div><h2>Settings & connection</h2><p>Check the account and test whether the database tables can be reached.</p></div></div>
+        <article class="panel"><div class="panel-head"><h3>Signed-in account</h3></div><div class="panel-body settings-list"><div class="settings-row"><strong>Email</strong><span id="settingsEmail">—</span></div><div class="settings-row"><strong>Account ID</strong><span id="settingsUserId">—</span></div><div class="settings-row"><strong>Session</strong><span id="settingsSession">—</span></div><div class="settings-row"><strong>Project URL</strong><span id="settingsUrl">—</span></div></div></article>
+        <article class="panel"><div class="panel-head"><h3>Database connection</h3></div><div class="panel-body"><p class="hint">This page uses the shared client in <code>assets/javascript/supabase.js</code>.</p><div class="settings-list"><div class="settings-row"><strong>Products table</strong><span id="productsConnection">Not tested</span></div><div class="settings-row"><strong>Orders table</strong><span id="ordersConnection">Not tested</span></div></div><button id="testConnectionButton" class="btn btn-gold" type="button">Test connection</button><div class="note"><strong>Security:</strong> use only a publishable/anon key in browser code. Never put a <code>service_role</code> or secret key in this file. Supabase Row Level Security must restrict customer and order data to trusted administrators.</div></div></article>
+      </section>
     </main>
   </div>
 
-  <!-- Product editor modal -->
-  <div id="productModalBackdrop" class="modal-backdrop" hidden>
-    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
-      <div class="modal-head"><div><h2 id="productModalTitle">Add product</h2><p>Keep the product details accurate for your storefront.</p></div><button class="modal-close" type="button" data-close="productModalBackdrop" aria-label="Close">×</button></div>
-      <div class="modal-body">
-        <div id="productFormMessage" class="message" role="alert"></div>
-        <form id="productForm">
-          <input id="productId" type="hidden" />
-          <div class="form-grid">
-            <div class="field full"><label for="productName">Product name *</label><input id="productName" name="name" required maxlength="150" placeholder="e.g. Palazzo pants" /></div>
-            <div class="field"><label for="productCategory">Category *</label><select id="productCategory" name="category" required><option value="apparel">Apparel</option><option value="beauty">Beauty</option><option value="kitchen">Kitchen</option><option value="toiletries">Toiletries</option><option value="other">Other</option></select></div>
-            <div class="field"><label for="productPrice">Price (₦) *</label><input id="productPrice" name="price" type="number" min="0" step="0.01" required placeholder="0.00" /></div>
-            <div class="field"><label for="productStock">Stock quantity *</label><input id="productStock" name="stock" type="number" min="0" step="1" required placeholder="0" /></div>
-            <div class="field"><label for="productImage">Image URL</label><input id="productImage" name="image_url" type="url" placeholder="https://…" /></div>
-            <div class="field full"><label for="productDescription">Description</label><textarea id="productDescription" name="description" rows="3" maxlength="2000" placeholder="Short description for your store…"></textarea></div>
-          </div>
-          <label class="check-field"><input id="productActive" type="checkbox" checked /> Active — available to display in the storefront</label>
-          <div class="modal-actions"><button class="btn btn-outline" type="button" data-close="productModalBackdrop">Cancel</button><button id="saveProductButton" class="btn btn-primary" type="submit">Save product</button></div>
-        </form>
-      </div>
-    </section>
-  </div>
-
-  <!-- Order details modal -->
-  <div id="orderModalBackdrop" class="modal-backdrop" hidden>
-    <section class="modal wide" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
-      <div class="modal-head"><div><h2 id="orderModalTitle">Order details</h2><p>Review the customer and checkout information saved for this order.</p></div><button class="modal-close" type="button" data-close="orderModalBackdrop" aria-label="Close">×</button></div>
-      <div class="modal-body" id="orderDetailsBody"></div>
-    </section>
-  </div>
-  <div id="toastWrap" class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
-
   <script type="module">
-    // Reuses the shared client used by the storefront/checkout. Do not paste a service-role key here.
+    // Use the same Supabase client as the storefront.
     import { supabase } from './assets/javascript/supabase.js';
 
-    const $ = (selector, root = document) => root.querySelector(selector);
-    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-    const state = { user: null, products: [], orders: [], currentSection: 'overview', productError: '', orderError: '' };
-    const currency = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 2 });
+    const $ = (selector) => document.querySelector(selector);
+    const state = { user: null, products: [], orders: [], productError: '', orderError: '' };
     const titles = {
-      overview: 'Overview', products: 'Product catalogue', orders: 'Orders & payments',
-      customers: 'Customers', inventory: 'Stock control', settings: 'Settings & connection'
+      overview: 'Overview', products: 'Products', homepage: 'Homepage Manager', shop: 'Shop Manager', orders: 'Orders & payments',
+      customers: 'Customers', stock: 'Stock control', settings: 'Settings'
     };
+    const money = new Intl.NumberFormat('en-NG', {
+      style: 'currency', currency: 'NGN', maximumFractionDigits: 2
+    });
 
     function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[char]));
     }
-    function safeImageUrl(value) {
-      try { const url = new URL(String(value || '')); return ['https:', 'http:'].includes(url.protocol) ? url.href : ''; }
-      catch { return ''; }
-    }
-    function formatMoney(value) { return currency.format(Number(value) || 0); }
+    function formatMoney(value) { return money.format(Number(value) || 0); }
     function formatDate(value) {
       if (!value) return '—';
       const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return '—';
-      return new Intl.DateTimeFormat('en-NG', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
+      return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('en-NG');
     }
-    function orderRef(order) { return String(order?.id || '').replace(/-/g, '').slice(0, 8).toUpperCase() || '—'; }
-    function normaliseStatus(value) {
+    function shortId(id) { return String(id || '').replace(/-/g, '').slice(0, 8).toUpperCase() || '—'; }
+    function showMessage(id, text, type = 'error') {
+      const box = $(id);
+      box.textContent = text;
+      box.className = `message ${type}`;
+      box.hidden = false;
+    }
+    function clearMessage(id) { $(id).hidden = true; $(id).textContent = ''; }
+    function safeImageUrl(value) {
+      try {
+        const url = new URL(String(value || ''));
+        return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+      } catch { return ''; }
+    }
+    function statusBadge(value) {
       const status = String(value || 'pending').toLowerCase();
-      return ['pending', 'paid', 'failed', 'cancelled', 'processing'].includes(status) ? status : 'pending';
+      const allowed = ['pending', 'paid', 'failed', 'cancelled', 'active', 'inactive', 'low'];
+      const clean = allowed.includes(status) ? status : 'pending';
+      const label = status === 'active' ? 'Active' : status === 'inactive' ? 'Inactive' : status;
+      return `<span class="badge ${clean === 'inactive' ? 'off' : clean}">${escapeHtml(label)}</span>`;
     }
-    function badge(status, label = status) {
-      const clean = String(status || 'pending').toLowerCase().replace(/[^a-z0-9_-]/g, '');
-      return `<span class="badge ${escapeHtml(clean)}">${escapeHtml(label || 'pending')}</span>`;
+    function showPage(page) {
+      if (!titles[page]) return;
+      document.querySelectorAll('[data-content]').forEach(section => {
+        section.classList.toggle('active', section.dataset.content === page);
+      });
+      document.querySelectorAll('[data-page]').forEach(button => {
+        button.classList.toggle('active', button.dataset.page === page);
+      });
+      $('#pageTitle').textContent = titles[page];
     }
-    function showToast(message, kind = '') {
-      const toast = document.createElement('div');
-      toast.className = `toast ${kind}`;
-      toast.textContent = message;
-      $('#toastWrap').append(toast);
-      window.setTimeout(() => toast.remove(), 4300);
-    }
-    function setMessage(element, message, kind = 'error') {
-      element.textContent = message;
-      element.className = `message show ${kind}`;
-    }
-    function clearMessage(element) { element.textContent = ''; element.className = 'message'; }
-    function showLogin(message = '') {
-      $('#appShell').hidden = true;
-      $('#authScreen').hidden = false;
-      $('#loginButton').disabled = false;
-      $('#loginButton').innerHTML = 'Sign in to dashboard <span aria-hidden="true">→</span>';
-      if (message) setMessage($('#loginMessage'), message); else clearMessage($('#loginMessage'));
-    }
-    function setConnected(connected) {
-      const pill = $('#connectionPill');
-      pill.textContent = connected ? 'Connected' : 'Connection issue';
-      pill.classList.toggle('offline', !connected);
-    }
-    function showGlobalErrors() {
-      const messages = [];
-      if (state.productError) messages.push(`Products: ${state.productError}`);
-      if (state.orderError) messages.push(`Orders: ${state.orderError}`);
-      const alert = $('#globalAlert');
-      alert.textContent = messages.join(' · ');
-      alert.classList.toggle('show', messages.length > 0);
-      setConnected(messages.length === 0);
-    }
-    function currentUserInitials(user) {
-      const email = user?.email || 'Jidderhs Heaven';
-      const first = email.split('@')[0].split(/[._ -]/).filter(Boolean);
-      return (first.length > 1 ? first[0][0] + first[1][0] : email.slice(0, 2)).toUpperCase();
-    }
-    async function enterApp(user) {
-      if (!user) return showLogin();
-      const alreadyInside = !$('#appShell').hidden && state.user?.id === user.id;
-      state.user = user;
-      $('#authScreen').hidden = true;
-      $('#appShell').hidden = false;
-      $('#accountName').textContent = user.user_metadata?.full_name || 'Store administrator';
-      $('#accountEmail').textContent = user.email || 'Authenticated account';
-      $('#accountAvatar').textContent = currentUserInitials(user);
-      $('#settingsEmail').textContent = user.email || '—';
-      $('#settingsUserId').textContent = user.id || '—';
-      $('#settingsSession').textContent = 'Signed in';
-      $('#settingsProjectUrl').textContent = supabase.supabaseUrl || 'Configured in supabase.js';
-      if (!alreadyInside) await loadData();
-    }
+
     async function loadData() {
       $('#refreshButton').disabled = true;
-      $('#refreshButton').innerHTML = '<span>↻</span> Loading…';
+      $('#refreshButton').textContent = 'Loading…';
       state.productError = '';
       state.orderError = '';
+
       const [productsResult, ordersResult] = await Promise.all([
-        supabase.from('products').select('id,name,description,category,price,image_url,stock,is_active,created_at').order('created_at', { ascending: false }),
-        supabase.from('orders').select('id,customer_name,customer_email,customer_phone,delivery_address,items,total_amount,payment_status,payment_reference,created_at').order('created_at', { ascending: false })
+        supabase.from('products')
+          .select('id,name,description,category,price,image_url,stock,is_active,show_on_homepage,show_in_shop,is_featured,is_new_arrival,display_order,created_at')
+          .order('created_at', { ascending: false }),
+        supabase.from('orders')
+          .select('id,customer_name,customer_email,customer_phone,delivery_address,items,total_amount,payment_status,payment_reference,created_at')
+          .order('created_at', { ascending: false })
       ]);
+
       if (productsResult.error) {
         state.productError = productsResult.error.message;
         state.products = [];
-        $('#productsConnectionState').textContent = 'Failed: ' + productsResult.error.message;
       } else {
         state.products = productsResult.data || [];
-        $('#productsConnectionState').textContent = `OK · ${state.products.length} products`;
       }
       if (ordersResult.error) {
         state.orderError = ordersResult.error.message;
         state.orders = [];
-        $('#ordersConnectionState').textContent = 'Failed: ' + ordersResult.error.message;
       } else {
         state.orders = ordersResult.data || [];
-        $('#ordersConnectionState').textContent = `OK · ${state.orders.length} orders`;
       }
+
+      $('#productsConnection').textContent = state.productError || `OK — ${state.products.length} products`;
+      $('#ordersConnection').textContent = state.orderError || `OK — ${state.orders.length} orders`;
       renderAll();
-      showGlobalErrors();
+      if (state.productError || state.orderError) {
+        showMessage('#mainMessage', `Database notice: ${[state.productError, state.orderError].filter(Boolean).join(' | ')}`);
+      } else {
+        clearMessage('#mainMessage');
+      }
       $('#refreshButton').disabled = false;
-      $('#refreshButton').innerHTML = '<span aria-hidden="true">↻</span> Refresh';
+      $('#refreshButton').textContent = 'Refresh';
     }
+
     function renderAll() {
-      renderStats(); renderRecentOrders(); renderLowStock(); renderRecentProducts();
-      renderProducts(); renderOrders(); renderCustomers(); renderInventory();
+      renderOverview();
+      renderProducts();
+      renderOrders();
+      renderCustomers();
+      renderStock();
+      renderManagers();
     }
-    function renderStats() {
-      $('#statProducts').textContent = state.products.length.toLocaleString('en-NG');
-      $('#statOrders').textContent = state.orders.length.toLocaleString('en-NG');
-      const recordedSales = state.orders.reduce((sum, order) => sum + (Number(order.total_amount) || 0), 0);
-      $('#statSales').textContent = formatMoney(recordedSales);
-      $('#statSales').style.fontSize = recordedSales >= 1000000 ? '21px' : '25px';
-      $('#statLowStock').textContent = state.products.filter(product => Number(product.stock) <= 5).length.toLocaleString('en-NG');
-      $('#stockUnitsTotal').textContent = state.products.reduce((sum, product) => sum + Math.max(0, Number(product.stock) || 0), 0).toLocaleString('en-NG');
-      $('#stockLowTotal').textContent = state.products.filter(product => Number(product.stock) > 0 && Number(product.stock) <= 5).length.toLocaleString('en-NG');
-      $('#stockOutTotal').textContent = state.products.filter(product => Number(product.stock) <= 0).length.toLocaleString('en-NG');
+
+    function renderOverview() {
+      $('#totalProducts').textContent = state.products.length;
+      $('#totalOrders').textContent = state.orders.length;
+      const total = state.orders.reduce((sum, order) => sum + (Number(order.total_amount) || 0), 0);
+      $('#totalSales').textContent = formatMoney(total);
+      $('#lowStock').textContent = state.products.filter(p => Number(p.stock) <= 5).length;
+
+      const recent = state.orders.slice(0, 5);
+      $('#recentOrders').innerHTML = recent.length ? recent.map(order => `
+        <tr><td>#${escapeHtml(shortId(order.id))}</td>
+        <td>${escapeHtml(order.customer_name || 'Customer')}<span class="small">${escapeHtml(order.customer_email || '')}</span></td>
+        <td>${escapeHtml(formatDate(order.created_at))}</td>
+        <td>${escapeHtml(formatMoney(order.total_amount))}</td>
+        <td>${statusBadge(order.payment_status)}</td></tr>`).join('') : emptyRow(5, state.orderError || 'No orders have been saved yet.');
+
+      const low = state.products.filter(p => Number(p.stock) <= 5).slice(0, 5);
+      $('#overviewStock').innerHTML = low.length ? low.map(product => `
+        <tr><td>${escapeHtml(product.name)}</td><td>${escapeHtml(product.category || 'other')}</td>
+        <td>${Number(product.stock) || 0}</td><td>${statusBadge(Number(product.stock) <= 0 ? 'failed' : 'low')}</td></tr>`).join('') : emptyRow(4, state.productError || 'No low-stock products.');
     }
-    function productVisual(product) {
+
+    function emptyRow(columns, text) {
+      return `<tr><td colspan="${columns}" class="empty">${escapeHtml(text)}</td></tr>`;
+    }
+    function productNameCell(product) {
       const image = safeImageUrl(product.image_url);
-      return image ? `<span class="product-thumb"><img src="${escapeHtml(image)}" alt="" loading="lazy" /></span>` : '<span class="product-thumb">✧</span>';
+      const picture = image ? `<img src="${escapeHtml(image)}" alt="" width="32" height="32" style="object-fit:cover;border-radius:6px;vertical-align:middle;margin-right:7px">` : '';
+      return `${picture}${escapeHtml(product.name || 'Unnamed product')}`;
     }
-    function productCell(product) {
-      return `<div class="product-cell">${productVisual(product)}<div><strong title="${escapeHtml(product.name)}">${escapeHtml(product.name || 'Unnamed product')}</strong><small>ID: ${escapeHtml(product.id)}</small></div></div>`;
-    }
-    function emptyRow(colspan, heading, detail = '') {
-      return `<tr><td colspan="${colspan}"><div class="empty-state"><strong>${escapeHtml(heading)}</strong>${escapeHtml(detail)}</div></td></tr>`;
-    }
-    function renderRecentOrders() {
-      const recent = [...state.orders].sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)).slice(0, 5);
-      if (!recent.length) {
-        $('#recentOrdersWrap').innerHTML = `<div class="empty-state"><strong>No orders yet</strong>New checkouts will appear here once saved.</div>`;
-        return;
-      }
-      $('#recentOrdersWrap').innerHTML = `<div class="table-scroll"><table class="mini-table"><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead><tbody>${recent.map(order => `<tr><td><strong>#${escapeHtml(orderRef(order))}</strong><div class="muted" style="margin-top:4px;font-size:9px">${escapeHtml(formatDate(order.created_at))}</div></td><td>${escapeHtml(order.customer_name || 'Customer')}</td><td class="money">${escapeHtml(formatMoney(order.total_amount))}</td><td>${badge(normaliseStatus(order.payment_status))}</td></tr>`).join('')}</tbody></table></div>`;
-    }
-    function renderLowStock() {
-      const low = state.products.filter(product => Number(product.stock) <= 5).sort((a,b) => Number(a.stock) - Number(b.stock)).slice(0, 5);
-      if (!low.length) {
-        $('#lowStockWrap').innerHTML = `<div class="empty-state"><strong>Stock looks healthy</strong>No products are at or below the 5-unit warning threshold.</div>`;
-        return;
-      }
-      $('#lowStockWrap').innerHTML = `<div class="activity-list">${low.map(product => `<div class="activity-item"><div class="activity-icon">!</div><div class="activity-text"><strong>${escapeHtml(product.name || 'Unnamed product')}</strong><p>${escapeHtml(product.category || 'Uncategorised')} · ${Number(product.stock) <= 0 ? 'Out of stock' : `${Number(product.stock)} unit(s) left`}</p></div>${badge(Number(product.stock) <= 0 ? 'failed' : 'low', Number(product.stock) <= 0 ? 'Out' : 'Low')}</div>`).join('')}</div>`;
-    }
-    function renderRecentProducts() {
-      const recent = [...state.products].sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)).slice(0, 5);
-      if (!recent.length) { $('#recentProductsWrap').innerHTML = `<div class="empty-state"><strong>No products found</strong>Add an item to start building your catalogue.</div>`; return; }
-      $('#recentProductsWrap').innerHTML = `<div class="table-scroll"><table class="mini-table"><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead><tbody>${recent.map(product => `<tr><td>${productCell(product)}</td><td class="money">${escapeHtml(formatMoney(product.price))}</td><td>${Number(product.stock) || 0}</td><td>${badge(product.is_active === false ? 'inactive' : 'active', product.is_active === false ? 'Inactive' : 'Active')}</td></tr>`).join('')}</tbody></table></div>`;
-    }
+
     function renderProducts() {
-      const term = ($('#productSearch')?.value || '').trim().toLowerCase();
-      const category = $('#productCategoryFilter')?.value || 'all';
-      const status = $('#productStatusFilter')?.value || 'all';
-      const filtered = state.products.filter(product => {
-        const haystack = `${product.name || ''} ${product.category || ''} ${product.id || ''} ${product.description || ''}`.toLowerCase();
-        return (!term || haystack.includes(term)) && (category === 'all' || String(product.category || 'other').toLowerCase() === category) && (status === 'all' || (status === 'active' ? product.is_active !== false : product.is_active === false));
+      const search = ($('#productSearch').value || '').toLowerCase().trim();
+      const filter = $('#productFilter').value;
+      const products = state.products.filter(p => {
+        const active = p.is_active !== false;
+        const matchesSearch = `${p.name || ''} ${p.category || ''} ${p.id || ''}`.toLowerCase().includes(search);
+        return matchesSearch && (filter === 'all' || (filter === 'active' && active) || (filter === 'inactive' && !active));
       });
-      $('#productCountLabel').textContent = `${filtered.length} product${filtered.length === 1 ? '' : 's'}`;
-      $('#productsTableBody').innerHTML = filtered.length ? filtered.map(product => `<tr><td>${productCell(product)}</td><td><span class="category-tag">${escapeHtml(product.category || 'other')}</span></td><td class="money">${escapeHtml(formatMoney(product.price))}</td><td>${Number(product.stock) || 0}</td><td>${badge(product.is_active === false ? 'inactive' : 'active', product.is_active === false ? 'Inactive' : 'Active')}</td><td><div class="row-actions"><button class="icon-btn" type="button" data-edit-product="${escapeHtml(product.id)}" title="Edit product" aria-label="Edit product">✎</button><button class="icon-btn" type="button" data-toggle-product="${escapeHtml(product.id)}" title="${product.is_active === false ? 'Activate' : 'Deactivate'} product" aria-label="${product.is_active === false ? 'Activate' : 'Deactivate'} product">${product.is_active === false ? '✓' : '◌'}</button></div></td></tr>`).join('') : emptyRow(6, state.productError ? 'Products could not be loaded' : 'No matching products', state.productError || 'Try another search/filter or add your first product.');
+      $('#productsTable').innerHTML = products.length ? products.map(p => `
+        <tr><td>${productNameCell(p)}<span class="small">ID: ${escapeHtml(p.id)}</span></td>
+        <td>${escapeHtml(p.category || 'other')}</td><td>${escapeHtml(formatMoney(p.price))}</td>
+        <td>${Number(p.stock) || 0}</td><td>${statusBadge(p.is_active === false ? 'inactive' : 'active')}</td>
+        <td><div class="row-buttons"><button class="btn btn-light" type="button" data-edit="${escapeHtml(p.id)}">Edit</button>
+        <button class="btn btn-light" type="button" data-toggle="${escapeHtml(p.id)}">${p.is_active === false ? 'Activate' : 'Deactivate'}</button></div></td></tr>`).join('') : emptyRow(6, state.productError || 'No matching products.');
     }
-    function renderOrders() {
-      const term = ($('#orderSearch')?.value || '').trim().toLowerCase();
-      const status = $('#orderStatusFilter')?.value || 'all';
-      const filtered = state.orders.filter(order => {
-        const haystack = `${order.id || ''} ${orderRef(order)} ${order.customer_name || ''} ${order.customer_email || ''} ${order.customer_phone || ''}`.toLowerCase();
-        return (!term || haystack.includes(term)) && (status === 'all' || normaliseStatus(order.payment_status) === status);
-      });
-      $('#orderCountLabel').textContent = `${filtered.length} order${filtered.length === 1 ? '' : 's'}`;
-      $('#ordersTableBody').innerHTML = filtered.length ? filtered.map(order => {
-        const currentStatus = normaliseStatus(order.payment_status);
-        const options = ['pending','paid','failed','cancelled'].map(option => `<option value="${option}" ${currentStatus === option ? 'selected' : ''}>${option[0].toUpperCase()+option.slice(1)}</option>`).join('');
-        return `<tr><td><strong>#${escapeHtml(orderRef(order))}</strong><div class="muted" style="margin-top:5px;font-size:9px">${escapeHtml(String(order.id || ''))}</div></td><td><strong>${escapeHtml(order.customer_name || 'Customer')}</strong><div class="muted" style="margin-top:4px;font-size:9px">${escapeHtml(order.customer_email || 'No email saved')}</div></td><td>${escapeHtml(formatDate(order.created_at))}</td><td class="money">${escapeHtml(formatMoney(order.total_amount))}</td><td>${badge(currentStatus)}</td><td><div class="row-actions"><button class="btn btn-outline" style="min-height:32px;padding:6px 9px" type="button" data-view-order="${escapeHtml(order.id)}">View</button><select class="small-select" data-order-status="${escapeHtml(order.id)}" aria-label="New payment status">${options}</select><button class="icon-btn" type="button" data-save-order-status="${escapeHtml(order.id)}" title="Save payment status" aria-label="Save payment status">✓</button></div></td></tr>`;
-      }).join('') : emptyRow(6, state.orderError ? 'Orders could not be loaded' : 'No matching orders', state.orderError || 'Orders will appear here after customers place an order.');
+
+    function clearProductForm() {
+      $('#productForm').reset();
+      $('#editProductId').value = '';
+      $('#productStock').value = '0';
+      $('#productActive').checked = true;
+      $('#productShowHome').checked = false;
+      $('#productShowShop').checked = true;
+      $('#productFeatured').checked = false;
+      $('#productNewArrival').checked = false;
+      $('#productDisplayOrder').value = '0';
+      $('#productFormTitle').textContent = 'Add a product';
+      $('#saveProductButton').textContent = 'Save product';
+      $('#cancelEditButton').hidden = true;
     }
-    function buildCustomers() {
-      const map = new Map();
-      state.orders.forEach(order => {
-        const email = String(order.customer_email || '').trim().toLowerCase();
-        if (!email) return;
-        if (!map.has(email)) map.set(email, { email, name: order.customer_name || 'Customer', phone: order.customer_phone || '', orders: [], total: 0, latest: order.created_at || null });
-        const customer = map.get(email);
-        customer.orders.push(order);
-        customer.total += Number(order.total_amount) || 0;
-        if (!customer.name && order.customer_name) customer.name = order.customer_name;
-        if (!customer.phone && order.customer_phone) customer.phone = order.customer_phone;
-        if (new Date(order.created_at || 0) > new Date(customer.latest || 0)) customer.latest = order.created_at;
-      });
-      return [...map.values()].sort((a,b) => new Date(b.latest || 0) - new Date(a.latest || 0));
-    }
-    function renderCustomers() {
-      const all = buildCustomers();
-      const term = ($('#customerSearch')?.value || '').trim().toLowerCase();
-      const filtered = all.filter(customer => `${customer.name} ${customer.email} ${customer.phone}`.toLowerCase().includes(term));
-      $('#customerTotal').textContent = all.length.toLocaleString('en-NG');
-      $('#repeatCustomers').textContent = all.filter(customer => customer.orders.length > 1).length.toLocaleString('en-NG');
-      $('#customerOrdersTotal').textContent = all.reduce((sum, customer) => sum + customer.orders.length, 0).toLocaleString('en-NG');
-      $('#customerCountLabel').textContent = `${filtered.length} customer${filtered.length === 1 ? '' : 's'}`;
-      $('#customersTableBody').innerHTML = filtered.length ? filtered.map(customer => `<tr><td><strong>${escapeHtml(customer.name || 'Customer')}</strong></td><td>${escapeHtml(customer.email)}<span class="customer-email">Recorded from checkout</span></td><td>${escapeHtml(customer.phone || '—')}</td><td>${customer.orders.length}</td><td class="money">${escapeHtml(formatMoney(customer.total))}</td><td>${escapeHtml(formatDate(customer.latest))}</td></tr>`).join('') : emptyRow(6, state.orderError ? 'Customer data could not be loaded' : 'No customer records yet', state.orderError || 'Customer records are created from checkout orders that include an email address.');
-    }
-    function renderInventory() {
-      const term = ($('#inventorySearch')?.value || '').trim().toLowerCase();
-      const filter = $('#inventoryFilter')?.value || 'all';
-      const filtered = state.products.filter(product => {
-        const stock = Number(product.stock) || 0;
-        const haystack = `${product.name || ''} ${product.category || ''} ${product.id || ''}`.toLowerCase();
-        const matchesFilter = filter === 'all' || (filter === 'low' && stock > 0 && stock <= 5) || (filter === 'out' && stock <= 0) || (filter === 'healthy' && stock > 5);
-        return (!term || haystack.includes(term)) && matchesFilter;
-      });
-      $('#inventoryCountLabel').textContent = `${filtered.length} product${filtered.length === 1 ? '' : 's'}`;
-      $('#inventoryTableBody').innerHTML = filtered.length ? filtered.map(product => {
-        const stock = Number(product.stock) || 0;
-        const label = stock <= 0 ? 'Out of stock' : stock <= 5 ? 'Low stock' : 'In stock';
-        const kind = stock <= 0 ? 'failed' : stock <= 5 ? 'low' : 'active';
-        return `<tr><td>${productCell(product)}</td><td><span class="category-tag">${escapeHtml(product.category || 'other')}</span></td><td><strong>${stock}</strong></td><td>${badge(kind, label)}</td><td><form class="stock-control" data-stock-form="${escapeHtml(product.id)}"><input type="number" min="0" step="1" value="${stock}" aria-label="New stock for ${escapeHtml(product.name)}" /><button class="btn btn-outline" type="submit">Save</button></form></td></tr>`;
-      }).join('') : emptyRow(5, state.productError ? 'Inventory could not be loaded' : 'No matching inventory', state.productError || 'Change the filter or search term.');
-    }
-    function showSection(section) {
-      if (!titles[section]) return;
-      state.currentSection = section;
-      $('#sectionTitle').textContent = titles[section];
-      $$('.view').forEach(view => view.classList.toggle('active', view.dataset.view === section));
-      $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.section === section));
-      $('#sidebar').classList.remove('open');
-      $('#mobileShade').classList.remove('show');
+    function startProductEdit(id) {
+      const product = state.products.find(p => String(p.id) === String(id));
+      if (!product) return;
+      $('#editProductId').value = product.id;
+      $('#productName').value = product.name || '';
+      $('#productCategory').value = product.category || 'other';
+      if (!['apparel', 'beauty', 'kitchen', 'toiletries', 'other'].includes($('#productCategory').value)) $('#productCategory').value = 'other';
+      $('#productPrice').value = product.price ?? 0;
+      $('#productStock').value = product.stock ?? 0;
+      $('#productImage').value = product.image_url || '';
+      $('#productDescription').value = product.description || '';
+      $('#productActive').checked = product.is_active !== false;
+      $('#productShowHome').checked = product.show_on_homepage === true;
+      $('#productShowShop').checked = product.show_in_shop !== false;
+      $('#productFeatured').checked = product.is_featured === true;
+      $('#productNewArrival').checked = product.is_new_arrival === true;
+      $('#productDisplayOrder').value = Number(product.display_order || 0);
+      $('#productFormTitle').textContent = 'Edit product';
+      $('#saveProductButton').textContent = 'Save changes';
+      $('#cancelEditButton').hidden = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    function openProductModal(product = null) {
-      clearMessage($('#productFormMessage'));
-      $('#productForm').reset();
-      $('#productId').value = product ? product.id : '';
-      $('#productModalTitle').textContent = product ? 'Edit product' : 'Add product';
-      $('#productName').value = product?.name || '';
-      $('#productCategory').value = String(product?.category || 'apparel').toLowerCase();
-      if (!['apparel','beauty','kitchen','toiletries','other'].includes($('#productCategory').value)) $('#productCategory').value = 'other';
-      $('#productPrice').value = product?.price ?? '';
-      $('#productStock').value = product?.stock ?? 0;
-      $('#productImage').value = product?.image_url || '';
-      $('#productDescription').value = product?.description || '';
-      $('#productActive').checked = product ? product.is_active !== false : true;
-      $('#saveProductButton').disabled = false;
-      $('#saveProductButton').textContent = product ? 'Save changes' : 'Save product';
-      $('#productModalBackdrop').hidden = false;
-      $('#productName').focus();
-    }
-    function closeModal(id) { const el = document.getElementById(id); if (el) el.hidden = true; }
+
     async function saveProduct(event) {
       event.preventDefault();
-      const id = $('#productId').value.trim();
+      const id = $('#editProductId').value;
       const price = Number($('#productPrice').value);
       const stock = Number($('#productStock').value);
-      if (!$('#productName').value.trim() || !Number.isFinite(price) || price < 0 || !Number.isInteger(stock) || stock < 0) {
-        setMessage($('#productFormMessage'), 'Enter a product name, a valid non-negative price, and a whole-number stock quantity.'); return;
+      const image = $('#productImage').value.trim();
+      if (!Number.isFinite(price) || price < 0 || !Number.isInteger(stock) || stock < 0) {
+        showMessage('#mainMessage', 'Enter a valid price and a whole-number stock quantity.');
+        return;
       }
-      const imageUrl = $('#productImage').value.trim();
-      if (imageUrl && !safeImageUrl(imageUrl)) { setMessage($('#productFormMessage'), 'Image URL must start with http:// or https://.'); return; }
-      const payload = {
+      if (image && !safeImageUrl(image)) {
+        showMessage('#mainMessage', 'The image URL must start with http:// or https://.');
+        return;
+      }
+      const product = {
         name: $('#productName').value.trim(),
         category: $('#productCategory').value,
         price,
         stock,
-        image_url: imageUrl || null,
+        image_url: image || null,
         description: $('#productDescription').value.trim() || null,
-        is_active: $('#productActive').checked
+        is_active: $('#productActive').checked,
+        show_on_homepage: $('#productShowHome').checked,
+        show_in_shop: $('#productShowShop').checked,
+        is_featured: $('#productFeatured').checked,
+        is_new_arrival: $('#productNewArrival').checked,
+        display_order: Math.trunc(Number($('#productDisplayOrder').value) || 0)
       };
-      const button = $('#saveProductButton'); button.disabled = true; button.textContent = 'Saving…';
+      $('#saveProductButton').disabled = true;
+      $('#saveProductButton').textContent = 'Saving…';
       const result = id
-        ? await supabase.from('products').update(payload).eq('id', id)
-        : await supabase.from('products').insert(payload);
+        ? await supabase.from('products').update(product).eq('id', id).select('id').maybeSingle()
+        : await supabase.from('products').insert(product).select('id').maybeSingle();
+      $('#saveProductButton').disabled = false;
+      $('#saveProductButton').textContent = id ? 'Save changes' : 'Save product';
       if (result.error) {
-        setMessage($('#productFormMessage'), `Could not save product: ${result.error.message}`);
-        button.disabled = false; button.textContent = id ? 'Save changes' : 'Save product'; return;
+        showMessage('#mainMessage', `Could not save product: ${result.error.message}`);
+      } else if (id && !result.data) {
+        showMessage('#mainMessage', 'No product was changed. Check your admin database permissions.');
+      } else {
+        clearMessage('#mainMessage');
+        clearProductForm();
+        await loadData();
+        showMessage('#mainMessage', id ? 'Product updated.' : 'Product added.', 'success');
       }
-      closeModal('productModalBackdrop');
-      showToast(id ? 'Product details saved.' : 'Product added to the catalogue.', 'success');
-      await loadData();
     }
+
     async function toggleProduct(id) {
-      const product = state.products.find(item => String(item.id) === String(id));
+      const product = state.products.find(p => String(p.id) === String(id));
       if (!product) return;
-      const next = product.is_active === false;
-      const { error } = await supabase.from('products').update({ is_active: next }).eq('id', product.id);
-      if (error) { showToast(`Could not update product: ${error.message}`, 'error'); return; }
-      showToast(next ? 'Product activated.' : 'Product deactivated.', 'success');
+      const nextActive = product.is_active === false;
+      const result = await supabase.from('products').update({ is_active: nextActive }).eq('id', product.id).select('id').maybeSingle();
+      if (result.error) return showMessage('#mainMessage', `Could not update product: ${result.error.message}`);
+      if (!result.data) return showMessage('#mainMessage', 'No product was changed. Check your admin database permissions.');
       await loadData();
+      showMessage('#mainMessage', nextActive ? 'Product activated.' : 'Product deactivated.', 'success');
     }
-    async function saveStock(event) {
-      const form = event.target.closest('form[data-stock-form]');
-      if (!form) return;
-      event.preventDefault();
-      const id = form.dataset.stockForm;
-      const input = $('input', form);
-      const stock = Number(input.value);
-      if (!Number.isInteger(stock) || stock < 0) { showToast('Stock must be a whole number of zero or more.', 'error'); return; }
-      const button = $('button', form); button.disabled = true; button.textContent = '…';
-      const { error } = await supabase.from('products').update({ stock }).eq('id', id);
-      if (error) { showToast(`Could not update stock: ${error.message}`, 'error'); button.disabled = false; button.textContent = 'Save'; return; }
-      showToast('Stock updated.', 'success');
-      await loadData();
+
+    function renderManagers() {
+      const list = [...state.products].sort((a,b) => Number(a.display_order || 0)-Number(b.display_order || 0) || String(a.name||'').localeCompare(String(b.name||'')));
+      $('#homeCount').textContent = list.filter(p=>p.is_active!==false && p.show_on_homepage===true).length;
+      $('#featuredCount').textContent = list.filter(p=>p.is_active!==false && p.is_featured===true).length;
+      $('#newArrivalCount').textContent = list.filter(p=>p.is_active!==false && p.is_new_arrival===true).length;
+      $('#homeActiveCount').textContent = list.filter(p=>p.is_active!==false).length;
+      $('#homepageTable').innerHTML = list.length ? list.map(p=>`<tr><td>${productNameCell(p)}</td><td>${statusBadge(p.is_active===false?'inactive':'active')}</td><td>${p.show_on_homepage===true?'Yes':'No'}</td><td>${p.is_featured===true?'Yes':'No'}</td><td>${p.is_new_arrival===true?'Yes':'No'}</td><td>${Number(p.display_order||0)}</td><td><button class="btn btn-light" type="button" data-manager-edit="${escapeHtml(p.id)}">Edit</button></td></tr>`).join('') : emptyRow(7,'No products available.');
+      const q=($('#shopSearch').value||'').toLowerCase().trim(), filter=$('#shopVisibility').value;
+      const shopList=list.filter(p=>`${p.name||''} ${p.category||''} ${p.id||''}`.toLowerCase().includes(q) && (filter==='all'||(filter==='visible'&&p.show_in_shop!==false)||(filter==='hidden'&&p.show_in_shop===false)));
+      $('#shopTable').innerHTML = shopList.length ? shopList.map(p=>`<tr><td>${productNameCell(p)}</td><td>${escapeHtml(p.category||'other')}</td><td>${statusBadge(p.is_active===false?'inactive':'active')}</td><td>${p.show_in_shop===false?'Hidden':'Visible'}</td><td>${Number(p.display_order||0)}</td><td><button class="btn btn-light" type="button" data-manager-edit="${escapeHtml(p.id)}">Edit</button><button class="btn btn-light" type="button" data-shop-toggle="${escapeHtml(p.id)}">${p.show_in_shop===false?'Show':'Hide'}</button></td></tr>`).join('') : emptyRow(6,'No matching products.');
     }
-    async function savePaymentStatus(id) {
-      const select = $(`[data-order-status="${CSS.escape(String(id))}"]`);
+
+    async function toggleShopVisibility(id) {
+      const p=state.products.find(x=>String(x.id)===String(id)); if(!p)return;
+      const result=await supabase.from('products').update({show_in_shop:p.show_in_shop===false}).eq('id',id).select('id').maybeSingle();
+      if(result.error)return showMessage('#mainMessage',`Could not update shop visibility: ${result.error.message}`);
+      if(!result.data)return showMessage('#mainMessage','No product was changed. Check admin database permissions.');
+      await loadData(); showMessage('#mainMessage',p.show_in_shop===false?'Product is now visible in the shop.':'Product is now hidden from the shop.','success');
+    }
+
+    function renderOrders() {
+      const search = ($('#orderSearch').value || '').toLowerCase().trim();
+      const filter = $('#orderFilter').value;
+      const orders = state.orders.filter(order => {
+        const status = String(order.payment_status || 'pending').toLowerCase();
+        const text = `${order.id || ''} ${shortId(order.id)} ${order.customer_name || ''} ${order.customer_email || ''} ${order.customer_phone || ''}`.toLowerCase();
+        return text.includes(search) && (filter === 'all' || filter === status);
+      });
+      $('#ordersTable').innerHTML = orders.length ? orders.map(order => {
+        const status = ['pending', 'paid', 'failed', 'cancelled'].includes(String(order.payment_status).toLowerCase()) ? String(order.payment_status).toLowerCase() : 'pending';
+        return `<tr><td><strong>#${escapeHtml(shortId(order.id))}</strong><span class="small">${escapeHtml(order.id)}</span></td>
+          <td>${escapeHtml(order.customer_name || 'Customer')}<span class="small">${escapeHtml(order.customer_email || 'No email')} · ${escapeHtml(order.customer_phone || 'No phone')}</span></td>
+          <td style="white-space:normal;min-width:150px">${escapeHtml(order.delivery_address || 'No address saved')}</td>
+          <td>${escapeHtml(formatDate(order.created_at))}</td><td>${escapeHtml(formatMoney(order.total_amount))}</td>
+          <td><select class="status-select" data-order-status="${escapeHtml(order.id)}"><option value="pending" ${status === 'pending' ? 'selected' : ''}>Pending</option><option value="paid" ${status === 'paid' ? 'selected' : ''}>Paid</option><option value="failed" ${status === 'failed' ? 'selected' : ''}>Failed</option><option value="cancelled" ${status === 'cancelled' ? 'selected' : ''}>Cancelled</option></select></td>
+          <td><button class="btn btn-light" type="button" data-save-order="${escapeHtml(order.id)}">Save</button></td></tr>`;
+      }).join('') : emptyRow(7, state.orderError || 'No matching orders.');
+    }
+
+    async function saveOrderStatus(id) {
+      const select = document.querySelector(`[data-order-status="${CSS.escape(String(id))}"]`);
       if (!select) return;
-      const status = select.value;
-      const { error } = await supabase.from('orders').update({ payment_status: status }).eq('id', id);
-      if (error) { showToast(`Could not update payment status: ${error.message}`, 'error'); return; }
-      showToast('Payment status record updated. No payment was processed.', 'success');
+      const result = await supabase.from('orders').update({ payment_status: select.value }).eq('id', id).select('id').maybeSingle();
+      if (result.error) return showMessage('#mainMessage', `Could not update order: ${result.error.message}`);
+      if (!result.data) return showMessage('#mainMessage', 'No order was changed. Check your admin database permissions.');
       await loadData();
+      showMessage('#mainMessage', 'Payment status updated in the database. No payment was processed.', 'success');
     }
-    function prettyOrderItems(items) {
-      if (!Array.isArray(items) || !items.length) return '<div class="empty-state">No item details were saved on this order.</div>';
-      return `<div class="detail-items">${items.map(item => {
-        const name = item?.name || item?.product_name || (item?.product_id ? `Product ID ${item.product_id}` : 'Item');
-        const quantity = Number(item?.quantity ?? item?.qty ?? 1) || 1;
-        const price = Number(item?.price ?? item?.unit_price);
-        return `<div class="detail-item"><span>${escapeHtml(name)} <span class="muted">× ${quantity}</span></span><strong>${Number.isFinite(price) ? escapeHtml(formatMoney(price * quantity)) : '—'}</strong></div>`;
-      }).join('')}</div>`;
+
+    function getCustomers() {
+      const customers = new Map();
+      state.orders.forEach(order => {
+        const email = String(order.customer_email || '').trim().toLowerCase();
+        if (!email) return;
+        if (!customers.has(email)) customers.set(email, {
+          name: order.customer_name || 'Customer', email,
+          phone: order.customer_phone || '', count: 0, total: 0, latest: order.created_at
+        });
+        const customer = customers.get(email);
+        customer.count += 1;
+        customer.total += Number(order.total_amount) || 0;
+        if (!customer.phone && order.customer_phone) customer.phone = order.customer_phone;
+        if (new Date(order.created_at || 0) > new Date(customer.latest || 0)) customer.latest = order.created_at;
+      });
+      return [...customers.values()].sort((a, b) => new Date(b.latest || 0) - new Date(a.latest || 0));
     }
-    function openOrderModal(id) {
-      const order = state.orders.find(item => String(item.id) === String(id));
-      if (!order) return;
-      const status = normaliseStatus(order.payment_status);
-      $('#orderModalTitle').textContent = `Order #${orderRef(order)}`;
-      $('#orderDetailsBody').innerHTML = `
-        <div class="detail-grid">
-          <div class="detail-box"><span>Order reference</span><strong>#${escapeHtml(orderRef(order))}</strong></div>
-          <div class="detail-box"><span>Placed on</span><strong>${escapeHtml(formatDate(order.created_at))}</strong></div>
-          <div class="detail-box"><span>Customer</span><strong>${escapeHtml(order.customer_name || 'Customer')}</strong></div>
-          <div class="detail-box"><span>Payment status</span><strong>${badge(status)}</strong></div>
-          <div class="detail-box"><span>Email</span><strong>${escapeHtml(order.customer_email || '—')}</strong></div>
-          <div class="detail-box"><span>Phone</span><strong>${escapeHtml(order.customer_phone || '—')}</strong></div>
-          <div class="detail-box full"><span>Delivery address</span><strong>${escapeHtml(order.delivery_address || 'No address saved')}</strong></div>
-          <div class="detail-box full"><span>Payment reference</span><strong>${escapeHtml(order.payment_reference || 'Not provided')}</strong></div>
-        </div>
-        <h3 style="margin:0 0 10px;font:600 17px 'Playfair Display',serif">Items in this order</h3>
-        ${prettyOrderItems(order.items)}
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid var(--line)"><span class="muted" style="font-size:11px">Order total</span><strong style="font:600 21px 'Playfair Display',serif">${escapeHtml(formatMoney(order.total_amount))}</strong></div>
-        <p class="muted" style="margin:14px 0 0;font-size:10px;line-height:1.6">Changing a payment status here updates the database record only. It does not charge a card, transfer money, or confirm a payout.</p>`;
-      $('#orderModalBackdrop').hidden = false;
+
+    function renderCustomers() {
+      const search = ($('#customerSearch').value || '').toLowerCase().trim();
+      const customers = getCustomers().filter(customer => `${customer.name} ${customer.email} ${customer.phone}`.toLowerCase().includes(search));
+      $('#customersTable').innerHTML = customers.length ? customers.map(customer => `
+        <tr><td>${escapeHtml(customer.name)}</td><td>${escapeHtml(customer.email)}</td><td>${escapeHtml(customer.phone || '—')}</td>
+        <td>${customer.count}</td><td>${escapeHtml(formatMoney(customer.total))}</td><td>${escapeHtml(formatDate(customer.latest))}</td></tr>`).join('') : emptyRow(6, state.orderError || 'No customer records yet.');
     }
+
+    function renderStock() {
+      const totalUnits = state.products.reduce((sum, p) => sum + Math.max(0, Number(p.stock) || 0), 0);
+      $('#stockUnits').textContent = totalUnits.toLocaleString('en-NG');
+      $('#stockLow').textContent = state.products.filter(p => Number(p.stock) > 0 && Number(p.stock) <= 5).length;
+      $('#stockOut').textContent = state.products.filter(p => Number(p.stock) <= 0).length;
+      const search = ($('#stockSearch').value || '').toLowerCase().trim();
+      const filter = $('#stockFilter').value;
+      const products = state.products.filter(p => {
+        const stock = Number(p.stock) || 0;
+        const text = `${p.name || ''} ${p.category || ''}`.toLowerCase();
+        const matchesFilter = filter === 'all' || (filter === 'low' && stock > 0 && stock <= 5) || (filter === 'out' && stock <= 0) || (filter === 'healthy' && stock > 5);
+        return text.includes(search) && matchesFilter;
+      });
+      $('#stockTable').innerHTML = products.length ? products.map(p => `
+        <tr><td>${escapeHtml(p.name || 'Unnamed product')}</td><td>${escapeHtml(p.category || 'other')}</td><td>${Number(p.stock) || 0}</td>
+        <td><input aria-label="New stock quantity" type="number" min="0" step="1" value="${Number(p.stock) || 0}" style="width:85px;padding:7px"></td>
+        <td><button class="btn btn-light" type="button" data-save-stock="${escapeHtml(p.id)}">Save</button></td></tr>`).join('') : emptyRow(5, state.productError || 'No matching stock items.');
+    }
+
+    async function saveStock(id) {
+      const button = document.querySelector(`[data-save-stock="${CSS.escape(String(id))}"]`);
+      const row = button?.closest('tr');
+      if (!row) return;
+      const stock = Number(row.querySelector('input').value);
+      if (!Number.isInteger(stock) || stock < 0) return showMessage('#mainMessage', 'Stock must be a whole number of zero or more.');
+      button.disabled = true;
+      const result = await supabase.from('products').update({ stock }).eq('id', id).select('id').maybeSingle();
+      button.disabled = false;
+      if (result.error) return showMessage('#mainMessage', `Could not update stock: ${result.error.message}`);
+      if (!result.data) return showMessage('#mainMessage', 'Stock was not changed. Check your admin database permissions.');
+      await loadData();
+      showMessage('#mainMessage', 'Stock updated.', 'success');
+    }
+
     async function testConnection() {
       $('#testConnectionButton').disabled = true;
       $('#testConnectionButton').textContent = 'Testing…';
-      try {
-        const [products, orders, auth] = await Promise.all([
-          supabase.from('products').select('id', { count: 'exact', head: true }),
-          supabase.from('orders').select('id', { count: 'exact', head: true }),
-          supabase.auth.getUser()
-        ]);
-        $('#productsConnectionState').textContent = products.error ? `Failed: ${products.error.message}` : `OK · ${products.count ?? 0} rows accessible`;
-        $('#ordersConnectionState').textContent = orders.error ? `Failed: ${orders.error.message}` : `OK · ${orders.count ?? 0} rows accessible`;
-        if (products.error || orders.error || auth.error) {
-          showToast('Connection test completed with an error. Check the connection details shown here.', 'error');
-        } else {
-          showToast('Supabase connection and current session look healthy.', 'success');
-        }
-      } catch (error) {
-        showToast(`Connection test failed: ${error.message || error}`, 'error');
-      } finally {
-        $('#testConnectionButton').disabled = false;
-        $('#testConnectionButton').textContent = 'Test connection';
-      }
+      const [products, orders, userResult] = await Promise.all([
+        supabase.from('products').select('id', { count: 'exact', head: true }),
+        supabase.from('orders').select('id', { count: 'exact', head: true }),
+        supabase.auth.getUser()
+      ]);
+      $('#productsConnection').textContent = products.error ? `Error: ${products.error.message}` : `OK — ${products.count ?? 0} rows`;
+      $('#ordersConnection').textContent = orders.error ? `Error: ${orders.error.message}` : `OK — ${orders.count ?? 0} rows`;
+      showMessage('#mainMessage', products.error || orders.error || userResult.error
+        ? 'Connection test finished, but one or more checks failed. See Settings for details.'
+        : 'Supabase connection and sign-in session are working.',
+        products.error || orders.error || userResult.error ? 'error' : 'success');
+      $('#testConnectionButton').disabled = false;
+      $('#testConnectionButton').textContent = 'Test connection';
     }
 
-    // Navigation
-    $$('.nav-item').forEach(button => button.addEventListener('click', () => showSection(button.dataset.section)));
-    $$('[data-go]').forEach(button => button.addEventListener('click', () => showSection(button.dataset.go)));
-    $('#menuToggle').addEventListener('click', () => { $('#sidebar').classList.add('open'); $('#mobileShade').classList.add('show'); });
-    $('#mobileShade').addEventListener('click', () => { $('#sidebar').classList.remove('open'); $('#mobileShade').classList.remove('show'); });
+    // Navigation and page events
+    document.querySelectorAll('[data-page]').forEach(button => {
+      button.addEventListener('click', () => showPage(button.dataset.page));
+    });
     $('#refreshButton').addEventListener('click', loadData);
     $('#productSearch').addEventListener('input', renderProducts);
-    $('#productCategoryFilter').addEventListener('change', renderProducts);
-    $('#productStatusFilter').addEventListener('change', renderProducts);
-    $('#orderSearch').addEventListener('input', renderOrders);
-    $('#orderStatusFilter').addEventListener('change', renderOrders);
-    $('#customerSearch').addEventListener('input', renderCustomers);
-    $('#inventorySearch').addEventListener('input', renderInventory);
-    $('#inventoryFilter').addEventListener('change', renderInventory);
-    $('#addProductButton').addEventListener('click', () => openProductModal());
+    $('#productFilter').addEventListener('change', renderProducts);
+    $('#shopSearch').addEventListener('input', renderManagers);
+    $('#shopVisibility').addEventListener('change', renderManagers);
+    document.addEventListener('click', event => {
+      const edit = event.target.closest('[data-manager-edit]');
+      const toggle = event.target.closest('[data-shop-toggle]');
+      if (edit) { showPage('products'); startProductEdit(edit.dataset.managerEdit); }
+      if (toggle) toggleShopVisibility(toggle.dataset.shopToggle);
+    });
     $('#productForm').addEventListener('submit', saveProduct);
-    $('#inventoryTableBody').addEventListener('submit', saveStock);
-    $('#productsTableBody').addEventListener('click', event => {
-      const edit = event.target.closest('[data-edit-product]');
-      const toggle = event.target.closest('[data-toggle-product]');
-      if (edit) openProductModal(state.products.find(product => String(product.id) === String(edit.dataset.editProduct)));
-      if (toggle) toggleProduct(toggle.dataset.toggleProduct);
+    $('#cancelEditButton').addEventListener('click', clearProductForm);
+    $('#productsTable').addEventListener('click', event => {
+      const edit = event.target.closest('[data-edit]');
+      const toggle = event.target.closest('[data-toggle]');
+      if (edit) startProductEdit(edit.dataset.edit);
+      if (toggle) toggleProduct(toggle.dataset.toggle);
     });
-    $('#ordersTableBody').addEventListener('click', event => {
-      const view = event.target.closest('[data-view-order]');
-      const save = event.target.closest('[data-save-order-status]');
-      if (view) openOrderModal(view.dataset.viewOrder);
-      if (save) savePaymentStatus(save.dataset.saveOrderStatus);
+    $('#orderSearch').addEventListener('input', renderOrders);
+    $('#orderFilter').addEventListener('change', renderOrders);
+    $('#ordersTable').addEventListener('click', event => {
+      const button = event.target.closest('[data-save-order]');
+      if (button) saveOrderStatus(button.dataset.saveOrder);
     });
-    $$('[data-close]').forEach(button => button.addEventListener('click', () => closeModal(button.dataset.close)));
-    $$('.modal-backdrop').forEach(backdrop => backdrop.addEventListener('click', event => { if (event.target === backdrop) backdrop.hidden = true; }));
-    document.addEventListener('keydown', event => { if (event.key === 'Escape') $$('.modal-backdrop').forEach(modal => modal.hidden = true); });
-    $('#revealPassword').addEventListener('click', () => {
-      const input = $('#loginPassword'); const reveal = input.type === 'password';
-      input.type = reveal ? 'text' : 'password'; $('#revealPassword').textContent = reveal ? 'HIDE' : 'SHOW';
-      $('#revealPassword').setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
+    $('#stockSearch').addEventListener('input', renderStock);
+    $('#stockFilter').addEventListener('change', renderStock);
+    $('#stockTable').addEventListener('click', event => {
+      const button = event.target.closest('[data-save-stock]');
+      if (button) saveStock(button.dataset.saveStock);
     });
-    $('#settingsLogout').addEventListener('click', () => $('#logoutButton').click());
+    $('#customerSearch').addEventListener('input', renderCustomers);
     $('#testConnectionButton').addEventListener('click', testConnection);
 
-    // Authentication
+    // Login and sign out
     $('#loginForm').addEventListener('submit', async event => {
-      event.preventDefault(); clearMessage($('#loginMessage'));
-      const email = $('#loginEmail').value.trim();
-      const password = $('#loginPassword').value;
-      const button = $('#loginButton'); button.disabled = true; button.textContent = 'Signing in…';
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        if (!data?.user) throw new Error('Sign-in succeeded but no user session was returned.');
-        await enterApp(data.user);
-      } catch (error) {
-        const message = String(error?.message || error || 'Unable to sign in.');
-        if (/invalid api key/i.test(message)) {
-          setMessage($('#loginMessage'), 'Invalid API key: the shared assets/javascript/supabase.js file has a wrong, incomplete, or outdated key. Check the Project URL and publishable/anon key in Supabase Settings → API Keys. Do not use the service_role/secret key in this page.');
-        } else if (/invalid login credentials/i.test(message)) {
-          setMessage($('#loginMessage'), 'Email or password is incorrect, or this account is not available for password sign-in. Check your existing Supabase Auth user.');
-        } else {
-          setMessage($('#loginMessage'), message);
-        }
-      } finally {
-        button.disabled = false; button.innerHTML = 'Sign in to dashboard <span aria-hidden="true">→</span>';
+      event.preventDefault();
+      clearMessage('#loginMessage');
+      $('#loginButton').disabled = true;
+      $('#loginButton').textContent = 'Signing in…';
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: $('#email').value.trim(),
+        password: $('#password').value
+      });
+      $('#loginButton').disabled = false;
+      $('#loginButton').textContent = 'Sign in';
+      if (error) {
+        const message = /invalid api key/i.test(error.message)
+          ? 'Invalid API key. Check the project URL and publishable/anon key inside assets/javascript/supabase.js.'
+          : /invalid login credentials/i.test(error.message)
+            ? 'The email or password is incorrect.'
+            : error.message;
+        return showMessage('#loginMessage', message);
       }
-    });
-    $('#logoutButton').addEventListener('click', async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) { showToast(`Could not sign out: ${error.message}`, 'error'); return; }
-      state.user = null; state.products = []; state.orders = [];
-      $('#settingsSession').textContent = 'Signed out';
-      showLogin('You have signed out.');
-    });
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT') {
-        state.user = null;
-        if (!$('#appShell').hidden) showLogin();
-      }
+      if (!data.user) return showMessage('#loginMessage', 'No user was returned. Please sign in again.');
+      await enterDashboard(data.user);
     });
 
-    // Restore an existing session on page load.
+    async function enterDashboard(user) {
+      state.user = user;
+      $('#authScreen').hidden = true;
+      $('#app').hidden = false;
+      $('#settingsEmail').textContent = user.email || '—';
+      $('#settingsUserId').textContent = user.id || '—';
+      $('#settingsSession').textContent = 'Signed in';
+      $('#settingsUrl').textContent = supabase.supabaseUrl || 'Set in supabase.js';
+      await loadData();
+    }
+
+    $('#logoutButton').addEventListener('click', async () => {
+      const { error } = await supabase.auth.signOut();
+      if (error) return showMessage('#mainMessage', `Could not sign out: ${error.message}`);
+      state.user = null;
+      $('#app').hidden = true;
+      $('#authScreen').hidden = false;
+      $('#password').value = '';
+    });
+
+    // If an existing session is active, open the dashboard automatically.
     try {
       const { data, error } = await supabase.auth.getSession();
       if (error) throw error;
-      if (data.session?.user) await enterApp(data.session.user);
-      else showLogin();
+      if (data.session?.user) await enterDashboard(data.session.user);
     } catch (error) {
-      const message = String(error?.message || error || 'Could not initialize Supabase.');
-      if (/invalid api key/i.test(message)) {
-        showLogin('Invalid API key: check the Project URL and publishable/anon key in assets/javascript/supabase.js. Use a browser-safe publishable/anon key, never a service_role/secret key.');
-      } else {
-        showLogin(`Supabase initialization failed: ${message}`);
-      }
-      setConnected(false);
+      showMessage('#loginMessage', /invalid api key/i.test(error.message || '')
+        ? 'Invalid API key. Check the project URL and publishable/anon key inside assets/javascript/supabase.js.'
+        : `Could not connect to Supabase: ${error.message || error}`);
     }
   </script>
 </body>
