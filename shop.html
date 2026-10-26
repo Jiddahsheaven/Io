@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Shop | Jidderhs Heaven</title>
+  <meta
+    name="description"
+    content="Discover apparel, beauty, kitchen essentials and toiletries at Jidderhs Heaven."
+  >
+  <meta name="theme-color" content="#faf7f1">
+
+  <!-- Existing storefront stylesheet -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!-- Dedicated shop page stylesheet -->
+  <link rel="stylesheet" href="./assets/css/shop.css">
+</head>
+
+<body class="jh-shop-page">
+
+  <header class="shop-header">
+    <a class="shop-brand" href="./index.html" aria-label="Jidderhs Heaven home">
+      <span class="shop-brand-name">JIDDERHS</span>
+      <span class="shop-brand-subtitle">H E A V E N</span>
+    </a>
+
+    <div class="shop-header-actions">
+      <a class="shop-header-link" href="./index.html" aria-label="Home">
+        Home
+      </a>
+
+      <button
+        class="shop-header-button"
+        id="shopSearchToggle"
+        type="button"
+        aria-label="Focus product search"
+      >
+        Search
+      </button>
+
+      <button
+        class="shop-header-button shop-bag-button"
+        id="shopBagButton"
+        type="button"
+      >
+        Bag <span id="shopBagCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="shop-intro">
+      <p class="shop-eyebrow">THE JIDDERHS COLLECTION</p>
+
+      <h1>Find your next favourite.</h1>
+
+      <p class="shop-intro-copy">
+        Thoughtfully selected essentials for your style,
+        beauty, home and everyday living.
+      </p>
+
+      <nav class="shop-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Shop</span>
+      </nav>
+    </section>
+
+    <section class="shop-main" aria-label="Product catalogue">
+
+      <div class="shop-toolbar">
+        <div>
+          <p class="shop-eyebrow">EXPLORE THE COLLECTION</p>
+          <h2>Shop all products</h2>
+          <p id="shopResultCount" class="shop-result-count">
+            Discover our collection
+          </p>
+        </div>
+
+        <label class="shop-sort">
+          <span>Sort by</span>
+
+          <select id="shopSort">
+            <option value="featured">Featured</option>
+            <option value="newest">Newest</option>
+            <option value="price-low">Price: Low to high</option>
+            <option value="price-high">Price: High to low</option>
+            <option value="name">Name: A–Z</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="shop-layout">
+
+        <aside class="shop-sidebar" aria-label="Product filters">
+
+          <div class="shop-filter-heading">
+            <h2>Filter options</h2>
+
+            <button id="shopClearFilters" type="button">
+              Clear all
+            </button>
+          </div>
+
+          <div class="shop-filter-group">
+            <h3>Categories</h3>
+
+            <label class="shop-filter-option">
+              <input
+                type="radio"
+                name="shopCategory"
+                value="all"
+                checked
+              >
+              <span>All products</span>
+            </label>
+
+            <label class="shop-filter-option">
+              <input
+                type="radio"
+                name="shopCategory"
+                value="apparel"
+              >
+              <span>Apparel</span>
+            </label>
+
+            <label class="shop-filter-option">
+              <input
+                type="radio"
+                name="shopCategory"
+                value="beauty"
+              >
+              <span>Beauty</span>
+            </label>
+
+            <label class="shop-filter-option">
+              <input
+                type="radio"
+                name="shopCategory"
+                value="kitchen"
+              >
+              <span>Kitchen</span>
+            </label>
+
+            <label class="shop-filter-option">
+              <input
+                type="radio"
+                name="shopCategory"
+                value="toiletries"
+              >
+              <span>Toiletries</span>
+            </label>
+          </div>
+
+          <div class="shop-filter-group">
+            <h3>Price range</h3>
+
+            <div class="shop-price-inputs">
+              <label>
+                <span>Minimum (₦)</span>
+                <input
+                  id="shopMinPrice"
+                  type="number"
+                  min="0"
+                  step="100"
+                  placeholder="0"
+                >
+              </label>
+
+              <label>
+                <span>Maximum (₦)</span>
+                <input
+                  id="shopMaxPrice"
+                  type="number"
+                  min="0"
+                  step="100"
+                  placeholder="Any"
+                >
+              </label>
+            </div>
+          </div>
+
+          <div class="shop-filter-group">
+            <h3>Availability</h3>
+
+            <label class="shop-filter-option">
+              <input
+                id="shopInStock"
+                type="checkbox"
+              >
+              <span>In stock only</span>
+            </label>
+          </div>
+
+        </aside>
+
+        <div class="shop-products-area">
+
+          <div class="shop-mobile-toolbar">
+            <button
+              id="shopMobileFilterToggle"
+              type="button"
+              aria-expanded="false"
+            >
+              Filter products
+            </button>
+          </div>
+
+          <div
+            id="shopMessage"
+            class="shop-message"
+            role="status"
+            aria-live="polite"
+          >
+            Loading our collection…
+          </div>
+
+          <div
+            id="shopProductGrid"
+            class="shop-product-grid"
+          ></div>
+
+          <button
+            id="shopLoadMore"
+            class="shop-load-more"
+            type="button"
+            hidden
+          >
+            Load more products
+          </button>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="shop-promise">
+      <div>
+        <span class="shop-promise-icon" aria-hidden="true">◇</span>
+        <h3>Thoughtful selection</h3>
+        <p>Everyday essentials, chosen with care.</p>
+      </div>
+
+      <div>
+        <span class="shop-promise-icon" aria-hidden="true">✧</span>
+        <h3>A refined experience</h3>
+        <p>A beautiful shopping experience on every device.</p>
+      </div>
+
+      <div>
+        <span class="shop-promise-icon" aria-hidden="true">♡</span>
+        <h3>Here to help</h3>
+        <p>We're here to help you shop with confidence.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="shop-footer">
+    <a class="shop-footer-brand" href="./index.html">
+      JIDDERHS HEAVEN
+    </a>
+
+    <p>Beautiful essentials for you.</p>
+
+    <a href="./index.html">Return to homepage</a>
+
+    <p class="shop-footer-copy">
+      &copy; <span id="shopYear"></span> Jidderhs Heaven.
+    </p>
+  </footer>
+
+  <!-- Product details and cart integration will be added next. -->
+
+  <script type="module" src="./assets/javascript/shop.js"></script>
+
+</body>
+</html>
