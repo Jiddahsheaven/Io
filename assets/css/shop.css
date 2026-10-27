@@ -3441,3 +3441,356 @@ svg {
   }
 
 }
+/* ==========================================================
+   JIDDERHS HEAVEN — UNIVERSAL SHOP BRANDING
+   The shop is a section of the main Jidderhs Heaven website.
+   ========================================================== */
+
+:root {
+  --jh-primary: #75844F;
+  --jh-primary-dark: #53643A;
+  --jh-primary-light: #EDF0E5;
+
+  --jh-cream: #FAF9F5;
+  --jh-white: #FFFFFF;
+
+  --jh-text: #292B24;
+  --jh-muted: #77796F;
+  --jh-border: #E7E6DD;
+
+  --jh-gold: #BD9653;
+  --jh-gold-light: #EAD9B7;
+
+  --jh-radius-sm: 10px;
+  --jh-radius-md: 16px;
+  --jh-radius-lg: 24px;
+
+  --jh-shadow-sm: 0 4px 16px rgba(41, 43, 36, 0.05);
+  --jh-shadow-md: 0 12px 36px rgba(41, 43, 36, 0.09);
+}
+
+/* Base */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--jh-cream);
+  color: var(--jh-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+/* Header and navigation */
+
+header,
+.site-header,
+.shop-header {
+  background: var(--jh-cream);
+  color: var(--jh-text);
+}
+
+header a,
+.site-header a,
+.shop-header a {
+  transition: color 180ms ease;
+}
+
+header a:hover,
+.site-header a:hover,
+.shop-header a:hover {
+  color: var(--jh-primary-dark);
+}
+
+/* Buttons */
+
+button,
+.button,
+.btn {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--jh-gold);
+  outline-offset: 3px;
+}
+
+.product-add-button,
+#applyFiltersButton,
+#checkoutButton,
+button.primary-button {
+  background: var(--jh-primary);
+  border: 1px solid var(--jh-primary);
+  border-radius: var(--jh-radius-sm);
+  color: var(--jh-white);
+}
+
+.product-add-button:hover,
+#applyFiltersButton:hover,
+#checkoutButton:hover,
+button.primary-button:hover {
+  background: var(--jh-primary-dark);
+  border-color: var(--jh-primary-dark);
+  box-shadow: var(--jh-shadow-sm);
+}
+
+.product-add-button:disabled {
+  background: #D8D9D1;
+  border-color: #D8D9D1;
+  color: #77796F;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Product cards */
+
+.product-card {
+  background: var(--jh-white);
+  border: 1px solid var(--jh-border);
+  border-radius: var(--jh-radius-md);
+  box-shadow: var(--jh-shadow-sm);
+  overflow: hidden;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+
+.product-card:hover {
+  border-color: rgba(117, 132, 79, 0.42);
+  box-shadow: var(--jh-shadow-md);
+  transform: translateY(-3px);
+}
+
+.product-title {
+  color: var(--jh-text);
+}
+
+.product-description {
+  color: var(--jh-muted);
+}
+
+.product-price {
+  color: var(--jh-primary-dark);
+  font-weight: 800;
+}
+
+.product-category-label {
+  background: var(--jh-primary-light);
+  border-radius: 30px;
+  color: var(--jh-primary-dark);
+}
+
+.product-stock-text {
+  color: var(--jh-primary-dark);
+}
+
+/* Favorites */
+
+.product-favorite-button {
+  background: var(--jh-white);
+  border: 1px solid var(--jh-border);
+  color: var(--jh-text);
+}
+
+.product-favorite-button:hover,
+.product-favorite-button.is-favorite {
+  background: var(--jh-primary-light);
+  border-color: var(--jh-primary);
+  color: var(--jh-primary-dark);
+}
+
+/* Search and filters */
+
+input,
+select,
+textarea {
+  background-color: var(--jh-white);
+  border-color: var(--jh-border);
+  color: var(--jh-text);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--jh-muted);
+}
+
+[data-filter].active,
+[data-category].active {
+  background-color: var(--jh-primary-light);
+  border-color: var(--jh-primary);
+  color: var(--jh-primary-dark);
+}
+
+/* Shopping bag */
+
+#cartDrawer {
+  background: var(--jh-cream);
+  color: var(--jh-text);
+}
+
+.cart-item {
+  background: var(--jh-white);
+  border: 1px solid var(--jh-border);
+  border-radius: var(--jh-radius-md);
+}
+
+.cart-item h3 {
+  color: var(--jh-text);
+}
+
+.cart-item-price,
+.cart-item-end strong {
+  color: var(--jh-primary-dark);
+}
+
+.cart-item-controls button {
+  background: var(--jh-primary-light);
+  border: 1px solid var(--jh-border);
+  border-radius: 8px;
+  color: var(--jh-primary-dark);
+}
+
+.cart-item-controls button:hover {
+  background: var(--jh-primary);
+  color: var(--jh-white);
+}
+
+.cart-item-remove {
+  background: transparent;
+  border: 0;
+  color: var(--jh-muted);
+}
+
+.cart-item-remove:hover {
+  color: #A33F35;
+}
+
+/* Product details modal */
+
+#productModal {
+  background: var(--jh-cream);
+  border: 1px solid var(--jh-border);
+  border-radius: var(--jh-radius-lg);
+  color: var(--jh-text);
+  max-width: min(920px, calc(100vw - 28px));
+  padding: 24px;
+}
+
+#productModal::backdrop {
+  background: rgba(31, 34, 26, 0.56);
+  backdrop-filter: blur(4px);
+}
+
+.product-modal-category {
+  color: var(--jh-primary-dark);
+}
+
+.product-modal-price {
+  color: var(--jh-primary-dark);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.product-modal-description {
+  color: var(--jh-muted);
+}
+
+/* Image fallbacks */
+
+.product-image-placeholder,
+.product-modal-image-placeholder,
+.cart-item-image-placeholder {
+  align-items: center;
+  background:
+    linear-gradient(
+      135deg,
+      var(--jh-primary-light),
+      var(--jh-cream)
+    );
+  color: var(--jh-primary-dark);
+  display: flex;
+  justify-content: center;
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Notifications */
+
+#toast {
+  background: var(--jh-primary-dark);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--jh-radius-sm);
+  box-shadow: var(--jh-shadow-md);
+  color: var(--jh-white);
+}
+
+#toast.error {
+  background: #913D35;
+}
+
+#toast.warning {
+  background: #765B2B;
+}
+
+/* Footer */
+
+footer,
+.site-footer {
+  background: var(--jh-primary-dark);
+  color: var(--jh-white);
+}
+
+footer a:hover,
+.site-footer a:hover {
+  color: var(--jh-gold-light);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  #productModal {
+    border-radius: var(--jh-radius-md);
+    padding: 16px;
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
