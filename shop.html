@@ -2,280 +2,1071 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Shop | Jidderhs Heaven</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#211a17"
+  >
+
   <meta
     name="description"
-    content="Discover apparel, beauty, kitchen essentials and toiletries at Jidderhs Heaven."
+    content="Discover fashion, beauty, home essentials and everyday luxuries at Jidderhs Heaven."
   >
-  <meta name="theme-color" content="#faf7f1">
 
-  <!-- Existing storefront stylesheet -->
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <title>Shop the Collection | Jidderhs Heaven</title>
 
-  <!-- Dedicated shop page stylesheet -->
-  <link rel="stylesheet" href="./assets/css/shop.css">
+  <!-- Premium typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Existing storefront styles -->
+  <link
+    rel="stylesheet"
+    href="./assets/css/style.css"
+  >
+
+  <!-- New premium shop styles: File 2 -->
+  <link
+    rel="stylesheet"
+    href="./assets/css/shop.css"
+  >
 </head>
 
-<body class="jh-shop-page">
+<body>
 
-  <header class="shop-header">
-    <a class="shop-brand" href="./index.html" aria-label="Jidderhs Heaven home">
-      <span class="shop-brand-name">JIDDERHS</span>
-      <span class="shop-brand-subtitle">H E A V E N</span>
-    </a>
+  <div class="jh-shop-page" id="jhShopPage">
 
-    <div class="shop-header-actions">
-      <a class="shop-header-link" href="./index.html" aria-label="Home">
-        Home
+    <!-- ==========================================
+         ANNOUNCEMENT BAR
+    =========================================== -->
+
+    <div class="shop-announcement">
+      <p>
+        THE JIDDERHS HEAVEN EXPERIENCE
+        <span aria-hidden="true">✦</span>
+        Everyday essentials, elevated.
+      </p>
+    </div>
+
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="shop-header">
+
+      <a
+        href="./index.html"
+        class="shop-brand"
+        aria-label="Jidderhs Heaven home"
+      >
+        <span class="shop-brand-name">
+          JIDDERHS HEAVEN
+        </span>
+
+        <span class="shop-brand-subtitle">
+          YOUR WORLD OF ELEGANCE
+        </span>
       </a>
 
-      <button
-        class="shop-header-button"
-        id="shopSearchToggle"
-        type="button"
-        aria-label="Focus product search"
+
+      <nav
+        class="shop-header-navigation"
+        aria-label="Main navigation"
       >
-        Search
-      </button>
 
-      <button
-        class="shop-header-button shop-bag-button"
-        id="shopBagButton"
-        type="button"
-      >
-        Bag <span id="shopBagCount">0</span>
-      </button>
-    </div>
-  </header>
+        <a
+          href="./index.html"
+          class="shop-nav-link"
+        >
+          Home
+        </a>
 
-  <main>
+        <a
+          href="./shop.html"
+          class="shop-nav-link is-active"
+          aria-current="page"
+        >
+          Shop
+        </a>
 
-    <section class="shop-intro">
-      <p class="shop-eyebrow">THE JIDDERHS COLLECTION</p>
+        <a
+          href="./index.html#categories"
+          class="shop-nav-link"
+        >
+          Categories
+        </a>
 
-      <h1>Find your next favourite.</h1>
-
-      <p class="shop-intro-copy">
-        Thoughtfully selected essentials for your style,
-        beauty, home and everyday living.
-      </p>
-
-      <nav class="shop-breadcrumb" aria-label="Breadcrumb">
-        <a href="./index.html">Home</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Shop</span>
       </nav>
-    </section>
 
-    <section class="shop-main" aria-label="Product catalogue">
 
-      <div class="shop-toolbar">
-        <div>
-          <p class="shop-eyebrow">EXPLORE THE COLLECTION</p>
-          <h2>Shop all products</h2>
-          <p id="shopResultCount" class="shop-result-count">
-            Discover our collection
-          </p>
-        </div>
+      <div class="shop-header-actions">
 
-        <label class="shop-sort">
-          <span>Sort by</span>
+        <!-- Search -->
+        <button
+          type="button"
+          class="shop-icon-button"
+          id="shopSearchToggle"
+          aria-label="Search products"
+          aria-expanded="false"
+          aria-controls="shopSearchPanel"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 5 5"></path>
+          </svg>
+        </button>
 
-          <select id="shopSort">
-            <option value="featured">Featured</option>
-            <option value="newest">Newest</option>
-            <option value="price-low">Price: Low to high</option>
-            <option value="price-high">Price: High to low</option>
-            <option value="name">Name: A–Z</option>
-          </select>
-        </label>
-      </div>
 
-      <div class="shop-layout">
+        <!-- Favorites -->
+        <a
+          href="#shopFavorites"
+          class="shop-icon-button shop-favorites-link"
+          id="shopFavoritesLink"
+          aria-label="View your favorites"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"
+            ></path>
+          </svg>
 
-        <aside class="shop-sidebar" aria-label="Product filters">
-
-          <div class="shop-filter-heading">
-            <h2>Filter options</h2>
-
-            <button id="shopClearFilters" type="button">
-              Clear all
-            </button>
-          </div>
-
-          <div class="shop-filter-group">
-            <h3>Categories</h3>
-
-            <label class="shop-filter-option">
-              <input
-                type="radio"
-                name="shopCategory"
-                value="all"
-                checked
-              >
-              <span>All products</span>
-            </label>
-
-            <label class="shop-filter-option">
-              <input
-                type="radio"
-                name="shopCategory"
-                value="apparel"
-              >
-              <span>Apparel</span>
-            </label>
-
-            <label class="shop-filter-option">
-              <input
-                type="radio"
-                name="shopCategory"
-                value="beauty"
-              >
-              <span>Beauty</span>
-            </label>
-
-            <label class="shop-filter-option">
-              <input
-                type="radio"
-                name="shopCategory"
-                value="kitchen"
-              >
-              <span>Kitchen</span>
-            </label>
-
-            <label class="shop-filter-option">
-              <input
-                type="radio"
-                name="shopCategory"
-                value="toiletries"
-              >
-              <span>Toiletries</span>
-            </label>
-          </div>
-
-          <div class="shop-filter-group">
-            <h3>Price range</h3>
-
-            <div class="shop-price-inputs">
-              <label>
-                <span>Minimum (₦)</span>
-                <input
-                  id="shopMinPrice"
-                  type="number"
-                  min="0"
-                  step="100"
-                  placeholder="0"
-                >
-              </label>
-
-              <label>
-                <span>Maximum (₦)</span>
-                <input
-                  id="shopMaxPrice"
-                  type="number"
-                  min="0"
-                  step="100"
-                  placeholder="Any"
-                >
-              </label>
-            </div>
-          </div>
-
-          <div class="shop-filter-group">
-            <h3>Availability</h3>
-
-            <label class="shop-filter-option">
-              <input
-                id="shopInStock"
-                type="checkbox"
-              >
-              <span>In stock only</span>
-            </label>
-          </div>
-
-        </aside>
-
-        <div class="shop-products-area">
-
-          <div class="shop-mobile-toolbar">
-            <button
-              id="shopMobileFilterToggle"
-              type="button"
-              aria-expanded="false"
-            >
-              Filter products
-            </button>
-          </div>
-
-          <div
-            id="shopMessage"
-            class="shop-message"
-            role="status"
+          <span
+            class="shop-icon-count"
+            id="shopFavoritesCount"
             aria-live="polite"
           >
-            Loading our collection…
-          </div>
+            0
+          </span>
+        </a>
 
-          <div
-            id="shopProductGrid"
-            class="shop-product-grid"
-          ></div>
+
+        <!-- Customer profile -->
+        <a
+          href="./profile.html"
+          class="shop-profile-link"
+          aria-label="Open your profile"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+          </svg>
+
+          <span>Profile</span>
+        </a>
+
+
+        <!-- Shopping bag -->
+        <button
+          type="button"
+          class="shop-bag-button"
+          id="shopBagButton"
+          aria-label="Open shopping bag"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M5 8h14l1 13H4L5 8Z"></path>
+            <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+          </svg>
+
+          <span class="shop-bag-label">
+            Bag
+          </span>
+
+          <span
+            class="shop-bag-count"
+            id="shopBagCount"
+            aria-live="polite"
+          >
+            0
+          </span>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- ==========================================
+         SEARCH PANEL
+    =========================================== -->
+
+    <section
+      class="shop-search-panel"
+      id="shopSearchPanel"
+      aria-label="Search the collection"
+      hidden
+    >
+
+      <div class="shop-search-inner">
+
+        <div class="shop-search-heading">
+          <span class="shop-eyebrow">
+            FIND SOMETHING SPECIAL
+          </span>
+
+          <h2>
+            What are you looking for?
+          </h2>
+        </div>
+
+        <div class="shop-search-input-wrap">
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 5 5"></path>
+          </svg>
+
+          <input
+            id="shopSearchInput"
+            type="search"
+            placeholder="Search fashion, beauty, home essentials..."
+            autocomplete="off"
+            aria-label="Search products"
+          >
 
           <button
-            id="shopLoadMore"
-            class="shop-load-more"
             type="button"
-            hidden
+            id="shopSearchClose"
+            aria-label="Close search"
           >
-            Load more products
+            &times;
           </button>
 
         </div>
 
       </div>
+
     </section>
 
-    <section class="shop-promise">
-      <div>
-        <span class="shop-promise-icon" aria-hidden="true">◇</span>
-        <h3>Thoughtful selection</h3>
-        <p>Everyday essentials, chosen with care.</p>
+
+    <!-- ==========================================
+         HERO / INTRODUCTION
+    =========================================== -->
+
+    <section class="shop-hero">
+
+      <div class="shop-hero-decoration shop-hero-decoration-one"></div>
+      <div class="shop-hero-decoration shop-hero-decoration-two"></div>
+
+      <div class="shop-hero-content">
+
+        <span class="shop-eyebrow">
+          CURATED FOR YOUR LIFESTYLE
+        </span>
+
+        <h1>
+          Discover your
+          <em>kind of luxury.</em>
+        </h1>
+
+        <p class="shop-hero-description">
+          From everyday essentials to beautiful finds,
+          discover pieces that bring elegance, comfort,
+          and character into your world.
+        </p>
+
+        <a
+          href="#shopCatalogue"
+          class="shop-primary-button"
+        >
+          Explore the collection
+
+          <span aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+
       </div>
 
-      <div>
-        <span class="shop-promise-icon" aria-hidden="true">✧</span>
-        <h3>A refined experience</h3>
-        <p>A beautiful shopping experience on every device.</p>
+      <div class="shop-hero-bottom">
+
+        <span>
+          THOUGHTFULLY CURATED
+        </span>
+
+        <span class="shop-hero-divider"></span>
+
+        <span>
+          MADE FOR EVERYDAY LIVING
+        </span>
+
       </div>
 
-      <div>
-        <span class="shop-promise-icon" aria-hidden="true">♡</span>
-        <h3>Here to help</h3>
-        <p>We're here to help you shop with confidence.</p>
-      </div>
     </section>
 
-  </main>
 
-  <footer class="shop-footer">
-    <a class="shop-footer-brand" href="./index.html">
-      JIDDERHS HEAVEN
-    </a>
+    <!-- ==========================================
+         COLLECTION BENEFITS
+    =========================================== -->
 
-    <p>Beautiful essentials for you.</p>
+    <section
+      class="shop-benefits"
+      aria-label="Shopping benefits"
+    >
 
-    <a href="./index.html">Return to homepage</a>
+      <div class="shop-benefit">
 
-    <p class="shop-footer-copy">
-      &copy; <span id="shopYear"></span> Jidderhs Heaven.
-    </p>
-  </footer>
+        <span class="shop-benefit-icon" aria-hidden="true">
+          ✧
+        </span>
 
-  <!-- Product details and cart integration will be added next. -->
+        <div>
+          <h3>Beautifully Curated</h3>
 
-  <script type="module" src="./assets/javascript/shop.js"></script>
+          <p>
+            Thoughtful finds for your everyday life.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="shop-benefit">
+
+        <span class="shop-benefit-icon" aria-hidden="true">
+          ◇
+        </span>
+
+        <div>
+          <h3>Easy Shopping</h3>
+
+          <p>
+            Discover your favourites with ease.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="shop-benefit">
+
+        <span class="shop-benefit-icon" aria-hidden="true">
+          ♡
+        </span>
+
+        <div>
+          <h3>Made for You</h3>
+
+          <p>
+            Save the pieces you love.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         MAIN SHOP
+    =========================================== -->
+
+    <main
+      class="shop-main"
+      id="shopCatalogue"
+    >
+
+      <!-- Catalogue heading -->
+
+      <section class="shop-section-heading">
+
+        <div>
+
+          <span class="shop-eyebrow">
+            THE COLLECTION
+          </span>
+
+          <h2>
+            Find your next favourite.
+          </h2>
+
+          <p>
+            A little something for every part of your life.
+          </p>
+
+        </div>
+
+        <div class="shop-collection-note">
+          <span class="shop-collection-note-line"></span>
+
+          <span>
+            JIDDERHS HEAVEN
+          </span>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           FEATURED COLLECTION
+      ========================================= -->
+
+      <section
+        class="shop-featured-section"
+        id="shopFeaturedSection"
+        hidden
+      >
+
+        <div class="shop-subsection-heading">
+
+          <div>
+            <span class="shop-eyebrow">
+              HANDPICKED FOR YOU
+            </span>
+
+            <h2>
+              Featured pieces
+            </h2>
+          </div>
+
+          <span class="shop-subsection-caption">
+            A little extra special.
+          </span>
+
+        </div>
+
+        <div
+          class="shop-featured-grid"
+          id="shopFeaturedGrid"
+        ></div>
+
+      </section>
+
+
+      <!-- ========================================
+           FAVORITES COLLECTION
+      ========================================= -->
+
+      <section
+        class="shop-favorites-section"
+        id="shopFavorites"
+        hidden
+      >
+
+        <div class="shop-subsection-heading">
+
+          <div>
+            <span class="shop-eyebrow">
+              SAVED WITH LOVE
+            </span>
+
+            <h2>
+              Your favourites
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            class="shop-text-button"
+            id="shopHideFavorites"
+          >
+            Hide favourites
+          </button>
+
+        </div>
+
+        <p class="shop-section-description">
+          Keep the pieces you love close at hand.
+        </p>
+
+        <div
+          class="shop-favorites-grid"
+          id="shopFavoritesGrid"
+        ></div>
+
+        <div
+          class="shop-favorites-empty"
+          id="shopFavoritesEmpty"
+          hidden
+        >
+
+          <span class="shop-empty-heart" aria-hidden="true">
+            ♡
+          </span>
+
+          <h3>
+            Your favourites start here.
+          </h3>
+
+          <p>
+            Tap the heart on a product to save it to your collection.
+          </p>
+
+          <button
+            type="button"
+            class="shop-outline-button"
+            id="shopExploreFavorites"
+          >
+            Explore the collection
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================
+           CATALOGUE TOOLBAR
+      ========================================= -->
+
+      <section class="shop-catalogue">
+
+        <div class="shop-catalogue-toolbar">
+
+          <div class="shop-catalogue-title">
+
+            <span class="shop-eyebrow">
+              EXPLORE EVERYTHING
+            </span>
+
+            <h2>
+              The shop
+            </h2>
+
+            <p
+              class="shop-result-count"
+              id="shopResultCount"
+              aria-live="polite"
+            >
+              Discover the collection
+            </p>
+
+          </div>
+
+
+          <div class="shop-catalogue-controls">
+
+            <button
+              type="button"
+              class="shop-filter-toggle"
+              id="shopMobileFilterToggle"
+              aria-expanded="false"
+              aria-controls="shopSidebar"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M4 6h16"></path>
+                <path d="M7 12h10"></path>
+                <path d="M10 18h4"></path>
+              </svg>
+
+              Filters
+
+            </button>
+
+
+            <label class="shop-sort">
+
+              <span>Sort by</span>
+
+              <select id="shopSort">
+
+                <option value="featured">
+                  Featured
+                </option>
+
+                <option value="newest">
+                  Newest arrivals
+                </option>
+
+                <option value="price-low">
+                  Price: low to high
+                </option>
+
+                <option value="price-high">
+                  Price: high to low
+                </option>
+
+                <option value="name">
+                  Alphabetical
+                </option>
+
+              </select>
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- ======================================
+             FILTER + PRODUCT LAYOUT
+        ======================================= -->
+
+        <div class="shop-layout">
+
+
+          <!-- FILTER SIDEBAR -->
+
+          <aside
+            class="shop-sidebar"
+            id="shopSidebar"
+            aria-label="Product filters"
+          >
+
+            <div class="shop-filter-heading">
+
+              <h3>
+                Refine your search
+              </h3>
+
+              <button
+                type="button"
+                id="shopClearFilters"
+              >
+                Reset
+              </button>
+
+            </div>
+
+
+            <!-- Category -->
+
+            <fieldset class="shop-filter-group">
+
+              <legend>
+                Category
+              </legend>
+
+              <label class="shop-filter-option">
+
+                <input
+                  type="radio"
+                  name="shopCategory"
+                  value="all"
+                  checked
+                >
+
+                <span>All products</span>
+
+              </label>
+
+
+              <label class="shop-filter-option">
+
+                <input
+                  type="radio"
+                  name="shopCategory"
+                  value="apparel"
+                >
+
+                <span>Fashion & apparel</span>
+
+              </label>
+
+
+              <label class="shop-filter-option">
+
+                <input
+                  type="radio"
+                  name="shopCategory"
+                  value="beauty"
+                >
+
+                <span>Beauty & skincare</span>
+
+              </label>
+
+
+              <label class="shop-filter-option">
+
+                <input
+                  type="radio"
+                  name="shopCategory"
+                  value="kitchen"
+                >
+
+                <span>Home & kitchen</span>
+
+              </label>
+
+
+              <label class="shop-filter-option">
+
+                <input
+                  type="radio"
+                  name="shopCategory"
+                  value="toiletries"
+                >
+
+                <span>Personal care</span>
+
+              </label>
+
+            </fieldset>
+
+
+            <!-- Price -->
+
+            <fieldset class="shop-filter-group">
+
+              <legend>
+                Price range
+              </legend>
+
+              <div class="shop-price-inputs">
+
+                <label>
+                  <span>Minimum (₦)</span>
+
+                  <input
+                    type="number"
+                    id="shopMinPrice"
+                    min="0"
+                    placeholder="0"
+                    inputmode="numeric"
+                  >
+
+                </label>
+
+
+                <label>
+                  <span>Maximum (₦)</span>
+
+                  <input
+                    type="number"
+                    id="shopMaxPrice"
+                    min="0"
+                    placeholder="Any"
+                    inputmode="numeric"
+                  >
+
+                </label>
+
+              </div>
+
+            </fieldset>
+
+
+            <!-- Availability -->
+
+            <fieldset class="shop-filter-group">
+
+              <legend>
+                Availability
+              </legend>
+
+              <label class="shop-filter-option">
+
+                <input
+                  type="checkbox"
+                  id="shopInStock"
+                >
+
+                <span>Available products only</span>
+
+              </label>
+
+            </fieldset>
+
+
+            <div class="shop-sidebar-note">
+
+              <span aria-hidden="true">
+                ✧
+              </span>
+
+              <p>
+                Take your time. Find something that feels like you.
+              </p>
+
+            </div>
+
+          </aside>
+
+
+          <!-- PRODUCT AREA -->
+
+          <div class="shop-products-area">
+
+            <div
+              class="shop-message"
+              id="shopMessage"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></div>
+
+
+            <div
+              class="shop-product-grid"
+              id="shopProductGrid"
+              aria-live="polite"
+            ></div>
+
+
+            <div
+              class="shop-empty-state"
+              id="shopEmptyState"
+              hidden
+            >
+
+              <span aria-hidden="true">
+                ♡
+              </span>
+
+              <h3>
+                Nothing here just yet.
+              </h3>
+
+              <p>
+                Try another search or adjust your filters.
+              </p>
+
+              <button
+                type="button"
+                class="shop-outline-button"
+                id="shopEmptyReset"
+              >
+                Clear filters
+              </button>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="shop-load-more"
+              id="shopLoadMore"
+              hidden
+            >
+              Load more products
+              <span aria-hidden="true">
+                &darr;
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- ==========================================
+         BRAND MESSAGE
+    =========================================== -->
+
+    <section class="shop-brand-message">
+
+      <div class="shop-brand-message-inner">
+
+        <span class="shop-eyebrow">
+          A LITTLE MORE BEAUTY IN EVERYDAY LIFE
+        </span>
+
+        <h2>
+          The things you love.
+          <em>The life you create.</em>
+        </h2>
+
+        <p>
+          Welcome to a collection made for the moments,
+          routines, and little luxuries that make life yours.
+        </p>
+
+        <a
+          href="#shopCatalogue"
+          class="shop-outline-button"
+        >
+          Continue exploring
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+
+    <footer class="shop-footer">
+
+      <a
+        href="./index.html"
+        class="shop-footer-brand"
+      >
+        JIDDERHS HEAVEN
+      </a>
+
+      <p class="shop-footer-tagline">
+        Your world of elegance.
+      </p>
+
+
+      <nav
+        class="shop-footer-links"
+        aria-label="Footer navigation"
+      >
+
+        <a href="./index.html">
+          Home
+        </a>
+
+        <a href="./shop.html">
+          Shop
+        </a>
+
+        <a href="./profile.html">
+          My profile
+        </a>
+
+        <a href="./checkout.html">
+          Checkout
+        </a>
+
+      </nav>
+
+
+      <div class="shop-footer-divider"></div>
+
+      <p class="shop-footer-copy">
+        &copy; <span id="shopYear"></span>
+        Jidderhs Heaven. All rights reserved.
+      </p>
+
+    </footer>
+
+
+    <!-- ==========================================
+         MOBILE BOTTOM NAVIGATION
+    =========================================== -->
+
+    <nav
+      class="shop-bottom-navigation"
+      aria-label="Quick navigation"
+    >
+
+      <a
+        href="./index.html"
+        class="shop-bottom-link"
+      >
+
+        <span aria-hidden="true">
+          ⌂
+        </span>
+
+        <small>Home</small>
+
+      </a>
+
+
+      <a
+        href="./shop.html"
+        class="shop-bottom-link is-active"
+        aria-current="page"
+      >
+
+        <span aria-hidden="true">
+          ◇
+        </span>
+
+        <small>Shop</small>
+
+      </a>
+
+
+      <a
+        href="#shopFavorites"
+        class="shop-bottom-link"
+        id="shopBottomFavorites"
+      >
+
+        <span aria-hidden="true">
+          ♡
+        </span>
+
+        <small>Saved</small>
+
+      </a>
+
+
+      <a
+        href="./profile.html"
+        class="shop-bottom-link"
+      >
+
+        <span aria-hidden="true">
+          ♙
+        </span>
+
+        <small>Profile</small>
+
+      </a>
+
+
+      <button
+        type="button"
+        class="shop-bottom-link"
+        id="jhBottomBagButton"
+      >
+
+        <span class="shop-bottom-bag-icon">
+          ♧
+
+          <span
+            id="jhBottomBagCount"
+            class="shop-bottom-bag-count"
+          >
+            0
+          </span>
+
+        </span>
+
+        <small>Bag</small>
+
+      </button>
+
+    </nav>
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
+
+    <script
+      type="module"
+      src="./assets/javascript/shop.js"
+    ></script>
+
+  </div>
 
 </body>
 </html>
