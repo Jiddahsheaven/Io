@@ -1,79 +1,54 @@
 /* ============================================================
-   JIDDERHS HEAVEN — PREMIUM SHOP JAVASCRIPT
-   Features:
-   - Supabase product loading
-   - Product category mapping
-   - Search and search suggestions
-   - Category filters
-   - Price and stock filters
-   - Product sorting
-   - Product details modal
-   - Shopping bag drawer
-   - Quantity controls
-   - Stock-aware add-to-bag
-   - Cart saved in localStorage
-   - Favorites
-   - Mobile cart and search controls
-   - Toast notifications
-   - Newsletter connection status
+   JIDDERHS HEAVEN — SHOP PAGE JAVASCRIPT
+   This page is a shop/category page, not the homepage.
+   Existing cart storage key is preserved for checkout.js.
    ============================================================ */
 
 import { supabase } from "./supabase.js";
 
-/* ============================================================
-   1. CONFIGURATION
-   ============================================================ */
-
+/* 1. CONFIGURATION ------------------------------------------------ */
 const CONFIG = {
-  cartKey: "jiddamarh-cart",
-  favoritesKey: "jidderhs-heaven-favorites",
   productsTable: "products",
-  currency: "NGN",
-  locale: "en-NG"
+  cartKey: "jiddamarh-cart", // Keep in sync with checkout.js.
+  favoritesKey: "jidderhs-heaven-favorites",
+  locale: "en-NG",
+  currency: "NGN"
 };
 
-const CATEGORY_MAP = {
-  apparel: "Fashion",
-  fashion: "Fashion",
-
-  kitchen: "Home & Living",
-  home: "Home & Living",
-  "home & living": "Home & Living",
-  home_living: "Home & Living",
+/* Keep the four store categories distinct. These names are the
+   display/filter values; the database may store lowercase values. */
+const CATEGORY_LOOKUP = {
+  apparel: "Apparel",
+  fashion: "Apparel",
+  clothes: "Apparel",
+  clothing: "Apparel",
+  outfit: "Apparel",
+  outfits: "Apparel",
+  abaya: "Apparel",
 
   beauty: "Beauty",
-  toiletries: "Beauty",
-  skincare: "Beauty",
-  cosmetics: "Beauty",
-
-  electronics: "Electronics",
-  sports: "Sports",
-  accessories: "Accessories"
-};
-
-const CATEGORY_ALIASES = {
-  clothes: "Fashion",
-  clothing: "Fashion",
-  outfit: "Fashion",
-  outfits: "Fashion",
-  abaya: "Fashion",
-
-  cookware: "Home & Living",
-  utensils: "Home & Living",
-  kitchenware: "Home & Living",
-  glassware: "Home & Living",
-
   makeup: "Beauty",
-  make_up: "Beauty",
+  "make up": "Beauty",
   cosmetics: "Beauty",
   skincare: "Beauty",
   "skin care": "Beauty",
-  face: "Beauty",
 
-  gadgets: "Electronics",
-  tech: "Electronics",
+  kitchen: "Kitchen",
+  home: "Kitchen",
+  "home & living": "Kitchen",
+  "home living": "Kitchen",
+  home_living: "Kitchen",
+  cookware: "Kitchen",
+  utensils: "Kitchen",
+  kitchenware: "Kitchen",
+  glassware: "Kitchen",
+  cutlery: "Kitchen",
 
-  accessory: "Accessories"
+  toiletries: "Toiletries",
+  "personal care": "Toiletries",
+  hygiene: "Toiletries",
+  sanitary: "Toiletries",
+  "bath & body": "Toiletries"
 };
 
 const moneyFormatter = new Intl.NumberFormat(CONFIG.locale, {
@@ -82,38 +57,18 @@ const moneyFormatter = new Intl.NumberFormat(CONFIG.locale, {
   maximumFractionDigits: 2
 });
 
-/* ============================================================
-   2. DOM HELPERS
-   ============================================================ */
-
-const $ = (selector, parent = document) =>
-  parent.querySelector(selector);
-
-const $$ = (selector, parent = document) =>
-  [...parent.querySelectorAll(selector)];
+/* 2. DOM + FORMATTING HELPERS ------------------------------------ */
+const $ = (selector, parent = document) => parent.querySelector(selector);
+const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 
 function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, character => {
-    const entities = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    };
-
-    return entities[character];
-  });
-}
-
-function formatMoney(amount) {
-  const number = Number(amount);
-
-  if (!Number.isFinite(number)) {
-    return moneyFormatter.format(0);
-  }
-
-  return moneyFormatter.format(number);
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
 }
 
 function normalizeText(value = "") {
@@ -124,52 +79,18 @@ function normalizeText(value = "") {
     .replace(/\s+/g, " ");
 }
 
-function normalizeCategory(category = "") {
-  const normalized = normalizeText(category);
-
-  return (
-    CATEGORY_MAP[normalized] ||
-    CATEGORY_ALIASES[normalized] ||
-    (normalized
-      ? normalized.replace(/\b\w/g, letter => letter.toUpperCase())
-      : "Accessories")
-  );
+function normalizeCategory(value = "") {
+  const key = normalizeText(value);
+  return CATEGORY_LOOKUP[key] || (key ? key.replace(/\b\w/g, letter => letter.toUpperCase()) : "Other");
 }
 
-function getProductImage(product) {
-  return (
-    product.image_url ||
-    product.image ||
-    product.imageUrl ||
-    ""
-  );
-}
-
-function getProductDescription(product) {
-  return (
-    product.description ||
-    "Discover more about this product and its details."
-  );
-}
-
-function getProductStock(product) {
-  const stock = Number(product.stock);
-
-  return Number.isFinite(stock) && stock >= 0
-    ? stock
-    : null;
-}
-
-function isInStock(product) {
-  const stock = getProductStock(product);
-
-  // Unknown stock is not treated as confirmed inventory.
-  return stock !== null && stock > 0;
+function formatMoney(value) {
+  const amount = Number(value);
+  return moneyFormatter.format(Number.isFinite(amount) ? amount : 0);
 }
 
 function showToast(message, type = "success") {
   const toast = $("#toast");
-
   if (!toast) {
     console.log(`[${type.toUpperCase()}] ${message}`);
     return;
@@ -177,1560 +98,777 @@ function showToast(message, type = "success") {
 
   toast.textContent = message;
   toast.classList.remove("show", "success", "error", "warning");
-
-  toast.classList.add(type, "show");
-  toast.setAttribute("role", "status");
-  toast.setAttribute("aria-live", "polite");
-
-  clearTimeout(showToast.timeout);
-
-  showToast.timeout = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3200);
+  toast.classList.add("show", type);
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
 function setText(selector, value) {
   const element = $(selector);
-
-  if (element) {
-    element.textContent = value;
-  }
+  if (element) element.textContent = value;
 }
-
-/* ============================================================
-   3. APPLICATION STATE
-   ============================================================ */
-
-let products = [];
-let visibleProducts = [];
-
-let activeCategory = "All";
-let favoritesOnly = false;
-let searchQuery = "";
-
-let cart = [];
-let favorites = new Set();
-
-let isLoadingProducts = false;
-let productLoadFailed = false;
-
-let selectedProduct = null;
-let lastFocusedElement = null;
-
-/* ============================================================
-   4. LOCAL STORAGE
-   ============================================================ */
 
 function readJSON(key, fallback) {
   try {
-    const saved = localStorage.getItem(key);
-
-    if (!saved) {
-      return fallback;
-    }
-
-    return JSON.parse(saved);
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
   } catch (error) {
-    console.warn(`Unable to read localStorage key "${key}".`, error);
+    console.warn(`Could not read localStorage item ${key}:`, error);
     return fallback;
   }
 }
 
-function saveCart() {
-  try {
-    localStorage.setItem(
-      CONFIG.cartKey,
-      JSON.stringify(cart)
-    );
-  } catch (error) {
-    console.error("Unable to save shopping bag:", error);
-    showToast("Your shopping bag could not be saved.", "error");
-  }
-}
+/* 3. APPLICATION STATE ------------------------------------------- */
+let products = [];
+let visibleProducts = [];
+let cart = [];
+let favorites = new Set();
+let activeCategory = "All";
+let searchQuery = "";
+let favoritesOnly = false;
+let selectedProduct = null;
+let lastFocusedElement = null;
+let productsFailed = false;
 
+/* 4. LOCAL STORAGE ------------------------------------------------ */
 function loadCart() {
-  const savedCart = readJSON(CONFIG.cartKey, []);
-
-  if (!Array.isArray(savedCart)) {
+  const stored = readJSON(CONFIG.cartKey, []);
+  if (!Array.isArray(stored)) {
     cart = [];
     return;
   }
 
-  cart = savedCart
-    .map(item => {
-      const id = item.id ?? item.product_id;
-
-      const quantity = Math.max(
-        1,
-        Math.floor(Number(item.quantity) || 1)
-      );
-
-      return {
-        id: String(id ?? ""),
-        name: String(item.name || item.title || "Product"),
-        price: Number(item.price) || 0,
-        image: String(
-          item.image ||
-          item.image_url ||
-          ""
-        ),
-        quantity,
-        stock: Number.isFinite(Number(item.stock))
-          ? Number(item.stock)
-          : null,
-        category: String(item.category || "Accessories")
-      };
-    })
-    .filter(item => item.id);
+  cart = stored.map(item => {
+    const id = item?.id ?? item?.product_id;
+    const quantity = Math.max(1, Math.floor(Number(item?.quantity) || 1));
+    return {
+      id: String(id ?? ""),
+      name: String(item?.name || item?.title || "Product"),
+      price: Number(item?.price) || 0,
+      image: String(item?.image || item?.image_url || ""),
+      quantity,
+      stock: item?.stock !== null && item?.stock !== undefined && item?.stock !== "" && Number.isFinite(Number(item.stock))
+        ? Number(item.stock)
+        : null,
+      category: String(item?.category || "Other")
+    };
+  }).filter(item => item.id);
 }
 
-function saveFavorites() {
+function saveCart() {
   try {
-    localStorage.setItem(
-      CONFIG.favoritesKey,
-      JSON.stringify([...favorites])
-    );
+    localStorage.setItem(CONFIG.cartKey, JSON.stringify(cart));
   } catch (error) {
-    console.warn("Unable to save favorites:", error);
+    console.error("Could not save shopping bag:", error);
+    showToast("Your bag could not be saved on this device.", "error");
   }
 }
 
 function loadFavorites() {
-  const saved = readJSON(CONFIG.favoritesKey, []);
-
-  favorites = new Set(
-    Array.isArray(saved) ? saved.map(String) : []
-  );
+  const stored = readJSON(CONFIG.favoritesKey, []);
+  favorites = new Set(Array.isArray(stored) ? stored.map(String) : []);
 }
 
-/* ============================================================
-   5. PRODUCT DATA
-   ============================================================ */
+function saveFavorites() {
+  try {
+    localStorage.setItem(CONFIG.favoritesKey, JSON.stringify([...favorites]));
+  } catch (error) {
+    console.warn("Could not save favorites:", error);
+  }
+}
 
-function normalizeProduct(rawProduct) {
-  const id = rawProduct.id;
+/* 5. PRODUCT DATA + SUPABASE -------------------------------------- */
+function getStock(product) {
+  if (product.stock === null || product.stock === undefined || product.stock === "") {
+    return null;
+  }
+  const value = Number(product.stock);
+  return Number.isFinite(value) && value >= 0 ? value : null;
+}
 
+function getImageURL(product) {
+  const candidate = product.image_url || product.image || product.imageUrl || "";
+  const value = String(candidate).trim();
+  if (!value) return "";
+  // Allow normal hosted URLs and relative paths; reject executable schemes.
+  if (/^(https?:\/\/|\/|\.\/|\.\.\/)/i.test(value)) return value;
+  return "";
+}
+
+function normalizeProduct(row) {
   return {
-    id: String(id),
-    databaseId: id,
-
-    name: String(
-      rawProduct.name ||
-      rawProduct.title ||
-      "Untitled product"
-    ),
-
-    description: getProductDescription(rawProduct),
-
-    category: normalizeCategory(rawProduct.category),
-
-    price: Number(rawProduct.price) || 0,
-
-    image: getProductImage(rawProduct),
-
-    stock: getProductStock(rawProduct),
-
-    isActive: rawProduct.is_active !== false,
-
-    createdAt: rawProduct.created_at || "",
-
-    rating: Number(rawProduct.rating) || 0,
-
-    featured: rawProduct.is_featured === true
+    id: String(row.id),
+    name: String(row.name || row.title || "Untitled product"),
+    description: String(row.description || "Discover more about this product and its details."),
+    category: normalizeCategory(row.category),
+    price: Number(row.price) || 0,
+    image: getImageURL(row),
+    stock: getStock(row),
+    createdAt: row.created_at || ""
   };
 }
 
 async function fetchProducts() {
-  if (isLoadingProducts) {
-    return;
-  }
-
-  isLoadingProducts = true;
-  productLoadFailed = false;
-
-  const loadingState = $("#loadingState");
-  const productGrid = $("#productGrid");
-  const emptyState = $("#emptyState");
-
-  if (loadingState) {
-    loadingState.hidden = false;
-  }
-
-  if (emptyState) {
-    emptyState.hidden = true;
-  }
-
-  if (productGrid) {
-    productGrid.innerHTML = "";
-  }
+  const loading = $("#loadingState");
+  const grid = $("#productGrid");
+  const empty = $("#emptyState");
+  if (loading) loading.hidden = false;
+  if (empty) empty.hidden = true;
+  if (grid) grid.innerHTML = "";
 
   try {
     const { data, error } = await supabase
       .from(CONFIG.productsTable)
-      .select(
-        "id,name,description,category,price,image_url,stock,is_active,created_at"
-      )
+      .select("id,name,description,category,price,image_url,stock,is_active,created_at")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     products = (data || []).map(normalizeProduct);
+    productsFailed = false;
 
-    productLoadFailed = false;
+    // Refresh details for items already in the locally saved bag.
+    cart = cart.map(item => {
+      const latest = products.find(product => product.id === item.id);
+      if (!latest) return item;
+      return {
+        ...item,
+        name: latest.name,
+        price: latest.price,
+        image: latest.image,
+        stock: latest.stock,
+        category: latest.category
+      };
+    });
+    saveCart();
 
     renderProducts();
-    updateCartDisplay();
-
-    if (products.length === 0) {
-      showEmptyState(
-        "No products are available right now. Please check back soon."
-      );
-    }
+    renderCart();
+    if (!products.length) showEmptyState("There are no active products available at the moment.");
   } catch (error) {
     console.error("Unable to load products from Supabase:", error);
-
     products = [];
     visibleProducts = [];
-    productLoadFailed = true;
-
+    productsFailed = true;
     renderProducts();
-
-    showEmptyState(
-      "We couldn't load the products. Check your internet connection and Supabase access, then refresh the page."
-    );
-
-    showToast(
-      "Unable to load products. Please try again.",
-      "error"
-    );
+    showEmptyState("We couldn't load the collection. Check your Supabase products access and internet connection, then refresh this page.");
+    showToast("Products could not be loaded. Please try again.", "error");
   } finally {
-    isLoadingProducts = false;
-
-    if (loadingState) {
-      loadingState.hidden = true;
-    }
-
+    if (loading) loading.hidden = true;
     updateResultsCount();
   }
 }
 
-/* ============================================================
-   6. PRODUCT CARD RENDERING
-   ============================================================ */
-
-function getStockLabel(product) {
-  const stock = getProductStock(product);
-
-  if (stock === null) {
-    return "Stock unavailable";
-  }
-
-  if (stock <= 0) {
-    return "Out of stock";
-  }
-
-  if (stock <= 5) {
-    return `Only ${stock} left`;
-  }
-
+/* 6. PRODUCT CARD RENDERING --------------------------------------- */
+function stockLabel(product) {
+  if (product.stock === null) return "Stock not confirmed";
+  if (product.stock <= 0) return "Out of stock";
+  if (product.stock <= 5) return `Only ${product.stock} left`;
   return "In stock";
 }
 
-function getProductImageMarkup(product) {
-  const image = product.image
-    ? `
-      <img
-        class="product-image"
-        src="${escapeHTML(product.image)}"
-        alt="${escapeHTML(product.name)}"
-        loading="lazy"
-        data-product-image
-      >
-    `
-    : `
-      <div class="product-image-placeholder" aria-label="No product image available">
-        <span>JH</span>
-      </div>
-    `;
-
-  return image;
+function productImageMarkup(product) {
+  if (!product.image) {
+    return '<div class="product-image-placeholder" aria-label="Product image unavailable">JH</div>';
+  }
+  return `<img class="product-image" src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}" loading="lazy" data-product-image>`;
 }
 
 function renderProductCard(product) {
-  const favorite = favorites.has(String(product.id));
-
-  const stock = getProductStock(product);
-
-  const soldOut = stock !== null && stock <= 0;
+  const isFavorite = favorites.has(product.id);
+  const soldOut = product.stock !== null && product.stock <= 0;
+  const lowStock = product.stock !== null && product.stock > 0 && product.stock <= 5;
+  const stockClass = soldOut ? "is-out" : lowStock ? "is-low" : "";
 
   return `
-    <article
-      class="product-card"
-      data-product-id="${escapeHTML(product.id)}"
-    >
+    <article class="product-card" data-product-id="${escapeHTML(product.id)}">
       <div class="product-card-image-wrap">
-
-        ${getProductImageMarkup(product)}
-
-        <span class="product-category-label">
-          ${escapeHTML(product.category)}
-        </span>
-
-        <button
-          class="product-favorite-button ${favorite ? "is-favorite" : ""}"
-          type="button"
-          data-action="favorite"
-          data-id="${escapeHTML(product.id)}"
-          aria-label="${favorite ? "Remove from favorites" : "Add to favorites"}"
-          aria-pressed="${favorite}"
-        >
-          ${favorite ? "♥" : "♡"}
-        </button>
-
-        ${
-          soldOut
-            ? `
-              <span class="product-stock-badge sold-out">
-                Out of stock
-              </span>
-            `
-            : ""
-        }
-
+        ${productImageMarkup(product)}
+        <span class="product-category-label">${escapeHTML(product.category)}</span>
+        <button class="product-favorite-button ${isFavorite ? "is-favorite" : ""}" type="button" data-action="favorite" data-id="${escapeHTML(product.id)}" aria-label="${isFavorite ? "Remove from saved items" : "Save item"}" aria-pressed="${isFavorite}">${isFavorite ? "♥" : "♡"}</button>
+        ${soldOut ? '<span class="product-stock-badge sold-out">Sold out</span>' : ""}
       </div>
-
       <div class="product-card-content">
-
-        <p class="product-stock-text">
-          ${escapeHTML(getStockLabel(product))}
-        </p>
-
-        <h3 class="product-title">
-          ${escapeHTML(product.name)}
-        </h3>
-
-        <p class="product-description">
-          ${escapeHTML(product.description)}
-        </p>
-
+        <p class="product-stock-text ${stockClass}">${escapeHTML(stockLabel(product))}</p>
+        <h3 class="product-title">${escapeHTML(product.name)}</h3>
+        <p class="product-description">${escapeHTML(product.description)}</p>
         <div class="product-card-bottom">
-
-          <strong class="product-price">
-            ${formatMoney(product.price)}
-          </strong>
-
-          <button
-            class="product-view-button"
-            type="button"
-            data-action="view"
-            data-id="${escapeHTML(product.id)}"
-          >
-            View details
-          </button>
-
+          <strong class="product-price">${formatMoney(product.price)}</strong>
+          <button class="product-view-button" type="button" data-action="view" data-id="${escapeHTML(product.id)}">View details</button>
         </div>
-
-        <button
-          class="product-add-button"
-          type="button"
-          data-action="add"
-          data-id="${escapeHTML(product.id)}"
-          ${soldOut ? "disabled" : ""}
-        >
-          ${soldOut ? "Out of stock" : "Add to bag"}
-        </button>
-
+        <button class="product-add-button" type="button" data-action="add" data-id="${escapeHTML(product.id)}" ${soldOut || product.stock === null ? "disabled" : ""}>${soldOut ? "Out of stock" : product.stock === null ? "Stock unavailable" : "Add to bag"}</button>
       </div>
-    </article>
-  `;
+    </article>`;
 }
 
 function renderProducts() {
   const grid = $("#productGrid");
+  if (!grid) return;
 
-  if (!grid) {
-    console.error("Product grid #productGrid was not found.");
-    return;
-  }
+  visibleProducts = getFilteredProducts();
+  grid.innerHTML = visibleProducts.map(renderProductCard).join("");
 
-  const filtered = getFilteredProducts();
-
-  visibleProducts = filtered;
-
-  grid.innerHTML = filtered
-    .map(renderProductCard)
-    .join("");
-
-  const emptyState = $("#emptyState");
-
-  if (emptyState) {
-    emptyState.hidden = filtered.length > 0;
-  }
+  const empty = $("#emptyState");
+  if (empty && !productsFailed) empty.hidden = visibleProducts.length > 0;
 
   updateResultsCount();
   updateActiveCategoryButtons();
+  updateFavoritesCount();
 }
 
 function showEmptyState(message) {
-  const emptyState = $("#emptyState");
-
-  if (!emptyState) {
-    return;
-  }
-
-  emptyState.hidden = false;
-
-  const paragraph = $("p", emptyState);
-
-  if (paragraph) {
-    paragraph.textContent = message;
-  } else {
-    emptyState.textContent = message;
-  }
+  const empty = $("#emptyState");
+  if (!empty) return;
+  empty.hidden = false;
+  const paragraph = $("p:not(.eyebrow)", empty);
+  if (paragraph) paragraph.textContent = message;
 }
 
-/* ============================================================
-   7. SEARCH, CATEGORIES AND FILTERS
-   ============================================================ */
+/* 7. SEARCH, CATEGORY FILTERS + SORTING --------------------------- */
+function searchTerms(value) {
+  const query = normalizeText(value);
+  if (!query) return [];
 
-function getSearchTerms(query) {
-  const normalized = normalizeText(query);
+  const terms = [query];
+  const mappedCategory = CATEGORY_LOOKUP[query];
+  if (mappedCategory) terms.push(normalizeText(mappedCategory));
 
-  if (!normalized) {
-    return [];
-  }
-
-  const terms = [normalized];
-
-  const alias = CATEGORY_ALIASES[normalized];
-
-  if (alias) {
-    terms.push(normalizeText(alias));
-  }
-
-  if (CATEGORY_MAP[normalized]) {
-    terms.push(normalizeText(CATEGORY_MAP[normalized]));
-  }
-
-  if (
-    normalized.includes("makeup") ||
-    normalized.includes("cosmetic")
-  ) {
-    terms.push("beauty", "make up", "skincare");
-  }
-
-  if (
-    normalized.includes("clothes") ||
-    normalized.includes("clothing")
-  ) {
-    terms.push("fashion", "apparel", "abaya");
-  }
-
-  if (
-    normalized.includes("kitchen") ||
-    normalized.includes("utensil")
-  ) {
-    terms.push("home living", "glassware", "cutlery");
-  }
-
-  if (
-    normalized.includes("skincare") ||
-    normalized.includes("skin care")
-  ) {
-    terms.push("beauty", "toiletries", "face");
-  }
-
+  const aliases = {
+    fashion: ["apparel", "clothes", "outfit", "abaya"],
+    apparel: ["fashion", "clothes", "outfit", "abaya"],
+    beauty: ["makeup", "cosmetics", "skincare"],
+    makeup: ["beauty", "cosmetics", "skincare"],
+    kitchen: ["utensils", "cookware", "glassware", "cutlery"],
+    utensils: ["kitchen", "cookware", "glassware", "cutlery"],
+    toiletries: ["personal care", "hygiene", "sanitary"]
+  };
+  terms.push(...(aliases[query] || []));
   return [...new Set(terms)];
 }
 
 function matchesSearch(product) {
-  if (!searchQuery.trim()) {
-    return true;
-  }
-
-  const terms = getSearchTerms(searchQuery);
-
-  const searchableText = normalizeText([
-    product.name,
-    product.description,
-    product.category
-  ].join(" "));
-
-  return terms.some(term => searchableText.includes(term));
+  if (!searchQuery) return true;
+  const haystack = normalizeText(`${product.name} ${product.description} ${product.category}`);
+  return searchTerms(searchQuery).some(term => haystack.includes(term));
 }
 
 function getFilteredProducts() {
   let result = [...products];
 
   if (activeCategory !== "All") {
-    result = result.filter(product => {
-      return normalizeCategory(product.category) === activeCategory;
-    });
+    result = result.filter(product => product.category === activeCategory);
   }
-
   result = result.filter(matchesSearch);
 
-  if (favoritesOnly) {
-    result = result.filter(product =>
-      favorites.has(String(product.id))
-    );
+  if (favoritesOnly) result = result.filter(product => favorites.has(product.id));
+
+  if ($("#inStockOnly")?.checked) {
+    result = result.filter(product => product.stock !== null && product.stock > 0);
   }
 
-  const stockOnly = $("#inStockOnly");
-
-  if (stockOnly?.checked) {
-    result = result.filter(product => isInStock(product));
+  const minValue = $("#minimumPrice")?.value;
+  const maxValue = $("#maximumPrice")?.value;
+  if (minValue !== "" && minValue !== undefined) {
+    const min = Number(minValue);
+    if (Number.isFinite(min)) result = result.filter(product => product.price >= min);
+  }
+  if (maxValue !== "" && maxValue !== undefined) {
+    const max = Number(maxValue);
+    if (Number.isFinite(max)) result = result.filter(product => product.price <= max);
   }
 
-  const minInput = $("#minimumPrice");
-  const maxInput = $("#maximumPrice");
-
-  const minPrice = minInput && minInput.value !== ""
-    ? Number(minInput.value)
-    : null;
-
-  const maxPrice = maxInput && maxInput.value !== ""
-    ? Number(maxInput.value)
-    : null;
-
-  if (minPrice !== null && Number.isFinite(minPrice)) {
-    result = result.filter(product => product.price >= minPrice);
-  }
-
-  if (maxPrice !== null && Number.isFinite(maxPrice)) {
-    result = result.filter(product => product.price <= maxPrice);
-  }
-
-  const sortSelect = $("#sortSelect");
-  const sortValue = sortSelect?.value || "default";
-
-  switch (sortValue) {
-    case "price-low":
-    case "price-asc":
-    case "low-to-high":
-      result.sort((a, b) => a.price - b.price);
-      break;
-
-    case "price-high":
-    case "price-desc":
-    case "high-to-low":
-      result.sort((a, b) => b.price - a.price);
-      break;
-
-    case "name-asc":
-      result.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-
-    case "name-desc":
-      result.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-
+  switch ($("#sortSelect")?.value || "newest") {
+    case "price-low": result.sort((a, b) => a.price - b.price); break;
+    case "price-high": result.sort((a, b) => b.price - a.price); break;
+    case "name-asc": result.sort((a, b) => a.name.localeCompare(b.name)); break;
     case "newest":
-      result.sort((a, b) => {
-        return new Date(b.createdAt || 0) -
-          new Date(a.createdAt || 0);
-      });
-      break;
-
-    case "featured":
-      result.sort((a, b) => Number(b.featured) - Number(a.featured));
-      break;
-
     default:
+      result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
       break;
   }
-
   return result;
 }
 
 function updateResultsCount() {
-  const resultsCount = $("#resultsCount");
-
-  if (!resultsCount) {
-    return;
-  }
-
-  const count = visibleProducts.length;
-
-  resultsCount.textContent =
-    `${count} ${count === 1 ? "product" : "products"}`;
+  const element = $("#resultsCount");
+  if (!element) return;
+  const amount = visibleProducts.length;
+  element.textContent = `${amount} ${amount === 1 ? "item" : "items"}`;
 }
 
 function updateActiveCategoryButtons() {
-  const filterButtons = $$("[data-filter]");
-
-  filterButtons.forEach(button => {
-    const category = button.dataset.filter || "All";
-
-    const isActive = normalizeCategory(category) === activeCategory ||
-      (category === "All" && activeCategory === "All");
-
-    button.classList.toggle("active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
+  $$('[data-filter]').forEach(button => {
+    const value = button.dataset.filter || "All";
+    const active = value === "All" ? activeCategory === "All" : normalizeCategory(value) === activeCategory;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
-
-  $$("[data-category]").forEach(card => {
-    const category = normalizeCategory(card.dataset.category || "");
-
-    card.classList.toggle(
-      "active",
-      category === activeCategory
-    );
+  $$('[data-category]').forEach(card => {
+    card.classList.toggle("active", normalizeCategory(card.dataset.category) === activeCategory);
   });
 }
 
-function setCategory(category) {
-  activeCategory = category === "All"
-    ? "All"
-    : normalizeCategory(category);
-
+function setCategory(value) {
+  activeCategory = value === "All" ? "All" : normalizeCategory(value);
   favoritesOnly = false;
-
   renderProducts();
+  $("#catalogue")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function resetFilters() {
   activeCategory = "All";
   favoritesOnly = false;
   searchQuery = "";
-
-  const searchInput = $("#searchInput");
-
-  if (searchInput) {
-    searchInput.value = "";
-  }
-
-  const minimumPrice = $("#minimumPrice");
-  const maximumPrice = $("#maximumPrice");
-  const inStockOnly = $("#inStockOnly");
-  const sortSelect = $("#sortSelect");
-
-  if (minimumPrice) minimumPrice.value = "";
-  if (maximumPrice) maximumPrice.value = "";
-  if (inStockOnly) inStockOnly.checked = false;
-  if (sortSelect) sortSelect.value = "default";
-
+  if ($("#searchInput")) $("#searchInput").value = "";
+  if ($("#minimumPrice")) $("#minimumPrice").value = "";
+  if ($("#maximumPrice")) $("#maximumPrice").value = "";
+  if ($("#inStockOnly")) $("#inStockOnly").checked = false;
+  if ($("#sortSelect")) $("#sortSelect").value = "newest";
+  const suggestions = $("#searchSuggestions");
+  if (suggestions) suggestions.hidden = true;
   renderProducts();
 }
 
-/* ============================================================
-   8. SEARCH PANEL
-   ============================================================ */
-
+/* 8. SEARCH PANEL + SUGGESTIONS ---------------------------------- */
 function openSearchPanel() {
   const panel = $("#searchPanel");
-
-  if (!panel) {
-    return;
-  }
-
+  if (!panel) return;
   panel.hidden = false;
-  panel.classList.add("is-open");
-
-  const input = $("#searchInput");
-
-  if (input) {
-    setTimeout(() => input.focus(), 100);
-  }
+  requestAnimationFrame(() => panel.classList.add("is-open"));
+  setTimeout(() => $("#searchInput")?.focus(), 80);
 }
 
 function closeSearchPanel() {
   const panel = $("#searchPanel");
+  if (!panel) return;
+  panel.classList.remove("is-open");
+  panel.hidden = true;
+  const suggestions = $("#searchSuggestions");
+  if (suggestions) suggestions.hidden = true;
+}
 
-  if (!panel) {
+function renderSearchSuggestions(value) {
+  const box = $("#searchSuggestions");
+  if (!box) return;
+  const query = normalizeText(value);
+  if (!query) {
+    box.hidden = true;
+    box.innerHTML = "";
     return;
   }
 
-  panel.classList.remove("is-open");
-  panel.hidden = true;
+  const matches = products
+    .filter(product => normalizeText(`${product.name} ${product.category}`).includes(query))
+    .slice(0, 5);
+
+  const suggestions = matches.map(product => `
+    <button class="suggestion-chip" type="button" data-action="search-suggestion" data-name="${escapeHTML(product.name)}">${escapeHTML(product.name)}</button>
+  `).join("");
+
+  box.innerHTML = suggestions || '<span class="suggestion-chip">Press Search to view matching results</span>';
+  box.hidden = false;
 }
 
 function performSearch(value) {
   searchQuery = String(value || "").trim();
-
   favoritesOnly = false;
-
   renderProducts();
-
-  const shopSection = $("#productGrid");
-
-  if (shopSection && searchQuery) {
-    shopSection.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }
+  closeSearchPanel();
+  if (searchQuery) $("#catalogue")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/* ============================================================
-   9. FAVORITES
-   ============================================================ */
+/* 9. FAVORITES ---------------------------------------------------- */
+function updateFavoritesCount() {
+  setText("#favoritesCount", String(favorites.size));
+  const button = $("#favoritesButton");
+  if (button) {
+    button.classList.toggle("active", favoritesOnly);
+    button.setAttribute("aria-pressed", String(favoritesOnly));
+  }
+}
 
 function toggleFavorite(productId) {
   const id = String(productId);
-
   if (favorites.has(id)) {
     favorites.delete(id);
-    showToast("Removed from favorites.");
+    showToast("Removed from saved items.");
   } else {
     favorites.add(id);
-    showToast("Added to favorites.");
+    showToast("Added to saved items.");
   }
-
   saveFavorites();
-  updateFavoritesCount();
   renderProducts();
-}
 
-function updateFavoritesCount() {
-  const count = favorites.size;
-
-  setText("#favoritesCount", String(count));
-
-  const button = $("#favoritesButton");
-
-  if (button) {
-    button.setAttribute(
-      "aria-pressed",
-      String(favoritesOnly)
-    );
-
-    button.classList.toggle("active", favoritesOnly);
+  // Keep the favorite control in an open product dialog in sync.
+  const modalFavorite = $('#productModalContent [data-action="favorite"]');
+  if (modalFavorite && selectedProduct) {
+    const saved = favorites.has(selectedProduct.id);
+    modalFavorite.textContent = saved ? "♥ Saved" : "♡ Save this item";
+    modalFavorite.classList.toggle("is-favorite", saved);
+    modalFavorite.setAttribute("aria-pressed", String(saved));
   }
 }
 
 function toggleFavoritesView() {
   favoritesOnly = !favoritesOnly;
-
   activeCategory = "All";
-
   renderProducts();
-
-  if (favoritesOnly) {
-    showToast("Showing your favorite products.");
-  } else {
-    showToast("Showing all products.");
-  }
+  showToast(favoritesOnly ? "Showing your saved items." : "Showing the full collection.");
+  $("#catalogue")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/* ============================================================
-   10. PRODUCT DETAILS MODAL
-   ============================================================ */
-
+/* 10. PRODUCT DETAILS DIALOG ------------------------------------- */
 function openProductModal(productId) {
-  const product = products.find(
-    item => String(item.id) === String(productId)
-  );
-
-  if (!product) {
-    showToast("This product could not be found.", "error");
-    return;
-  }
-
+  const product = products.find(item => item.id === String(productId));
   const modal = $("#productModal");
   const content = $("#productModalContent");
-
-  if (!modal || !content) {
-    showToast("Product details are unavailable.", "error");
+  if (!product || !modal || !content) {
+    showToast("Product details are not available.", "error");
     return;
   }
 
   selectedProduct = product;
   lastFocusedElement = document.activeElement;
-
-  const stock = getProductStock(product);
-
-  const soldOut = stock !== null && stock <= 0;
-
-  const imageMarkup = product.image
-    ? `
-      <img
-        class="product-modal-image"
-        src="${escapeHTML(product.image)}"
-        alt="${escapeHTML(product.name)}"
-      >
-    `
-    : `
-      <div class="product-modal-image-placeholder">
-        JH
-      </div>
-    `;
+  const soldOut = product.stock !== null && product.stock <= 0;
+  const noStockData = product.stock === null;
+  const image = product.image
+    ? `<img class="product-modal-image" src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)}">`
+    : '<div class="product-modal-image-placeholder">JH</div>';
+  const saved = favorites.has(product.id);
 
   content.innerHTML = `
     <div class="product-modal-layout">
-
-      <div class="product-modal-visual">
-        ${imageMarkup}
-      </div>
-
+      <div class="product-modal-visual">${image}</div>
       <div class="product-modal-details">
-
-        <span class="product-modal-category">
-          ${escapeHTML(product.category)}
-        </span>
-
+        <span class="product-modal-category">${escapeHTML(product.category)}</span>
         <h2>${escapeHTML(product.name)}</h2>
-
-        <p class="product-modal-price">
-          ${formatMoney(product.price)}
-        </p>
-
-        <p class="product-modal-description">
-          ${escapeHTML(product.description)}
-        </p>
-
-        <p class="product-modal-stock">
-          ${escapeHTML(getStockLabel(product))}
-        </p>
-
+        <p class="product-modal-price">${formatMoney(product.price)}</p>
+        <p class="product-modal-description">${escapeHTML(product.description)}</p>
+        <p class="product-modal-stock">${escapeHTML(stockLabel(product))}</p>
         <div class="product-modal-actions">
-
-          <button
-            type="button"
-            class="product-add-button"
-            data-action="modal-add"
-            data-id="${escapeHTML(product.id)}"
-            ${soldOut ? "disabled" : ""}
-          >
-            ${soldOut ? "Out of stock" : "Add to bag"}
-          </button>
-
-          <button
-            type="button"
-            class="product-favorite-button"
-            data-action="favorite"
-            data-id="${escapeHTML(product.id)}"
-          >
-            ${favorites.has(String(product.id))
-              ? "♥ Saved"
-              : "♡ Save to favorites"}
-          </button>
-
+          <button class="product-add-button" type="button" data-action="modal-add" data-id="${escapeHTML(product.id)}" ${soldOut || noStockData ? "disabled" : ""}>${soldOut ? "Out of stock" : noStockData ? "Stock unavailable" : "Add to bag"}</button>
+          <button class="product-favorite-button ${saved ? "is-favorite" : ""}" type="button" data-action="favorite" data-id="${escapeHTML(product.id)}" aria-pressed="${saved}">${saved ? "♥ Saved" : "♡ Save this item"}</button>
         </div>
-
       </div>
+    </div>`;
 
-    </div>
-  `;
-
-  if (!modal.open) {
-    modal.showModal();
-  }
+  if (!modal.open) modal.showModal();
 }
 
 function closeProductModal() {
   const modal = $("#productModal");
-
-  if (modal?.open) {
-    modal.close();
-  }
-
+  if (modal?.open) modal.close();
   selectedProduct = null;
 }
 
-/* ============================================================
-   11. SHOPPING BAG
-   ============================================================ */
-
-function getCartItem(productId) {
-  return cart.find(
-    item => String(item.id) === String(productId)
-  );
-}
-
-function getCartQuantity(productId) {
-  const item = getCartItem(productId);
-
-  return item ? item.quantity : 0;
+/* 11. SHOPPING BAG ------------------------------------------------ */
+function findCartItem(id) {
+  return cart.find(item => item.id === String(id));
 }
 
 function addToCart(productId) {
-  const product = products.find(
-    item => String(item.id) === String(productId)
-  );
-
+  const product = products.find(item => item.id === String(productId));
   if (!product) {
     showToast("This product is no longer available.", "error");
     return;
   }
-
-  const stock = getProductStock(product);
-
-  if (stock === null) {
-    showToast(
-      "Stock availability is unknown. Please try again later.",
-      "warning"
-    );
+  if (product.stock === null) {
+    showToast("Stock availability has not been confirmed for this item.", "warning");
+    return;
+  }
+  if (product.stock <= 0) {
+    showToast("This item is out of stock.", "error");
     return;
   }
 
-  if (stock <= 0) {
-    showToast("This product is out of stock.", "error");
-    return;
-  }
-
-  const existingItem = getCartItem(product.id);
-
-  if (existingItem) {
-    if (existingItem.quantity >= stock) {
-      showToast(
-        `Only ${stock} unit(s) are available.`,
-        "warning"
-      );
+  const existing = findCartItem(product.id);
+  if (existing) {
+    if (existing.quantity >= product.stock) {
+      showToast(`Only ${product.stock} unit(s) are available.`, "warning");
       return;
     }
-
-    existingItem.quantity += 1;
-    existingItem.stock = stock;
+    existing.quantity += 1;
+    existing.stock = product.stock;
   } else {
     cart.push({
-      id: String(product.id),
+      id: product.id,
       name: product.name,
       price: product.price,
       image: product.image,
       quantity: 1,
-      stock,
+      stock: product.stock,
       category: product.category
     });
   }
 
   saveCart();
-  updateCartDisplay();
-
+  renderCart();
   showToast(`${product.name} added to your bag.`);
 }
 
 function removeFromCart(productId) {
-  cart = cart.filter(
-    item => String(item.id) !== String(productId)
-  );
-
+  cart = cart.filter(item => item.id !== String(productId));
   saveCart();
-  updateCartDisplay();
-
-  showToast("Product removed from your bag.");
+  renderCart();
+  showToast("Item removed from your bag.");
 }
 
-function changeCartQuantity(productId, change) {
-  const item = getCartItem(productId);
+function changeCartQuantity(productId, amount) {
+  const item = findCartItem(productId);
+  if (!item) return;
+  const product = products.find(entry => entry.id === String(productId));
+  const stock = product ? product.stock : item.stock;
+  const nextQuantity = item.quantity + amount;
 
-  if (!item) {
-    return;
-  }
-
-  const product = products.find(
-    entry => String(entry.id) === String(productId)
-  );
-
-  const currentStock = product
-    ? getProductStock(product)
-    : item.stock;
-
-  const newQuantity = item.quantity + change;
-
-  if (newQuantity <= 0) {
+  if (nextQuantity <= 0) {
     removeFromCart(productId);
     return;
   }
-
-  if (
-    currentStock !== null &&
-    currentStock !== undefined &&
-    newQuantity > currentStock
-  ) {
-    showToast(
-      `Only ${currentStock} unit(s) are available.`,
-      "warning"
-    );
+  if (amount > 0 && (stock === null || stock === undefined)) {
+    showToast("Stock availability has not been confirmed.", "warning");
+    return;
+  }
+  if (stock !== null && stock !== undefined && nextQuantity > stock) {
+    showToast(`Only ${stock} unit(s) are available.`, "warning");
     return;
   }
 
-  item.quantity = newQuantity;
-
+  item.quantity = nextQuantity;
+  if (product) item.stock = product.stock;
   saveCart();
-  updateCartDisplay();
+  renderCart();
 }
 
-function getCartCount() {
-  return cart.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+function cartCount() {
+  return cart.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-function getCartSubtotal() {
-  return cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+function cartSubtotal() {
+  return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 }
 
 function renderCart() {
-  const cartItems = $("#cartItems");
-  const cartEmpty = $("#cartEmpty");
-  const cartSummary = $("#cartSummary");
-
+  const itemsContainer = $("#cartItems");
+  const empty = $("#cartEmpty");
+  const summary = $("#cartSummary");
   const isEmpty = cart.length === 0;
 
-  if (cartEmpty) {
-    cartEmpty.hidden = !isEmpty;
-  }
+  if (empty) empty.hidden = !isEmpty;
+  if (summary) summary.hidden = isEmpty;
 
-  if (cartSummary) {
-    cartSummary.hidden = isEmpty;
-  }
-
-  if (cartItems) {
-    cartItems.innerHTML = cart.map(item => {
+  if (itemsContainer) {
+    itemsContainer.innerHTML = cart.map(item => {
       const image = item.image
-        ? `
-          <img
-            src="${escapeHTML(item.image)}"
-            alt="${escapeHTML(item.name)}"
-            class="cart-item-image"
-          >
-        `
-        : `
-          <div class="cart-item-image-placeholder">JH</div>
-        `;
-
+        ? `<img class="cart-item-image" src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" data-cart-image>`
+        : '<div class="cart-item-image-placeholder">JH</div>';
       return `
         <article class="cart-item" data-cart-id="${escapeHTML(item.id)}">
-
           ${image}
-
           <div class="cart-item-details">
-
             <h3>${escapeHTML(item.name)}</h3>
-
-            <p class="cart-item-price">
-              ${formatMoney(item.price)}
-            </p>
-
+            <p class="cart-item-price">${formatMoney(item.price)}</p>
             <div class="cart-item-controls">
-
-              <button
-                type="button"
-                data-action="decrease"
-                data-id="${escapeHTML(item.id)}"
-                aria-label="Decrease quantity of ${escapeHTML(item.name)}"
-              >
-                −
-              </button>
-
-              <span aria-label="Quantity">
-                ${item.quantity}
-              </span>
-
-              <button
-                type="button"
-                data-action="increase"
-                data-id="${escapeHTML(item.id)}"
-                aria-label="Increase quantity of ${escapeHTML(item.name)}"
-              >
-                +
-              </button>
-
+              <button type="button" data-action="decrease" data-id="${escapeHTML(item.id)}" aria-label="Decrease ${escapeHTML(item.name)} quantity">−</button>
+              <span>${item.quantity}</span>
+              <button type="button" data-action="increase" data-id="${escapeHTML(item.id)}" aria-label="Increase ${escapeHTML(item.name)} quantity">+</button>
             </div>
-
           </div>
-
           <div class="cart-item-end">
-
-            <strong>
-              ${formatMoney(item.price * item.quantity)}
-            </strong>
-
-            <button
-              type="button"
-              class="cart-item-remove"
-              data-action="remove"
-              data-id="${escapeHTML(item.id)}"
-            >
-              Remove
-            </button>
-
+            <strong>${formatMoney(item.price * item.quantity)}</strong>
+            <button class="cart-item-remove" type="button" data-action="remove" data-id="${escapeHTML(item.id)}">Remove</button>
           </div>
-
-        </article>
-      `;
+        </article>`;
     }).join("");
   }
 
-  setText("#cartSubtotal", formatMoney(getCartSubtotal()));
-  setText("#drawerCount", String(getCartCount()));
-
-  updateCartCountBadges();
-}
-
-function updateCartCountBadges() {
-  const count = getCartCount();
-
-  setText("#cartCount", String(count));
-  setText("#mobileCartCount", String(count));
-
-  const cartButtons = [
-    $("#openCartButton"),
-    $("#mobileCartButton")
-  ];
-
-  cartButtons.forEach(button => {
-    if (button) {
-      button.setAttribute(
-        "aria-label",
-        `Open shopping bag, ${count} ${count === 1 ? "item" : "items"}`
-      );
-    }
+  setText("#cartSubtotal", formatMoney(cartSubtotal()));
+  setText("#drawerCount", `(${cartCount()})`);
+  setText("#bagCount", String(cartCount()));
+  setText("#mobileCartCount", String(cartCount()));
+  const headerCart = $("#headerCartButton");
+  const mobileCart = $("#mobileCartButton");
+  [headerCart, mobileCart].forEach(button => {
+    if (button) button.setAttribute("aria-label", `Open shopping bag, ${cartCount()} ${cartCount() === 1 ? "item" : "items"}`);
   });
-}
-
-function updateCartDisplay() {
-  renderCart();
 }
 
 function openCart() {
   const drawer = $("#cartDrawer");
   const overlay = $("#overlay");
-
-  if (!drawer) {
-    showToast("The shopping bag could not be opened.", "error");
-    return;
-  }
-
+  if (!drawer) return;
   drawer.classList.add("is-open");
   drawer.setAttribute("aria-hidden", "false");
-
   if (overlay) {
     overlay.hidden = false;
-
-    requestAnimationFrame(() => {
-      overlay.classList.add("is-visible");
-    });
+    requestAnimationFrame(() => overlay.classList.add("is-visible"));
   }
-
   document.body.classList.add("cart-open");
-
   renderCart();
-
-  const closeButton = $("#closeCartButton");
-
-  if (closeButton) {
-    setTimeout(() => closeButton.focus(), 100);
-  }
+  setTimeout(() => $("#closeCartButton")?.focus(), 100);
 }
 
 function closeCart() {
   const drawer = $("#cartDrawer");
   const overlay = $("#overlay");
-
   if (drawer) {
     drawer.classList.remove("is-open");
     drawer.setAttribute("aria-hidden", "true");
   }
-
   if (overlay) {
     overlay.classList.remove("is-visible");
-
-    setTimeout(() => {
-      if (!overlay.classList.contains("is-visible")) {
-        overlay.hidden = true;
-      }
-    }, 250);
+    setTimeout(() => { if (!overlay.classList.contains("is-visible")) overlay.hidden = true; }, 260);
   }
-
   document.body.classList.remove("cart-open");
 }
 
-/* ============================================================
-   12. CART CHECKOUT LINK
-   ============================================================ */
-
+/* 12. CHECKOUT LINK ----------------------------------------------- */
 function handleCheckoutClick(event) {
-  if (cart.length === 0) {
+  if (!cart.length) {
     event.preventDefault();
-
-    showToast(
-      "Your shopping bag is empty.",
-      "warning"
-    );
-
-    return;
+    showToast("Your bag is empty.", "warning");
   }
-
-  /*
-   * The checkout page should read the same localStorage key:
-   * jiddamarh-cart
-   *
-   * This handler does not process payment. Payment processing
-   * must be handled by the secure checkout/payment integration.
-   */
+  // A non-empty bag continues to checkout.html. No payment is processed here.
 }
 
-/* ============================================================
-   13. NEWSLETTER
-   ============================================================ */
-
+/* 13. NEWSLETTER + FOOTER ----------------------------------------- */
 function handleNewsletterSubmit(event) {
   event.preventDefault();
-
-  const emailInput = $("#newsletterEmail");
+  const input = $("#newsletterEmail");
   const message = $("#newsletterMessage");
-
-  if (!emailInput || !emailInput.value.trim()) {
-    if (message) {
-      message.textContent = "Please enter your email address.";
-    }
-
+  if (!input || !input.checkValidity()) {
+    if (message) message.textContent = "Please enter a valid email address.";
+    input?.reportValidity();
     return;
   }
-
-  if (!emailInput.checkValidity()) {
-    if (message) {
-      message.textContent = "Please enter a valid email address.";
-    }
-
-    return;
-  }
-
-  /*
-   * No newsletter table or email service has been connected yet.
-   * Do not pretend that the email has been subscribed.
-   */
-
-  if (message) {
-    message.textContent =
-      "Newsletter sign-up is not connected yet. Please check back soon.";
-  }
-
-  showToast(
-    "Newsletter sign-up is not connected yet.",
-    "warning"
-  );
+  if (message) message.textContent = "Newsletter sign-up is not connected yet. Please check back soon.";
+  showToast("Newsletter sign-up is not connected yet.", "warning");
 }
-
-/* ============================================================
-   14. YEAR IN FOOTER
-   ============================================================ */
 
 function updateFooterYear() {
   setText("#currentYear", String(new Date().getFullYear()));
 }
 
-/* ============================================================
-   15. IMAGE ERROR HANDLING
-   ============================================================ */
-
-document.addEventListener("error", event => {
-  const image = event.target;
-
-  if (
-    !(image instanceof HTMLImageElement) ||
-    !image.matches("[data-product-image]")
-  ) {
-    return;
-  }
-
-  const placeholder = document.createElement("div");
-
-  placeholder.className = "product-image-placeholder";
-  placeholder.textContent = "JH";
-  placeholder.setAttribute("aria-label", "Product image unavailable");
-
-  image.replaceWith(placeholder);
-}, true);
-
-/* ============================================================
-   16. CLICK EVENTS
-   ============================================================ */
-
+/* 14. EVENT LISTENERS --------------------------------------------- */
+// Product cards, category tiles, filters and cart controls are rendered dynamically.
 document.addEventListener("click", event => {
   const actionButton = event.target.closest("[data-action]");
-
   if (actionButton) {
     const action = actionButton.dataset.action;
     const id = actionButton.dataset.id;
 
-    if (action === "favorite") {
-      toggleFavorite(id);
-      return;
-    }
-
-    if (action === "view") {
-      openProductModal(id);
-      return;
-    }
-
+    if (action === "favorite") { toggleFavorite(id); return; }
+    if (action === "view") { openProductModal(id); return; }
     if (action === "add" || action === "modal-add") {
       addToCart(id);
-
-      if (action === "modal-add") {
-        closeProductModal();
-      }
-
+      if (action === "modal-add") closeProductModal();
       return;
     }
-
-    if (action === "increase") {
-      changeCartQuantity(id, 1);
-      return;
-    }
-
-    if (action === "decrease") {
-      changeCartQuantity(id, -1);
-      return;
-    }
-
-    if (action === "remove") {
-      removeFromCart(id);
+    if (action === "increase") { changeCartQuantity(id, 1); return; }
+    if (action === "decrease") { changeCartQuantity(id, -1); return; }
+    if (action === "remove") { removeFromCart(id); return; }
+    if (action === "favorites-view") { toggleFavoritesView(); return; }
+    if (action === "search-suggestion") {
+      const value = actionButton.dataset.name || "";
+      if ($("#searchInput")) $("#searchInput").value = value;
+      performSearch(value);
       return;
     }
   }
 
-  const categoryCard = event.target.closest("[data-category]");
-
-  if (categoryCard) {
-    setCategory(categoryCard.dataset.category);
+  const categoryTile = event.target.closest("[data-category]");
+  if (categoryTile) {
+    setCategory(categoryTile.dataset.category || "All");
     return;
   }
 
   const filterButton = event.target.closest("[data-filter]");
-
   if (filterButton) {
     setCategory(filterButton.dataset.filter || "All");
-  }
-});
-
-/* ============================================================
-   17. FORM EVENTS
-   ============================================================ */
-
-const searchForm = $("#shopSearchForm");
-
-if (searchForm) {
-  searchForm.addEventListener("submit", event => {
-    event.preventDefault();
-
-    performSearch($("#searchInput")?.value || "");
-    closeSearchPanel();
-  });
-}
-
-const searchInput = $("#searchInput");
-
-if (searchInput) {
-  searchInput.addEventListener("input", () => {
-    searchQuery = searchInput.value.trim();
-
-    favoritesOnly = false;
-
-    renderProducts();
-  });
-}
-
-const newsletterForm = $("#newsletterForm");
-
-if (newsletterForm) {
-  newsletterForm.addEventListener(
-    "submit",
-    handleNewsletterSubmit
-  );
-}
-
-/* ============================================================
-   18. FILTER EVENTS
-   ============================================================ */
-
-const sortSelect = $("#sortSelect");
-
-if (sortSelect) {
-  sortSelect.addEventListener("change", renderProducts);
-}
-
-const stockFilter = $("#inStockOnly");
-
-if (stockFilter) {
-  stockFilter.addEventListener("change", renderProducts);
-}
-
-const applyFiltersButton = $("#applyFiltersButton");
-
-if (applyFiltersButton) {
-  applyFiltersButton.addEventListener("click", renderProducts);
-}
-
-const resetFiltersButton = $("#resetFilters");
-
-if (resetFiltersButton) {
-  resetFiltersButton.addEventListener("click", resetFilters);
-}
-
-const emptyStateResetButton = $("#emptyStateReset");
-
-if (emptyStateResetButton) {
-  emptyStateResetButton.addEventListener("click", resetFilters);
-}
-
-const showAllButton = $("#showAllButton");
-
-if (showAllButton) {
-  showAllButton.addEventListener("click", resetFilters);
-}
-
-/* ============================================================
-   19. SEARCH PANEL BUTTONS
-   ============================================================ */
-
-const searchToggle = $("#searchToggle");
-
-if (searchToggle) {
-  searchToggle.addEventListener("click", () => {
-    const panel = $("#searchPanel");
-
-    if (panel && !panel.hidden) {
-      closeSearchPanel();
-    } else {
-      openSearchPanel();
-    }
-  });
-}
-
-const mobileSearchButton = $("#mobileSearchButton");
-
-if (mobileSearchButton) {
-  mobileSearchButton.addEventListener("click", openSearchPanel);
-}
-
-const closeSearchButton = $("#closeSearch");
-
-if (closeSearchButton) {
-  closeSearchButton.addEventListener("click", closeSearchPanel);
-}
-
-/* ============================================================
-   20. CART DRAWER BUTTONS
-   ============================================================ */
-
-const openCartButton = $("#openCartButton");
-
-if (openCartButton) {
-  openCartButton.addEventListener("click", openCart);
-}
-
-const mobileCartButton = $("#mobileCartButton");
-
-if (mobileCartButton) {
-  mobileCartButton.addEventListener("click", openCart);
-}
-
-const closeCartButton = $("#closeCartButton");
-
-if (closeCartButton) {
-  closeCartButton.addEventListener("click", closeCart);
-}
-
-const continueShoppingButton = $("#continueShopping");
-
-if (continueShoppingButton) {
-  continueShoppingButton.addEventListener("click", closeCart);
-}
-
-const overlay = $("#overlay");
-
-if (overlay) {
-  overlay.addEventListener("click", closeCart);
-}
-
-const checkoutButton = $("#checkoutButton");
-
-if (checkoutButton) {
-  checkoutButton.addEventListener("click", handleCheckoutClick);
-}
-
-/* ============================================================
-   21. FAVORITES BUTTON
-   ============================================================ */
-
-const favoritesButton = $("#favoritesButton");
-
-if (favoritesButton) {
-  favoritesButton.addEventListener("click", toggleFavoritesView);
-}
-
-/* ============================================================
-   22. PRODUCT MODAL BUTTONS
-   ============================================================ */
-
-const closeProductModalButton = $("#closeProductModal");
-
-if (closeProductModalButton) {
-  closeProductModalButton.addEventListener(
-    "click",
-    closeProductModal
-  );
-}
-
-const productModal = $("#productModal");
-
-if (productModal) {
-  productModal.addEventListener("click", event => {
-    /*
-     * Close only when clicking the dialog backdrop,
-     * not when clicking the modal content.
-     */
-    if (event.target === productModal) {
-      closeProductModal();
-    }
-  });
-
-  productModal.addEventListener("close", () => {
-    selectedProduct = null;
-
-    if (lastFocusedElement instanceof HTMLElement) {
-      lastFocusedElement.focus();
-    }
-  });
-}
-
-/* ============================================================
-   23. KEYBOARD ACCESSIBILITY
-   ============================================================ */
-
-document.addEventListener("keydown", event => {
-  if (event.key !== "Escape") {
     return;
   }
 
-  closeCart();
-  closeSearchPanel();
-
-  if (productModal?.open) {
-    closeProductModal();
+  const footerCategory = event.target.closest("[data-footer-category]");
+  if (footerCategory) {
+    setCategory(footerCategory.dataset.footerCategory || "All");
   }
 });
 
-/* ============================================================
-   24. INITIALIZE SHOP
-   ============================================================ */
+const searchForm = $("#shopSearchForm");
+searchForm?.addEventListener("submit", event => {
+  event.preventDefault();
+  performSearch($("#searchInput")?.value || "");
+});
 
+$("#searchInput")?.addEventListener("input", event => {
+  searchQuery = event.target.value.trim();
+  favoritesOnly = false;
+  renderProducts();
+  renderSearchSuggestions(event.target.value);
+});
+
+$("#openSearchButton")?.addEventListener("click", openSearchPanel);
+$("#mobileSearchButton")?.addEventListener("click", openSearchPanel);
+$("#closeSearch")?.addEventListener("click", closeSearchPanel);
+$("#headerCartButton")?.addEventListener("click", openCart);
+$("#mobileCartButton")?.addEventListener("click", openCart);
+$("#closeCartButton")?.addEventListener("click", closeCart);
+$("#continueShopping")?.addEventListener("click", closeCart);
+$("#continueShoppingFooter")?.addEventListener("click", closeCart);
+$("#overlay")?.addEventListener("click", closeCart);
+$("#checkoutButton")?.addEventListener("click", handleCheckoutClick);
+$("#favoritesButton")?.addEventListener("click", toggleFavoritesView);
+$("#newsletterForm")?.addEventListener("submit", handleNewsletterSubmit);
+
+$("#sortSelect")?.addEventListener("change", renderProducts);
+$("#inStockOnly")?.addEventListener("change", renderProducts);
+$("#applyFiltersButton")?.addEventListener("click", renderProducts);
+$("#resetFilters")?.addEventListener("click", resetFilters);
+$("#emptyStateReset")?.addEventListener("click", resetFilters);
+
+$("#closeProductModal")?.addEventListener("click", closeProductModal);
+const productModal = $("#productModal");
+productModal?.addEventListener("click", event => {
+  if (event.target === productModal) closeProductModal();
+});
+productModal?.addEventListener("close", () => {
+  selectedProduct = null;
+  if (lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
+});
+
+document.addEventListener("error", event => {
+  const image = event.target;
+  if (!(image instanceof HTMLImageElement)) return;
+
+  if (image.matches("[data-product-image]")) {
+    const placeholder = document.createElement("div");
+    placeholder.className = "product-image-placeholder";
+    placeholder.textContent = "JH";
+    placeholder.setAttribute("aria-label", "Product image unavailable");
+    image.replaceWith(placeholder);
+  } else if (image.matches("[data-cart-image]")) {
+    const placeholder = document.createElement("div");
+    placeholder.className = "cart-item-image-placeholder";
+    placeholder.textContent = "JH";
+    image.replaceWith(placeholder);
+  }
+}, true);
+
+document.addEventListener("keydown", event => {
+  if (event.key !== "Escape") return;
+  closeCart();
+  closeSearchPanel();
+  if (productModal?.open) closeProductModal();
+});
+
+/* 15. INITIALIZE -------------------------------------------------- */
 function initializeShop() {
   loadCart();
   loadFavorites();
-
   updateFooterYear();
   updateFavoritesCount();
-  updateCartDisplay();
-
-  /*
-   * Load real active products from Supabase.
-   */
+  renderCart();
   fetchProducts();
 }
 
 initializeShop();
-
-/* ============================================================
-   END OF JIDDERHS HEAVEN SHOP JAVASCRIPT
-   ============================================================ */
