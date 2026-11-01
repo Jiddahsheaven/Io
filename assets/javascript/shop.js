@@ -808,7 +808,6 @@ $("#searchInput")?.addEventListener("input", event => {
 });
 
 $("#openSearchButton")?.addEventListener("click", openSearchPanel);
-$("#mobileSearchButton")?.addEventListener("click", openSearchPanel);
 $("#closeSearch")?.addEventListener("click", closeSearchPanel);
 $("#headerCartButton")?.addEventListener("click", openCart);
 $("#mobileCartButton")?.addEventListener("click", openCart);
