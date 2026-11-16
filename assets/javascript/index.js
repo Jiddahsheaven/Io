@@ -1683,3 +1683,61 @@ overlay.onclick = function (event) {
 
   console.log("Account panel controls initialized.");
 })();
+/* =========================================
+   JIDDERHS HEAVEN MAINTENANCE SYSTEM
+========================================= */
+
+const maintenancePopup =
+    document.getElementById("maintenancePopup");
+
+
+/* OPEN POPUP */
+
+function showMaintenancePopup() {
+
+    maintenancePopup.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+/* CLOSE POPUP */
+
+function closeMaintenancePopup() {
+
+    maintenancePopup.classList.remove("active");
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* CLOSE WHEN CLICKING OUTSIDE */
+
+maintenancePopup.addEventListener("click", function(e) {
+
+    if (e.target === maintenancePopup) {
+        closeMaintenancePopup();
+    }
+
+});
+
+
+/* BLOCK ORDERS TAB */
+
+document.addEventListener("click", function(e) {
+
+    const orderTab = e.target.closest(
+        '[data-maintenance-order]'
+    );
+
+    if (!orderTab) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    showMaintenancePopup();
+
+}, true);
